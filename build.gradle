@@ -29,6 +29,19 @@ dependencies {
     }
 }
 
-test {
+ task buildFrontEnd(type: Exec) {
+     workingDir "./src/frontend"
+     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+         commandLine 'npm.cmd', 'install'
+         commandLine 'npm.cmd', 'run', 'build'
+     } else {
+         commandLine 'npm', 'install'
+         commandLine 'npm', 'run', 'build'
+     }
+ }
+
+ processResources.dependsOn 'buildFrontEnd'
+
+ test {
     useJUnitPlatform()
 }
