@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.4.3",
+    "request": "^2.88.0",
     "vue": "^2.6.10"
   },
   "devDependencies": {
