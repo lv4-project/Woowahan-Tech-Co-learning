@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.4.3",
+    "path": "^0.12.7",
     "request": "^2.88.0",
     "vue": "^2.6.10",
     "vuetify": "^2.1.12"
