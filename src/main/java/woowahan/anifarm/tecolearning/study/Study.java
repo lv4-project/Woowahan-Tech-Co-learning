@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Builder
 public class Study {
     private static final int SUBJECT_LENGTH_UTF_8 = 200;
     private static final int PRESENTER_LENGTH_UTF_8 = 50;
