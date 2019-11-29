@@ -1,29 +1,13 @@
 <template>
   <v-app>
     <v-row>
-      <v-toolbar dense>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-        <v-toolbar-title>Title</v-toolbar-title>
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-      </v-toolbar>
+      <MainToolbar />
     </v-row>
+
     <v-row>
       <component :is="view"></component>
     </v-row>
+
     <v-row>
       <v-col>
         <v-btn @click="view = 'StudyRecruitment'">모집</v-btn>
@@ -50,6 +34,7 @@
   import FinishedStudy from "./components/study/FinishedStudy";
   import MyPage from "./components/user/MyPage";
   import ParticipatingStudy from "./components/user/ParticipatingStudy";
+  import MainToolbar from "./MainToolbar";
 
   export default {
     name: 'App',
@@ -59,6 +44,7 @@
       FinishedStudy,
       MyPage,
       ParticipatingStudy,
+      MainToolbar,
     },
     data: () => ({
       view: 'StudyRecruitment'
