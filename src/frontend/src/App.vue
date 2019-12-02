@@ -35,10 +35,12 @@
   import MyPage from "./components/user/MyPage";
   import ParticipatingStudy from "./components/user/ParticipatingStudy";
   import MainToolbar from "./MainToolbar";
+  import StudyGeneration from "./components/study/StudyGeneration";
 
   export default {
     name: 'App',
     components: {
+      StudyGeneration,
       StudyRecruitment,
       OngoingStudy,
       FinishedStudy,
