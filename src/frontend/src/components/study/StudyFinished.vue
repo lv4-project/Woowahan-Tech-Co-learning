@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'FinishedStudy',
+    name: `StudyFinished`,
     data: () => ({}),
   };
 </script>

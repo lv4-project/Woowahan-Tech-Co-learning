@@ -63,7 +63,7 @@
   `use strict`;
 
   export default {
-    name: 'OngoingStudy',
+    name: 'StudyOngoing',
     data() {
       return {
         infos:
