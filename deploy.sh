@@ -1,0 +1,1 @@
+$WORKSPACE/gradlew clean build
