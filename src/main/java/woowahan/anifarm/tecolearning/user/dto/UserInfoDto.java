@@ -11,12 +11,14 @@ public class UserInfoDto {
     private Long id;
     private String email;
     private String nickName;
+    private String introduction;
 
     @Builder
-    public UserInfoDto(Long id, String email, String nickName) {
+    public UserInfoDto(Long id, String email, String nickName, String introduction) {
         this.id = id;
         this.email = email;
         this.nickName = nickName;
+        this.introduction = introduction;
     }
 
     public static UserInfoDto from(User user) {
@@ -24,6 +26,7 @@ public class UserInfoDto {
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickName(user.getNickName())
+                .introduction(user.getIntroduction())
                 .build();
     }
 }

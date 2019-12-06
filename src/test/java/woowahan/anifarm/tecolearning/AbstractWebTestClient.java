@@ -5,6 +5,9 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +33,14 @@ import java.util.Map;
 public class AbstractWebTestClient {
     @Autowired
     private WebTestClient webTestClient;
+
+    @BeforeEach
+    protected void setUp() {
+    }
+
+    @AfterEach
+    protected void tearDown() {
+    }
 
     protected <T> T getRequest(String uri, Class<T> bodyType) {
         return get(uri)

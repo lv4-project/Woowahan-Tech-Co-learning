@@ -6,4 +6,8 @@ public class UserCreateException extends RuntimeException {
     public UserCreateException(Throwable cause) {
         super(MESSAGE, cause);
     }
+
+    public UserCreateException(String message) {
+        super(message);
+    }
 }
