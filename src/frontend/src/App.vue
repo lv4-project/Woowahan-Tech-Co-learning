@@ -51,48 +51,13 @@
       >
         <v-container :style="getMainSheetStyle">
           <v-row>
-            <component :is="view" />
+            <component :is="view" v-on:updatedView="updateView"/>
           </v-row>
         </v-container>
       </v-sheet>
     </v-card>
 
-    <v-bottom-navigation
-      fixed
-      grow
-    >
-      <v-btn
-        @click="changeView(`StudyRecruitment`)"
-        icon
-      >
-        <span>모집중</span>
-        <v-icon>mdi-account-group</v-icon>
-      </v-btn>
-
-      <v-btn
-        @click="changeView(`StudyOngoing`)"
-        icon
-      >
-        <span>진행중</span>
-        <v-icon>mdi-airplane-takeoff</v-icon>
-      </v-btn>
-
-      <v-btn
-        @click="changeView(`StudyFinished`)"
-        icon
-      >
-        <span>완료됨</span>
-        <v-icon>mdi-check</v-icon>
-      </v-btn>
-
-      <v-btn
-        @click="changeView(`MyPage`)"
-        icon
-      >
-        <span>프로필</span>
-        <v-icon>mdi-account</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
+    <BottomNavigation v-on:updatedView="updateView"/>
   </v-app>
 </template>
 
@@ -102,8 +67,10 @@
   import StudyRecruitment from "./components/study/StudyRecruitment";
   import StudyOngoing from "./components/study/StudyOngoing";
   import StudyFinished from "./components/study/StudyFinished";
-  import MyPage from "./components/user/MyPage";
+  import UserProfile from "./components/user/UserProfile";
   import ParticipatingStudy from "./components/user/ParticipatingStudy";
+  import UserUpdateForm from "./components/user/UserUpdateForm";
+  import BottomNavigation from "./components/templates/BottomNavigation";
 
   export default {
     name: `App`,
@@ -111,8 +78,10 @@
       StudyRecruitment,
       StudyOngoing,
       StudyFinished,
-      MyPage,
+      UserProfile,
       ParticipatingStudy,
+      UserUpdateForm,
+      BottomNavigation,
     },
     data() {
       return {
@@ -123,13 +92,13 @@
       }
     },
     methods: {
-      changeView(componentName) {
-        this.view = componentName;
-      },
       resetSheetMargin() {
         this.sheetMarginTop = document.getElementsByTagName(`header`)[0].style.height;
         this.sheetMarginBottom = document.getElementsByClassName(`v-bottom-navigation`)[0].style.height
       },
+      updateView(componentName) {
+        this.view = componentName;
+      }
     },
     computed: {
       isInMainView() {

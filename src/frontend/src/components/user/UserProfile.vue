@@ -9,22 +9,27 @@
       </v-avatar>
     </v-row>
 
-    <v-col cols="12" sm="6" md="3">
-      <v-text-field
-        v-model="nickName"
-        label="닉네임"
-        readonly
-        outlined
-      />
+    <v-row justify="center">
+      <v-col cols="10" sm="6" md="3">
+        <v-text-field
+          v-model="nickName"
+          label="닉네임"
+          readonly
+          outlined
+        />
 
-      <v-text-field
-        v-model= "email"
-        label="이메일"
-        readonly
-        outlined
-      />
+        <v-text-field
+          v-model= "email"
+          label="이메일"
+          readonly
+          outlined
+        />
 
-    </v-col>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-btn @click="turnIntoEdit">정보 수정</v-btn>
+    </v-row>
   </v-container>
 </template>
 
@@ -41,6 +46,12 @@
     },
     props: {
       userId: Number,
+    },
+    methods: {
+      turnIntoEdit() {
+        window.console.log(`emit!`);
+        this.$emit(`updatedView`, `UserUpdateForm`);
+      },
     },
     mounted() {
       const temp = this;
