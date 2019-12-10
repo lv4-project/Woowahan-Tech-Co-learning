@@ -29,6 +29,10 @@
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
 
+        <v-btn @click="routeToStudyGeneration" icon>
+          <v-icon>mdi-square-edit-outline</v-icon>
+        </v-btn>
+
         <v-btn icon>
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
@@ -47,7 +51,8 @@
       <v-sheet
         id="scrolling-techniques-3"
         class="overflow-y-auto"
-        max-height="600"
+        :max-height="getDeviceHeight"
+        fixed
       >
         <v-container :style="getMainSheetStyle">
           <router-view></router-view>
@@ -81,6 +86,9 @@
         this.sheetMarginTop = document.getElementsByTagName(`header`)[0].style.height;
         this.sheetMarginBottom = document.getElementsByClassName(`v-bottom-navigation`)[0].style.height
       },
+      routeToStudyGeneration() {
+        this.$router.push(`StudyGeneration`)
+      },
     },
     computed: {
       isInRecruitmentView() {
@@ -95,8 +103,12 @@
                 margin-top: ${String(marginTop)}px;
                 margin-bottom: ${String(marginBottom)}px;`
       },
+      getDeviceHeight() {
+        return window.screen.height;
+      },
     },
     mounted() {
+      this.$router.push(`StudyRecruitment`);
       this.resetSheetMargin();
     },
     updated() {
