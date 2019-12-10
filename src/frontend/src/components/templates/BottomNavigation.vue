@@ -7,7 +7,7 @@
       @click="changeView(`StudyRecruitment`)"
       icon
     >
-      <span>모집중</span>
+      <span>모집</span>
       <v-icon>mdi-account-group</v-icon>
     </v-btn>
 
@@ -15,7 +15,7 @@
       @click="changeView(`StudyOngoing`)"
       icon
     >
-      <span>진행중</span>
+      <span>진행</span>
       <v-icon>mdi-airplane-takeoff</v-icon>
     </v-btn>
 
@@ -23,7 +23,7 @@
       @click="changeView(`StudyFinished`)"
       icon
     >
-      <span>완료됨</span>
+      <span>완료</span>
       <v-icon>mdi-check</v-icon>
     </v-btn>
 
@@ -42,8 +42,7 @@
     name: "BottomNavigation",
     methods: {
       changeView(componentName) {
-        this.$emit(`updatedView`, componentName);
-        window.console.log(componentName);
+        this.$router.push(componentName)
       },
     },
   }

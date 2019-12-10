@@ -5,6 +5,7 @@ import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.domain.UserRepository;
 import woowahan.anifarm.tecolearning.user.dto.UserCreateDto;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
+import woowahan.anifarm.tecolearning.user.dto.UserLoginDto;
 import woowahan.anifarm.tecolearning.user.dto.UserUpdateDto;
 import woowahan.anifarm.tecolearning.user.exception.UserCreateException;
 import woowahan.anifarm.tecolearning.user.exception.UserNotFoundException;
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class UserService {
+    public static final String LOGGED_IN_USER_SESSION_KEY = "LOGGED_IN_USER";
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -48,5 +50,12 @@ public class UserService {
         userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new)
                 .deactivate();
+    }
+
+    public UserInfoDto authenticate(UserLoginDto userLoginDto) {
+        User loginUser = userLoginDto.toEntity();
+        return userRepository.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword())
+                .map(UserInfoDto::from)
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

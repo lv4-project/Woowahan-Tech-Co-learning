@@ -4,8 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import woowahan.anifarm.tecolearning.user.dto.UserCreateDto;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
+import woowahan.anifarm.tecolearning.user.dto.UserLoginDto;
 import woowahan.anifarm.tecolearning.user.dto.UserUpdateDto;
 import woowahan.anifarm.tecolearning.user.service.UserService;
+
+import javax.servlet.http.HttpSession;
+
+import static woowahan.anifarm.tecolearning.user.service.UserService.LOGGED_IN_USER_SESSION_KEY;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,6 +34,13 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserInfoDto> update(@RequestBody UserUpdateDto userUpdateDto) {
         return ResponseEntity.ok().body(userService.update(userUpdateDto, 1));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserInfoDto> login(@RequestBody UserLoginDto userLoginDto, HttpSession httpSession) {
+        UserInfoDto userInfoDto = userService.authenticate(userLoginDto);
+        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userInfoDto.getId());
+        return ResponseEntity.ok().body(userInfoDto);
     }
 
     @DeleteMapping

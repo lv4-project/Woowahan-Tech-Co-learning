@@ -74,4 +74,14 @@ public class UserControllerTest extends AbstractWebTestClient {
         assertThat(deleteRequest(API_USERS).getStatus().is2xxSuccessful()).isTrue();
     }
 
+    @Test
+    @DisplayName("적절한 이메일과 패스워드 입력 시 로그인 성공")
+    void login() {
+        Map<String, String> params = new HashMap<>();
+        params.put(EMAIL, testUser.getEmail());
+        params.put(PASSWORD, "mastermaster");
+        assertThat(postJsonRequest(API_USERS + "/login", params)
+                .getStatus()
+                .is2xxSuccessful()).isTrue();
+    }
 }

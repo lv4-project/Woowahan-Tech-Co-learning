@@ -49,8 +49,7 @@
     },
     methods: {
       turnIntoEdit() {
-        window.console.log(`emit!`);
-        this.$emit(`updatedView`, `UserUpdateForm`);
+        this.$router.push(`UserUpdateForm`);
       },
     },
     mounted() {
