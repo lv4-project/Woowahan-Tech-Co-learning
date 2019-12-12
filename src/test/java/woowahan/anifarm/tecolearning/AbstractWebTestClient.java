@@ -36,8 +36,8 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
         DependencyInjectionTestExecutionListener.class,
 })
 @DbUnitConfiguration(databaseConnection = "dbUnitDatabaseConnection")
-@DatabaseSetup(value = {"/woowahan/anifarm/tecolearning/user.xml"}, type = DatabaseOperation.CLEAN_INSERT)
-@DatabaseTearDown(value = {"/woowahan/anifarm/tecolearning/user.xml"}, type = DatabaseOperation.DELETE_ALL)
+@DatabaseSetup(value = {"/woowahan/anifarm/tecolearning/user.xml", "/woowahan/anifarm/tecolearning/study.xml"}, type = DatabaseOperation.CLEAN_INSERT)
+@DatabaseTearDown(value = {"/woowahan/anifarm/tecolearning/user.xml", "/woowahan/anifarm/tecolearning/study.xml"}, type = DatabaseOperation.DELETE_ALL)
 @ExtendWith(RestDocumentationExtension.class)
 public class AbstractWebTestClient {
     private static final String EMAIL_KEY = "email";
@@ -70,7 +70,7 @@ public class AbstractWebTestClient {
                 .getFirst("Set-Cookie");
 
         token = cookie.split(";")[0].split("=")[1];
-        
+
     }
 
     @AfterEach
@@ -103,6 +103,11 @@ public class AbstractWebTestClient {
                 .returnResult();
     }
 
+    protected <T, R> EntityExchangeResult<R> postJsonRequest(String uri, T dto, Class<R> returnType) {
+        return post(uri, dto)
+                .expectBody(returnType).returnResult();
+    }
+
     protected <T> T postJsonRequest(String uri, Map<String, String> params, Class<T> bodyType) {
         return post(uri, params)
                 .expectBody(bodyType)
@@ -115,6 +120,14 @@ public class AbstractWebTestClient {
                 .uri(uri)
                 .cookie(LoggedInInterceptor.TOKEN, token)
                 .body(Mono.just(params), Map.class)
+                .exchange();
+    }
+
+    private <T> WebTestClient.ResponseSpec post(String uri, T dto) {
+        return webTestClient.post()
+                .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
+                .body(Mono.just(dto), dto.getClass())
                 .exchange();
     }
 
@@ -136,6 +149,14 @@ public class AbstractWebTestClient {
                 .uri(uri)
                 .cookie(LoggedInInterceptor.TOKEN, token)
                 .body(Mono.just(params), Map.class)
+                .exchange();
+    }
+
+    protected <T> WebTestClient.ResponseSpec put(String uri, T dto) {
+        return webTestClient.put()
+                .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
+                .body(Mono.just(dto), dto.getClass())
                 .exchange();
     }
 

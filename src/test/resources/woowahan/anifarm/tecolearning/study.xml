@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <study study_id="1"
+           presenter_id="1"
+           subject="spring"
+           total_number_of_participants="6"
+           start_date="2019-12-12"
+           end_date="2019-1-13"
+           location="판교"
+           description="내가 판교를 제패하겠다."
+           status="RECRUITING"
+    />
+</dataset>

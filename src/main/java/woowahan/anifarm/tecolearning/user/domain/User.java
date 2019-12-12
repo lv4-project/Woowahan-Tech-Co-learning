@@ -1,6 +1,11 @@
 package woowahan.anifarm.tecolearning.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import woowahan.anifarm.tecolearning.user.domain.exception.UserAuthenticationFailException;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -65,11 +70,21 @@ public class User {
         this.introduction = updateUser.introduction;
     }
 
+    public void activate() {
+        this.status = AccountStatus.ACTIVE;
+    }
+
     public void deactivate() {
         this.status = AccountStatus.INACTIVE;
     }
 
-    public void activate() {
-        this.status = AccountStatus.ACTIVE;
+    public void authenticate(User presenter) {
+        if (doesNotAuthenticated(presenter)) {
+            throw new UserAuthenticationFailException();
+        }
+    }
+
+    private boolean doesNotAuthenticated(User presenter) {
+        return !this.id.equals(presenter.id);
     }
 }

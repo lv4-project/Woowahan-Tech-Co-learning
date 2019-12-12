@@ -2,9 +2,10 @@ package woowahan.anifarm.tecolearning.user.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import woowahan.anifarm.tecolearning.user.domain.exception.UserAuthenticationFailException;
 import woowahan.anifarm.tecolearning.user.dto.UserUpdateDto;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 class UserTest {
     private static final String VALID_EMAIL = "moomin@woowa.com";
@@ -35,4 +36,22 @@ class UserTest {
         assertThat(user.getStatus()).isEqualTo(AccountStatus.INACTIVE);
     }
 
+    @Test
+    @DisplayName("User id가 같으면, 인증에 성공(void)")
+    void authenticate() {
+        User user1 = User.builder().id(1L).build();
+        User user2 = User.builder().id(1L).build();
+
+        assertThatCode(() -> user1.authenticate(user2)).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("User id가 다를 경우, UserAuthenticationFailException 을 반환한다.")
+    void authenticate_fail() {
+        User user1 = User.builder().id(1L).build();
+        User user2 = User.builder().id(999L).build();
+
+        assertThatThrownBy(() -> user1.authenticate(user2))
+                .isInstanceOf(UserAuthenticationFailException.class);
+    }
 }

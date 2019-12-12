@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
+import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
+import java.io.UnsupportedEncodingException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +20,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 public class UserControllerTest extends AbstractWebTestClient {
+    public static final long SAMPLE_USER_ID = 1L;
+
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private static final String NICK_NAME = "nickName";
@@ -30,7 +34,7 @@ public class UserControllerTest extends AbstractWebTestClient {
     @BeforeEach
     protected void setUp(RestDocumentationContextProvider restDocumentation) {
         super.setUp(restDocumentation);
-        testUser = getRequest(API_USERS + "/" + 1, UserInfoDto.class);
+        testUser = getRequest(API_USERS + "/" + SAMPLE_USER_ID, UserInfoDto.class);
     }
 
     @Override
