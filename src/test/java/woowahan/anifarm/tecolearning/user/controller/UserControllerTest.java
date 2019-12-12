@@ -6,8 +6,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
+import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,13 +88,10 @@ public class UserControllerTest extends AbstractWebTestClient {
     }
 
     @Test
-    @DisplayName("적절한 이메일과 패스워드 입력 시 로그인 성공")
-    void login() {
-        Map<String, String> params = new HashMap<>();
-        params.put(EMAIL, testUser.getEmail());
-        params.put(PASSWORD, "mastermaster");
-        assertThat(postJsonRequest(API_USERS + "/login", params)
-                .getStatus()
-                .is2xxSuccessful()).isTrue();
+    @DisplayName("비로그인 시 유저읽기 실패")
+    void readUser_fail() throws UnsupportedEncodingException {
+        removeToken();
+        assertThat(new String(getRequest(API_USERS + "/" + testUser.getId()).getResponseBody(), "utf-8"))
+                .isEqualTo(new JWTValidException().getMessage());
     }
 }

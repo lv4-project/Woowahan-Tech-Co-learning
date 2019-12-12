@@ -19,7 +19,7 @@
         />
 
         <v-text-field
-          v-model= "email"
+          v-model="email"
           label="이메일"
           readonly
           outlined
@@ -49,14 +49,28 @@
     },
     methods: {
       turnIntoEdit() {
-        this.$router.push(`UserUpdateForm`);
+        this.$router.push(`update`);
       },
+      getCookie(cookie_name) {
+        let x, y;
+        const val = document.cookie.split(';');
+
+        for (let i = 0; i < val.length; i++) {
+          x = val[i].substr(0, val[i].indexOf('='));
+          y = val[i].substr(val[i].indexOf('=') + 1);
+          x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+          if (x == cookie_name) {
+            return unescape(y); // unescape로 디코딩 후 값 리턴
+          }
+        }
+      }
     },
     mounted() {
       const temp = this;
+
       const request = require('request');
       request.get({
-        url: `${window.location.origin}/api/users/${this.userId}`,
+        url: `${window.location.origin}/api/users/myinfo`,
       }, function (error, response, body) {
         if ((response && response.statusCode) === 200) {
           body = JSON.parse(body);

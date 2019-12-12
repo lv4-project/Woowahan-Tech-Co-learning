@@ -41,6 +41,7 @@ public class UserService {
     public UserInfoDto update(UserUpdateDto userUpdateDto, long userId) {
         User findUser = findById(userId);
         findUser.update(userUpdateDto.toEntity());
+        findUser.activate();
 
         return UserInfoDto.from(findUser);
     }
@@ -52,10 +53,19 @@ public class UserService {
                 .deactivate();
     }
 
-    public UserInfoDto authenticate(UserLoginDto userLoginDto) {
+    public User authenticate(UserLoginDto userLoginDto) {
         User loginUser = userLoginDto.toEntity();
         return userRepository.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword())
-                .map(UserInfoDto::from)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public User findInfoDtoByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public User saveGitTempUser(String email) {
+        User tempUser = User.creatGitTempUser(email);
+        return userRepository.save(tempUser);
     }
 }

@@ -1,80 +1,74 @@
 <template>
-  <v-container id="inspire">
-    <v-content>
-      <v-container
-        class="fill-height"
-        fluid
+  <v-container>
+    <v-col
+      cols="12"
+      sm="6"
+      md="3"
+    >
+      <v-text-field
+        v-model="loginData.email"
+        label="이메일"
+        outlined
+      />
+
+      <v-text-field
+        v-model="loginData.password"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        :rules="[rules.required, rules.min]"
+        :type="showPassword ? 'text' : 'password'"
+        @click:append="showPassword = !showPassword"
+        name="input-10-1"
+        label="패스워드 입력"
+        hint="최소 8 글자 이상 입력하세요."
+        counter
+        outlined
+      />
+    </v-col>
+
+    <v-col
+      cols="12"
+      sm="6"
+      md="3"
+    >
+      <v-btn
+        @click="login"
+        block
+        tile
+        color="grey"
+        dark
       >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col
-            cols="12"
-            sm="8"
-            md="4"
-          >
-            <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
-                <v-toolbar-title>Login form</v-toolbar-title>
-                <v-spacer/>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      :href="source"
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-code-tags</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Source</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      href="https://codepen.io/johnjleider/pen/pMvGQO"
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-codepen</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Codepen</span>
-                </v-tooltip>
-              </v-toolbar>
-              <v-card-text>
-                <v-form>
-                  <v-text-field
-                    label="Login"
-                    name="login"
-                    type="text"
-                  />
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    type="password"
-                  />
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer/>
-                <v-btn color="primary">Login</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-content>
+        로그인
+      </v-btn>
+    </v-col>
+
+    <v-col
+      cols="12"
+      sm="6"
+      md="3"
+    >
+      <v-btn
+        @click="showSignUp"
+        block
+        tile
+        color="grey"
+        dark
+      >
+        회원가입
+      </v-btn>
+    </v-col>
+
+    <v-col
+      cols="12"
+      sm="6"
+      md="3"
+    >
+      <v-row justify="center">
+        <a href="https://github.com/login/oauth/authorize?client_id=ec77f51776eab7f7dcf1&scope=user:email">
+          Github 로그인
+        </a>
+      </v-row>
+    </v-col>
+
   </v-container>
 </template>
 
@@ -82,7 +76,43 @@
   export default {
     name: 'LoginForm',
     data() {
-      return {}
+      return {
+        showPassword: false,
+        loginData: {
+          email: '',
+          password: '',
+        },
+        rules: {
+          required: value => !!value || '필수 항목입니다.',
+          min: v => v.length >= 8 || '최소 8 글자 이상이어야 합니다.',
+        },
+      }
+    },
+    computed: {
+      isInRecruitmentView() {
+        return this.$route.name === `StudyRecruitment`;
+      },
+    },
+    methods: {
+      login() {
+        const vue = this;
+
+        const request = require('request');
+        request.post({
+          url: `${window.location.origin}/api/oauth/login`,
+          body: this.loginData,
+          json: true,
+        }, function (error, response, body) {
+          if ((response && response.statusCode) === 200) {
+            vue.$router.push(`/recruitment`);
+          } else {
+            window.alert(body);
+          }
+        });
+      },
+      showSignUp() {
+        this.$router.push(`/signup`)
+      },
     },
   };
 </script>

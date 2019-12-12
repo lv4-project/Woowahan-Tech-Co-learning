@@ -51,6 +51,15 @@ public class User {
         this.introduction = introduction;
     }
 
+    public static User creatGitTempUser(String email) {
+        return User.builder()
+                .email(email)
+                .password("tempPassword")
+                .nickName("moomin")
+                .introduction("")
+                .build();
+    }
+
     public void update(User updateUser) {
         this.nickName = updateUser.nickName;
         this.introduction = updateUser.introduction;
@@ -58,5 +67,9 @@ public class User {
 
     public void deactivate() {
         this.status = AccountStatus.INACTIVE;
+    }
+
+    public void activate() {
+        this.status = AccountStatus.ACTIVE;
     }
 }

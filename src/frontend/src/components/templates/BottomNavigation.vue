@@ -4,7 +4,7 @@
     grow
   >
     <v-btn
-      @click="changeView(`StudyRecruitment`)"
+      @click="changeView(`recruitment`)"
       icon
     >
       <span>모집</span>
@@ -12,7 +12,7 @@
     </v-btn>
 
     <v-btn
-      @click="changeView(`StudyOngoing`)"
+      @click="changeView(`ongoing`)"
       icon
     >
       <span>진행</span>
@@ -20,7 +20,7 @@
     </v-btn>
 
     <v-btn
-      @click="changeView(`StudyFinished`)"
+      @click="changeView(`finished`)"
       icon
     >
       <span>완료</span>
@@ -28,7 +28,7 @@
     </v-btn>
 
     <v-btn
-      @click="changeView(`UserProfile`)"
+      @click="changeView(`profile`)"
       icon
     >
       <span>프로필</span>

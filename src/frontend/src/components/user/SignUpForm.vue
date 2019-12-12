@@ -42,7 +42,11 @@
         outlined
       />
 
-      <div class="text-center">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <v-btn
           @click="requestSignUp"
           block
@@ -50,9 +54,25 @@
           color="grey"
           dark
         >
-          회원 가입
+          가입
         </v-btn>
-      </div>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-btn
+          @click="cancel"
+          block
+          tile
+          color="grey"
+          dark
+        >
+          취소
+        </v-btn>
+      </v-col>
     </v-col>
   </v-container>
 </template>
@@ -79,18 +99,24 @@
       }
     },
     methods: {
-      requestSignUp: function () {
+      requestSignUp() {
+        const vue = this;
+
         const request = require('request');
         request.post({
           url: `${window.location.origin}/api/users/signup`,
           body: this.signUpFormData,
           json: true,
-        }, function (error, response) {
+        }, function (error, response, body) {
           if ((response && response.statusCode) === 200) {
-            // TODO: success
+            vue.$router.push(`/login`);
+          } else {
+            window.confirm(body);
           }
-          // TODO: error
         });
+      },
+      cancel() {
+        this.$router.push(`/login`);
       },
     },
   };

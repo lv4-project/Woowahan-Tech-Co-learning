@@ -20,7 +20,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+import woowahan.anifarm.tecolearning.auth.advice.LoggedInInterceptor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
@@ -38,11 +40,19 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @DatabaseTearDown(value = {"/woowahan/anifarm/tecolearning/user.xml"}, type = DatabaseOperation.DELETE_ALL)
 @ExtendWith(RestDocumentationExtension.class)
 public class AbstractWebTestClient {
+    private static final String EMAIL_KEY = "email";
+    private static final String PASSWORD_KEY = "password";
+
+    private static final String LOGIN_EMAIL = "learner_duck@woowa.com";
+    private static final String LOGIN_PASSWORD = "mastermaster";
+
     @LocalServerPort
     private int port;
 
     @Autowired
     private WebTestClient webTestClient;
+
+    private String token;
 
     @BeforeEach
     protected void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -50,6 +60,17 @@ public class AbstractWebTestClient {
                 .baseUrl("http://localhost:" + port)
                 .filter(documentationConfiguration(restDocumentation))
                 .build();
+
+        Map<String, String> login = new HashMap<>();
+        login.put(EMAIL_KEY, LOGIN_EMAIL);
+        login.put(PASSWORD_KEY, LOGIN_PASSWORD);
+
+        String cookie = postJsonRequest("/api/oauth/login", login)
+                .getResponseHeaders()
+                .getFirst("Set-Cookie");
+
+        token = cookie.split(";")[0].split("=")[1];
+        
     }
 
     @AfterEach
@@ -72,6 +93,7 @@ public class AbstractWebTestClient {
     protected WebTestClient.ResponseSpec get(String uri) {
         return webTestClient.get()
                 .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
                 .exchange();
     }
 
@@ -91,6 +113,7 @@ public class AbstractWebTestClient {
     protected WebTestClient.ResponseSpec post(String uri, Map<String, String> params) {
         return webTestClient.post()
                 .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
                 .body(Mono.just(params), Map.class)
                 .exchange();
     }
@@ -111,6 +134,7 @@ public class AbstractWebTestClient {
     private WebTestClient.ResponseSpec put(String uri, Map<String, String> params) {
         return webTestClient.put()
                 .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
                 .body(Mono.just(params), Map.class)
                 .exchange();
     }
@@ -118,8 +142,13 @@ public class AbstractWebTestClient {
     protected EntityExchangeResult<byte[]> deleteRequest(String uri) {
         return webTestClient.delete()
                 .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
                 .exchange()
                 .expectBody()
                 .returnResult();
+    }
+
+    protected void removeToken() {
+        token = null;
     }
 }

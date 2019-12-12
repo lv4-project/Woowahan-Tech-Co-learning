@@ -46,6 +46,8 @@
     },
     methods: {
       requestUpdate: function () {
+        let vue = this;
+
         const request = require('request');
         request.put({
           url: `${window.location.origin}/api/users/`,
@@ -53,22 +55,22 @@
           json: true,
         }, function (error, response) {
           if ((response && response.statusCode) === 200) {
-            // TODO: success
+            vue.$router.push(`/profile`)
           }
           // TODO: error
         });
       }
     },
     mounted() {
-      let temp = this;
+      let vue = this;
       const request = require('request');
       request.get({
-        url: `${window.location.origin}/api/users/${this.userId}`,
+        url: `${window.location.origin}/api/users/myinfo`,
       }, function (error, response, body) {
         if ((response && response.statusCode) === 200) {
           body = JSON.parse(body);
-          temp.nickName = body.nickName;
-          temp.email = body.email;
+          vue.nickName = body.nickName;
+          vue.email = body.email;
         }
         // TODO: error
       });
