@@ -7,11 +7,14 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
@@ -19,6 +22,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
+
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
+
 
 @AutoConfigureWebTestClient
 @Import(TestConfig.class)
@@ -30,12 +36,20 @@ import java.util.Map;
 @DbUnitConfiguration(databaseConnection = "dbUnitDatabaseConnection")
 @DatabaseSetup(value = {"/woowahan/anifarm/tecolearning/user.xml"}, type = DatabaseOperation.CLEAN_INSERT)
 @DatabaseTearDown(value = {"/woowahan/anifarm/tecolearning/user.xml"}, type = DatabaseOperation.DELETE_ALL)
+@ExtendWith(RestDocumentationExtension.class)
 public class AbstractWebTestClient {
+    @LocalServerPort
+    private int port;
+
     @Autowired
     private WebTestClient webTestClient;
 
     @BeforeEach
-    protected void setUp() {
+    protected void setUp(RestDocumentationContextProvider restDocumentation) {
+        this.webTestClient = WebTestClient.bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .filter(documentationConfiguration(restDocumentation))
+                .build();
     }
 
     @AfterEach
@@ -55,7 +69,7 @@ public class AbstractWebTestClient {
                 .returnResult();
     }
 
-    private WebTestClient.ResponseSpec get(String uri) {
+    protected WebTestClient.ResponseSpec get(String uri) {
         return webTestClient.get()
                 .uri(uri)
                 .exchange();
@@ -74,7 +88,7 @@ public class AbstractWebTestClient {
                 .getResponseBody();
     }
 
-    private WebTestClient.ResponseSpec post(String uri, Map<String, String> params) {
+    protected WebTestClient.ResponseSpec post(String uri, Map<String, String> params) {
         return webTestClient.post()
                 .uri(uri)
                 .body(Mono.just(params), Map.class)
