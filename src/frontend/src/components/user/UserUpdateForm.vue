@@ -48,8 +48,7 @@
       requestUpdate: function () {
         let vue = this;
 
-        const request = require('request');
-        request.put({
+        this.$request.put({
           url: `${window.location.origin}/api/users/`,
           body: { nickName: this.nickName },
           json: true,
