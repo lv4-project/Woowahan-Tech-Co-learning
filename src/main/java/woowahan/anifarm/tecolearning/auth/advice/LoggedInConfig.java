@@ -15,6 +15,12 @@ public class LoggedInConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggedInInterceptor)
+                .excludePathPatterns("/")
+                .excludePathPatterns("/css/*")
+                .excludePathPatterns("/js/*")
+                .excludePathPatterns("/index.html")
+                .excludePathPatterns("/login")
+                .excludePathPatterns("/docs/**")
                 .excludePathPatterns("/api/oauth")
                 .excludePathPatterns("/api/users/signup")
                 .excludePathPatterns("/api/oauth/login");

@@ -9,11 +9,6 @@
 
   export default {
     name: `App`,
-    data() {
-      return {
-        view: `Main`,
-      }
-    },
   }
 </script>
 

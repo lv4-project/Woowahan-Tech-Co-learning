@@ -108,7 +108,7 @@
       },
     },
     mounted() {
-      this.$router.push(`StudyRecruitment`);
+      this.$router.push(`recruitment`);
       this.resetSheetMargin();
     },
     updated() {
