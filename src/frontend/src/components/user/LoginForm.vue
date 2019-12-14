@@ -97,8 +97,7 @@
       login() {
         const vue = this;
 
-        const request = require('request');
-        request.post({
+        this.$request.post({
           url: `${window.location.origin}/api/oauth/login`,
           body: this.loginData,
           json: true,
@@ -116,4 +115,3 @@
     },
   };
 </script>
-Co

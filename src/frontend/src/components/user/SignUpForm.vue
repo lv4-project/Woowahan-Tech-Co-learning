@@ -102,8 +102,7 @@
       requestSignUp() {
         const vue = this;
 
-        const request = require('request');
-        request.post({
+        this.$request.post({
           url: `${window.location.origin}/api/users/signup`,
           body: this.signUpFormData,
           json: true,
