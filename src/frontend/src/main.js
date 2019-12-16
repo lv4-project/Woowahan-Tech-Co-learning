@@ -3,6 +3,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import request from 'request'
+import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 Vue.prototype.$request = request;

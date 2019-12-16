@@ -18,6 +18,7 @@ public class LoggedInConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/")
                 .excludePathPatterns("/css/*")
                 .excludePathPatterns("/js/*")
+                .excludePathPatterns("/img/**", "/precache-manifest.*.js", "/sw.js", "/service-worker.js", "/robots.txt")
                 .excludePathPatterns("/index.html")
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/docs/**")
