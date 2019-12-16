@@ -8,16 +8,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 import woowahan.anifarm.tecolearning.user.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.data.domain.Sort.by;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -78,5 +89,35 @@ class StudyServiceTest {
         // TODO: 2019-12-12 짤 것
     }
 
+    @Test
+    @DisplayName("StudySummaryDto를 page단위로 조회한다.")
+    void findSummaryDtoPage() {
+        // Given
+        int offset = 0;
+        int pageSize = 10;
+        Sort sort = by(Sort.Direction.ASC, "createdDate");
+        PageRequest pageRequest = PageRequest.of(offset, pageSize, sort);
+
+        Page<Study> pageOfStudy = getPageOfStudy(pageSize);
+        given(studyRepository.findAll(pageRequest)).willReturn(pageOfStudy);
+
+        // When
+        List<StudySummaryDto> pageOfSummaryDto = injectStudyService.findPageOfSummaryDto(pageRequest);
+
+        // Then
+        assertThat(pageOfSummaryDto.size()).isEqualTo(pageSize);
+    }
+
+
+    private Page<Study> getPageOfStudy(int pageSize) {
+        List<Study> studies = new ArrayList<>();
+
+        for (int i = 0; i < pageSize; i++) {
+            studies.add(getMockStudy());
+        }
+        return new PageImpl<>(studies);
+    }
+
     // TODO: 2019-12-12 Study 수정 test
+
 }

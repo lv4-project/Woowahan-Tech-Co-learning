@@ -1,17 +1,20 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import woowahan.anifarm.tecolearning.study.service.StudyCreateDto;
-import woowahan.anifarm.tecolearning.study.service.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.StudyService;
-import woowahan.anifarm.tecolearning.study.service.StudyUpdateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/studies")
 public class StudyApiController {
-
     private final StudyService studyService;
 
     public StudyApiController(StudyService studyService) {

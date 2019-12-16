@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
 import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
-import woowahan.anifarm.tecolearning.study.service.StudyCreateDto;
-import woowahan.anifarm.tecolearning.study.service.StudyInfoDto;
-import woowahan.anifarm.tecolearning.study.service.StudyUpdateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
 
 import java.time.LocalDate;
 
@@ -16,7 +16,7 @@ import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.S
 
 @Slf4j
 public class StudyApiControllerTest extends AbstractWebTestClient {
-    private static final String API_STUDIES = "/api/studies";
+    static final String API_STUDIES = "/api/studies";
     private static final long SAMPLE_STUDY_ID = 1L;
 
     @Test
@@ -38,7 +38,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         ).getResponseBody();
 
         assertThat(studyInfoDto.getSubject()).isEqualTo(studyCreateDto.getSubject());
-        assertThat(studyInfoDto.getTotalNumberOfParticipants()).isEqualTo(studyCreateDto.getTotalNumberOfParticipants());
+        assertThat(studyInfoDto.getTotalNumberOfRecruitment()).isEqualTo(studyCreateDto.getTotalNumberOfParticipants());
         assertThat(studyInfoDto.getStartDate()).isEqualTo(studyCreateDto.getStartDate());
         assertThat(studyInfoDto.getEndDate()).isEqualTo(studyCreateDto.getEndDate());
         assertThat(studyInfoDto.getLocation()).isEqualTo(studyCreateDto.getLocation());
@@ -71,7 +71,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     @DisplayName("스터디를 수정한다.")
     void put() {
         StudyUpdateDto updateDto = StudyUpdateDto.builder()
-                .subject("응 스프링 안해~")
+                .subject("spring")
                 .totalNumberOfParticipants(5)
                 .location("은평구")
                 .startDate(LocalDate.of(2029, 12, 25))
@@ -91,7 +91,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         assertThat(updatedInfoDto.getLocation()).isEqualTo(updateDto.getLocation());
         assertThat(updatedInfoDto.getStartDate()).isEqualTo(updateDto.getStartDate());
         assertThat(updatedInfoDto.getSubject()).isEqualTo(updateDto.getSubject());
-        assertThat(updatedInfoDto.getTotalNumberOfParticipants()).isEqualTo(updateDto.getTotalNumberOfParticipants());
+        assertThat(updatedInfoDto.getTotalNumberOfRecruitment()).isEqualTo(updateDto.getTotalNumberOfParticipants());
     }
 
     // TODO: 2019-12-12 로그인 하지 않은 유저에 대한 TEST

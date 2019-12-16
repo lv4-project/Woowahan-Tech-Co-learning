@@ -3,6 +3,7 @@ package woowahan.anifarm.tecolearning.study.domain;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import woowahan.anifarm.tecolearning.common.BaseEntity;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @ToString
-public class Study {
+public class Study extends BaseEntity {
     private static final int SUBJECT_LENGTH_UTF_8 = 200;
     private static final int PRESENTER_LENGTH_UTF_8 = 50;
 

@@ -1,13 +1,23 @@
 package woowahan.anifarm.tecolearning.study.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
 import woowahan.anifarm.tecolearning.study.service.exception.StudyNotFoundException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 import woowahan.anifarm.tecolearning.user.service.UserService;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudyService {
@@ -34,6 +44,15 @@ public class StudyService {
 
     public StudyInfoDto findInfoDtoById(long studyId) {
         return StudyInfoDto.from(findById(studyId));
+    }
+
+    public List<StudySummaryDto> findPageOfSummaryDto(Pageable pageable) {
+        Page<Study> pageOfStudy = studyRepository.findAll(pageable);
+
+        List<StudySummaryDto> studInfoDtos = pageOfStudy.stream()
+                .map(StudySummaryDto::from)
+                .collect(Collectors.toList());
+        return Collections.unmodifiableList(studInfoDtos);
     }
 
     @Transactional

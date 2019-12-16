@@ -1,4 +1,4 @@
-package woowahan.anifarm.tecolearning.study.service;
+package woowahan.anifarm.tecolearning.study.service.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class StudyInfoDto {
     private long id;
     private UserInfoDto presenter;
     private String subject;
-    private int totalNumberOfParticipants;
+    private int totalNumberOfRecruitment;
     private LocalDate startDate;
     private LocalDate endDate;
     private String location;
@@ -28,7 +28,7 @@ public class StudyInfoDto {
     public StudyInfoDto(long id,
                         UserInfoDto presenter,
                         String subject,
-                        int totalNumberOfParticipants,
+                        int totalNumberOfRecruitment,
                         LocalDate startDate,
                         LocalDate endDate,
                         String location,
@@ -37,7 +37,7 @@ public class StudyInfoDto {
         this.id = id;
         this.presenter = presenter;
         this.subject = subject;
-        this.totalNumberOfParticipants = totalNumberOfParticipants;
+        this.totalNumberOfRecruitment = totalNumberOfRecruitment;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
@@ -52,7 +52,7 @@ public class StudyInfoDto {
                 .id(study.getId())
                 .presenter(presenter)
                 .subject(study.getSubject())
-                .totalNumberOfParticipants(study.getTotalNumberOfParticipants())
+                .totalNumberOfRecruitment(study.getTotalNumberOfParticipants())
                 .startDate(study.getStartDate())
                 .endDate(study.getEndDate())
                 .location(study.getLocation())
