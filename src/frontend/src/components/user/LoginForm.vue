@@ -1,73 +1,81 @@
 <template>
-  <v-container>
-    <v-col
-      cols="12"
-      sm="6"
-      md="3"
-    >
-      <v-text-field
-        v-model="loginData.email"
-        label="이메일"
-        outlined
-      />
-
-      <v-text-field
-        v-model="loginData.password"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :rules="[rules.required, rules.min]"
-        :type="showPassword ? 'text' : 'password'"
-        @click:append="showPassword = !showPassword"
-        name="input-10-1"
-        label="패스워드 입력"
-        hint="최소 8 글자 이상 입력하세요."
-        counter
-        outlined
-      />
-    </v-col>
-
-    <v-col
-      cols="12"
-      sm="6"
-      md="3"
-    >
-      <v-btn
-        @click="login"
-        block
-        tile
-        color="grey"
-        dark
+  <v-container >
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
       >
-        로그인
-      </v-btn>
-    </v-col>
+        <v-text-field
+          v-model="loginData.email"
+          label="이메일"
+          outlined
+        />
 
-    <v-col
-      cols="12"
-      sm="6"
-      md="3"
-    >
-      <v-btn
-        @click="showSignUp"
-        block
-        tile
-        color="grey"
-        dark
+        <v-text-field
+          v-model="loginData.password"
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :rules="[rules.required, rules.min]"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
+          name="input-10-1"
+          label="패스워드 입력"
+          hint="최소 8 글자 이상 입력하세요."
+          counter
+          outlined
+        />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
       >
-        회원가입
-      </v-btn>
-    </v-col>
+        <v-btn
+          @click="login"
+          block
+          tile
+          color="primary"
+          dark
+        >
+          로그인
+        </v-btn>
+      </v-col>
+    </v-row>
 
-    <v-col
-      cols="12"
-      sm="6"
-      md="3"
-    >
-      <v-row justify="center">
-        <a href="https://github.com/login/oauth/authorize?client_id=ec77f51776eab7f7dcf1&scope=user:email">
-          Github 로그인
-        </a>
-      </v-row>
-    </v-col>
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-btn
+          @click="showSignUp"
+          block
+          tile
+          color="grey"
+          dark
+        >
+          회원가입
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-row justify="center">
+          <a href="https://github.com/login/oauth/authorize?client_id=ec77f51776eab7f7dcf1&scope=user:email">
+            Github 로그인
+          </a>
+        </v-row>
+      </v-col>
+    </v-row>
 
   </v-container>
 </template>

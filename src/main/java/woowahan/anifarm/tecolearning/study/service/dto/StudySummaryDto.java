@@ -43,7 +43,7 @@ public class StudySummaryDto {
                 .id(study.getId())
                 .presenterName(presenter.getNickName())
                 .subject(study.getSubject())
-                .totalNumberOfRecruitment(study.getTotalNumberOfParticipants())
+                .totalNumberOfRecruitment(study.getTotalNumberOfRecruitment())
                 .numberOfParticipants(1) // TODO: 2019-12-15  Study 도메인 객체에 participants 필드 만들 것.
                 .location(study.getLocation())
                 .summary(study.getDescription()) // TODO: 2019-12-15 도메인 객체에 summary 필드 만들 것.

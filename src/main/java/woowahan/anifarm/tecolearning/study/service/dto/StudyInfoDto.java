@@ -52,7 +52,7 @@ public class StudyInfoDto {
                 .id(study.getId())
                 .presenter(presenter)
                 .subject(study.getSubject())
-                .totalNumberOfRecruitment(study.getTotalNumberOfParticipants())
+                .totalNumberOfRecruitment(study.getTotalNumberOfRecruitment())
                 .startDate(study.getStartDate())
                 .endDate(study.getEndDate())
                 .location(study.getLocation())

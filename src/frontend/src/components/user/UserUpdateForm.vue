@@ -46,7 +46,7 @@
     },
     methods: {
       requestUpdate: function () {
-        let vue = this;
+        const vue = this;
 
         this.$request.put({
           url: `${window.location.origin}/api/users/`,
@@ -62,8 +62,8 @@
     },
     mounted() {
       let vue = this;
-      const request = require('request');
-      request.get({
+
+      this.$request.get({
         url: `${window.location.origin}/api/users/myinfo`,
       }, function (error, response, body) {
         if ((response && response.statusCode) === 200) {

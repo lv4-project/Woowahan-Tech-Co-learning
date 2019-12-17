@@ -33,7 +33,7 @@ public class Study extends BaseEntity {
 
     @Column(name = "total_number_of_participants",
             nullable = false)
-    private Integer totalNumberOfParticipants;
+    private Integer totalNumberOfRecruitment;
 
     // TODO: 2019-12-10 participants user -> many to many
 
@@ -64,7 +64,7 @@ public class Study extends BaseEntity {
     public Study(Long id,
                  String subject,
                  User presenter,
-                 Integer totalNumberOfParticipants,
+                 Integer totalNumberOfRecruitment,
                  LocalDate startDate,
                  LocalDate endDate,
                  String location,
@@ -73,7 +73,7 @@ public class Study extends BaseEntity {
         this.id = id;
         this.subject = subject;
         this.presenter = presenter;
-        this.totalNumberOfParticipants = totalNumberOfParticipants;
+        this.totalNumberOfRecruitment = totalNumberOfRecruitment;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
@@ -85,7 +85,7 @@ public class Study extends BaseEntity {
         this.location = newStudy.location;
         this.endDate = newStudy.endDate;
         this.startDate = newStudy.startDate;
-        this.totalNumberOfParticipants = newStudy.totalNumberOfParticipants;
+        this.totalNumberOfRecruitment = newStudy.totalNumberOfRecruitment;
         this.subject = newStudy.subject;
         this.description = newStudy.description;
 

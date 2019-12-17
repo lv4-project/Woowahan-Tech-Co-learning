@@ -21,7 +21,7 @@ class StudyTest {
                 .startDate(LocalDate.of(2019, 12, 12))
                 .endDate(LocalDate.of(2019, 12, 23))
                 .location("송파")
-                .totalNumberOfParticipants(5)
+                .totalNumberOfRecruitment(5)
                 .status(StudyStatus.RECRUITING)
                 .build();
 
@@ -32,7 +32,7 @@ class StudyTest {
                 .startDate(LocalDate.of(2019, 12, 13))
                 .endDate(LocalDate.of(2019, 12, 24))
                 .location("은평")
-                .totalNumberOfParticipants(6)
+                .totalNumberOfRecruitment(6)
                 .status(StudyStatus.RECRUITING)
                 .build();
 
@@ -43,7 +43,7 @@ class StudyTest {
         assertThat(updatedStudy.getEndDate()).isEqualTo(newStudy.getEndDate());
         assertThat(updatedStudy.getLocation()).isEqualTo(newStudy.getLocation());
         assertThat(updatedStudy.getStartDate()).isEqualTo(newStudy.getStartDate());
-        assertThat(updatedStudy.getTotalNumberOfParticipants()).isEqualTo(newStudy.getTotalNumberOfParticipants());
+        assertThat(updatedStudy.getTotalNumberOfRecruitment()).isEqualTo(newStudy.getTotalNumberOfRecruitment());
         assertThat(updatedStudy.getSubject()).isEqualTo(newStudy.getSubject());
     }
 

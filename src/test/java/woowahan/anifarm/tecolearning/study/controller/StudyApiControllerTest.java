@@ -38,7 +38,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         ).getResponseBody();
 
         assertThat(studyInfoDto.getSubject()).isEqualTo(studyCreateDto.getSubject());
-        assertThat(studyInfoDto.getTotalNumberOfRecruitment()).isEqualTo(studyCreateDto.getTotalNumberOfParticipants());
+        assertThat(studyInfoDto.getTotalNumberOfRecruitment()).isEqualTo(studyCreateDto.getTotalNumberOfRecruitment());
         assertThat(studyInfoDto.getStartDate()).isEqualTo(studyCreateDto.getStartDate());
         assertThat(studyInfoDto.getEndDate()).isEqualTo(studyCreateDto.getEndDate());
         assertThat(studyInfoDto.getLocation()).isEqualTo(studyCreateDto.getLocation());
@@ -72,7 +72,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     void put() {
         StudyUpdateDto updateDto = StudyUpdateDto.builder()
                 .subject("spring")
-                .totalNumberOfParticipants(5)
+                .totalNumberOfRecruitment(5)
                 .location("은평구")
                 .startDate(LocalDate.of(2029, 12, 25))
                 .endDate(LocalDate.of(2030, 12, 25))
@@ -91,7 +91,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         assertThat(updatedInfoDto.getLocation()).isEqualTo(updateDto.getLocation());
         assertThat(updatedInfoDto.getStartDate()).isEqualTo(updateDto.getStartDate());
         assertThat(updatedInfoDto.getSubject()).isEqualTo(updateDto.getSubject());
-        assertThat(updatedInfoDto.getTotalNumberOfRecruitment()).isEqualTo(updateDto.getTotalNumberOfParticipants());
+        assertThat(updatedInfoDto.getTotalNumberOfRecruitment()).isEqualTo(updateDto.getTotalNumberOfRecruitment());
     }
 
     // TODO: 2019-12-12 로그인 하지 않은 유저에 대한 TEST

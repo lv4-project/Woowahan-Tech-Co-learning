@@ -15,16 +15,16 @@ import java.time.LocalDate;
 @ToString
 public class StudyCreateDto {
     private String subject;
-    private int totalNumberOfParticipants;
+    private int totalNumberOfRecruitment;
     private LocalDate startDate;
     private LocalDate endDate;
     private String location;
     private String description;
 
     @Builder
-    public StudyCreateDto(String subject, int totalNumberOfParticipants, LocalDate startDate, LocalDate endDate, String location, String description) {
+    public StudyCreateDto(String subject, int totalNumberOfRecruitment, LocalDate startDate, LocalDate endDate, String location, String description) {
         this.subject = subject;
-        this.totalNumberOfParticipants = totalNumberOfParticipants;
+        this.totalNumberOfRecruitment = totalNumberOfRecruitment;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
@@ -35,7 +35,7 @@ public class StudyCreateDto {
         return Study.builder()
                 .subject(subject)
                 .presenter(user)
-                .totalNumberOfParticipants(totalNumberOfParticipants)
+                .totalNumberOfRecruitment(totalNumberOfRecruitment)
                 .startDate(startDate)
                 .location(location)
                 .endDate(endDate)

@@ -78,7 +78,7 @@ class StudyRepositoryTest extends AbstractWebTestClient {
             Study study = Study.builder()
                     .subject("subject")
                     .presenter(presenter)
-                    .totalNumberOfParticipants(6)
+                    .totalNumberOfRecruitment(6)
                     .startDate(LocalDate.of(2019, 12, 14))
                     .location("송파구")
                     .endDate(LocalDate.of(2019, 12, 15))

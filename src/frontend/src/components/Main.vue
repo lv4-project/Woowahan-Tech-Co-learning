@@ -19,7 +19,7 @@
           />
         </template>
 
-        <v-app-bar-nav-icon/>
+        <v-app-bar-nav-icon @click="showLogin"/>
 
         <v-toolbar-title>테코러닝</v-toolbar-title>
 
@@ -29,7 +29,10 @@
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
 
-        <v-btn @click="routeToStudyGeneration" icon>
+        <v-btn
+          @click="routeToStudyGeneration"
+          icon
+        >
           <v-icon>mdi-square-edit-outline</v-icon>
         </v-btn>
 
@@ -87,8 +90,11 @@
         this.sheetMarginBottom = document.getElementsByClassName(`v-bottom-navigation`)[0].style.height
       },
       routeToStudyGeneration() {
-        this.$router.push(`StudyGeneration`)
+        this.$router.push(`/generation`)
       },
+      showLogin() {
+        this.$router.push(`/login`)
+      }
     },
     computed: {
       isInRecruitmentView() {

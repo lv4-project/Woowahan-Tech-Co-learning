@@ -13,6 +13,7 @@ import GitRedirect from "./components/git/GitRedirect";
 
 import Main from "./components/Main";
 import LoginForm from "./components/user/LoginForm";
+import StudyDetail from "./components/study/StudyDetail";
 
 Vue.use(VueRouter);
 
@@ -38,13 +39,18 @@ const mainChild = [
     component: StudyFinished,
   },
   {
+    name: `StudyDetail`,
+    path: `study-detail`,
+    component: StudyDetail,
+  },
+  {
     name: `UserProfile`,
     path: `profile`,
     component: UserProfile,
   },
   {
     name: `ParticipatingStudy`,
-    path: `ParticipatingStudy`,
+    path: `participating-study`,
     component: ParticipatingStudy,
   },
   {
