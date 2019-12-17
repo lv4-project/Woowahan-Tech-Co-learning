@@ -15,7 +15,7 @@
           <v-img
             v-if="isInRecruitmentView"
             v-bind="props"
-            gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+            gradient="to top right, rgba(99,114,200,.4), rgba(25,32,72,.7)"
           />
         </template>
 
