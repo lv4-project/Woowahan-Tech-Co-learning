@@ -54,4 +54,18 @@ class UserTest {
         assertThatThrownBy(() -> user1.authenticate(user2))
                 .isInstanceOf(UserAuthenticationFailException.class);
     }
+
+    @Test
+    @DisplayName("User id가 같지 않으면 false 반환")
+    void doesNotAuthenticated_false() {
+        User user = User.builder().id(1L).build();
+        assertThat(user.doesNotAuthenticated(1L)).isFalse();
+    }
+
+    @Test
+    @DisplayName("User id가 같으면 true 반환")
+    void doesNotAuthenticated() {
+        User user = User.builder().id(1L).build();
+        assertThat(user.doesNotAuthenticated(99999L)).isTrue();
+    }
 }

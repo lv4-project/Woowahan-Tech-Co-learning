@@ -1,13 +1,13 @@
 package woowahan.anifarm.tecolearning.study.domain;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
+import woowahan.anifarm.tecolearning.studyoutput.domain.StudyOutput;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -28,7 +28,6 @@ public class Study extends BaseEntity {
     private String subject;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "presenter_id", foreignKey = @ForeignKey(name = "fk_study_user"))
     private User presenter;
 
@@ -57,6 +56,9 @@ public class Study extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private StudyStatus status;
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE)
+    private List<StudyOutput> studyOutputs;
 
     @Builder
     public Study(Long id,
@@ -88,5 +90,11 @@ public class Study extends BaseEntity {
         this.description = newStudy.description;
 
         return this;
+    }
+
+    public void checkPermission(long id) {
+        if (presenter.doesNotAuthenticated(id)) {
+            throw new RuntimeException("수정 권한이 없습니다^^");
+        }
     }
 }

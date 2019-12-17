@@ -1,10 +1,6 @@
 package woowahan.anifarm.tecolearning.user.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import woowahan.anifarm.tecolearning.user.domain.exception.UserAuthenticationFailException;
 
 import javax.persistence.*;
@@ -86,5 +82,9 @@ public class User {
 
     private boolean doesNotAuthenticated(User presenter) {
         return !this.id.equals(presenter.id);
+    }
+
+    public boolean doesNotAuthenticated(long id) {
+        return !this.id.equals(id);
     }
 }

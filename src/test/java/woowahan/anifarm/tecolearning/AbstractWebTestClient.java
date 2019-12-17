@@ -27,7 +27,6 @@ import java.util.Map;
 
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-
 @AutoConfigureWebTestClient
 @Import(TestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,8 +35,16 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
         DependencyInjectionTestExecutionListener.class,
 })
 @DbUnitConfiguration(databaseConnection = "dbUnitDatabaseConnection")
-@DatabaseSetup(value = {"/woowahan/anifarm/tecolearning/user.xml", "/woowahan/anifarm/tecolearning/study.xml"}, type = DatabaseOperation.CLEAN_INSERT)
-@DatabaseTearDown(value = {"/woowahan/anifarm/tecolearning/user.xml", "/woowahan/anifarm/tecolearning/study.xml"}, type = DatabaseOperation.DELETE_ALL)
+@DatabaseSetup(value = {
+        "/woowahan/anifarm/tecolearning/user.xml",
+        "/woowahan/anifarm/tecolearning/study.xml",
+        "/woowahan/anifarm/tecolearning/study_output.xml"
+}, type = DatabaseOperation.CLEAN_INSERT)
+@DatabaseTearDown(value = {
+        "/woowahan/anifarm/tecolearning/user.xml",
+        "/woowahan/anifarm/tecolearning/study.xml",
+        "/woowahan/anifarm/tecolearning/study_output.xml"
+}, type = DatabaseOperation.DELETE_ALL)
 @ExtendWith(RestDocumentationExtension.class)
 public class AbstractWebTestClient {
     private static final String EMAIL_KEY = "email";
@@ -97,6 +104,12 @@ public class AbstractWebTestClient {
                 .exchange();
     }
 
+    protected WebTestClient.ResponseSpec getWithoutLogin(String uri) {
+        return webTestClient.get()
+                .uri(uri)
+                .exchange();
+    }
+
     protected EntityExchangeResult<byte[]> postJsonRequest(String uri, Map<String, String> params) {
         return post(uri, params)
                 .expectBody()
@@ -131,6 +144,14 @@ public class AbstractWebTestClient {
                 .exchange();
     }
 
+    protected <T> WebTestClient.ResponseSpec postWithoutLogin(String uri, T dto) {
+        return webTestClient.post()
+                .uri(uri)
+                .body(Mono.just(dto), dto.getClass())
+                .exchange();
+    }
+
+
     protected EntityExchangeResult<byte[]> putJsonRequest(String uri, Map<String, String> params) {
         return put(uri, params)
                 .expectBody()
@@ -160,6 +181,21 @@ public class AbstractWebTestClient {
                 .exchange();
     }
 
+    protected <T> WebTestClient.ResponseSpec putWithoutLogin(String uri, T dto) {
+        return webTestClient.put()
+                .uri(uri)
+                .body(Mono.just(dto), dto.getClass())
+                .exchange();
+    }
+
+    protected WebTestClient.ResponseSpec delete(String uri) {
+        return webTestClient.delete()
+                .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
+                .exchange();
+
+    }
+
     protected EntityExchangeResult<byte[]> deleteRequest(String uri) {
         return webTestClient.delete()
                 .uri(uri)
@@ -173,3 +209,4 @@ public class AbstractWebTestClient {
         token = null;
     }
 }
+

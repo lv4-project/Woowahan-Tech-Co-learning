@@ -2,13 +2,14 @@ package woowahan.anifarm.tecolearning.study.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import woowahan.anifarm.tecolearning.user.domain.User;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class StudyTest {
-
 
     @Test
     @DisplayName("스터디 정보를 수정한다.")
@@ -44,5 +45,16 @@ class StudyTest {
         assertThat(updatedStudy.getStartDate()).isEqualTo(newStudy.getStartDate());
         assertThat(updatedStudy.getTotalNumberOfParticipants()).isEqualTo(newStudy.getTotalNumberOfParticipants());
         assertThat(updatedStudy.getSubject()).isEqualTo(newStudy.getSubject());
+    }
+
+    @Test
+    @DisplayName("발제한 회원이 아닐경우 Exception 발생")
+    void checkPermission() {
+        Study study = Study.builder()
+                .id(1L)
+                .presenter(User.builder().id(1L).build())
+                .build();
+
+        assertThatThrownBy(() -> study.checkPermission(2L)).isInstanceOf(RuntimeException.class);
     }
 }
