@@ -1,6 +1,8 @@
 package woowahan.anifarm.tecolearning.study.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
 import woowahan.anifarm.tecolearning.studyoutput.domain.StudyOutput;
 import woowahan.anifarm.tecolearning.user.domain.User;
@@ -28,6 +30,7 @@ public class Study extends BaseEntity {
     private String subject;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "presenter_id", foreignKey = @ForeignKey(name = "fk_study_user"))
     private User presenter;
 
@@ -94,5 +97,9 @@ public class Study extends BaseEntity {
         if (presenter.doesNotAuthenticated(id)) {
             throw new RuntimeException("수정 권한이 없습니다^^");
         }
+    }
+
+    public boolean isCreatedBy(User user) {
+        return presenter.equals(user);
     }
 }

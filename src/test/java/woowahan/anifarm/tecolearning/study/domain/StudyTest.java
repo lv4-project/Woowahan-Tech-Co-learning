@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StudyTest {
 
@@ -56,5 +57,14 @@ class StudyTest {
                 .build();
 
         assertThatThrownBy(() -> study.checkPermission(2L)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    @DisplayName("스터디 발제자를 확인한다.")
+    void checkIfPresenter() {
+        User user = User.builder().id(1L).build();
+        Study study = Study.builder().id(1L).presenter(user).build();
+
+        assertTrue(study.isCreatedBy(user));
     }
 }
