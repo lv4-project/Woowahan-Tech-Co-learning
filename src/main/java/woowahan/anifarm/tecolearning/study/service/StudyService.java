@@ -12,6 +12,7 @@ import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
+import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
 import woowahan.anifarm.tecolearning.study.service.exception.StudyNotFoundException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
@@ -20,6 +21,8 @@ import woowahan.anifarm.tecolearning.user.service.UserService;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus.*;
 
 @Service
 public class StudyService {
@@ -48,15 +51,27 @@ public class StudyService {
 
         studyParticipantRepository.save(studyParticipant);
 
-        return StudyInfoDto.from(saved);
+        return StudyInfoDto.of(saved, PRESENTER.name().toLowerCase());
     }
 
     public Study findById(long studyId) {
         return studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
     }
 
-    public StudyInfoDto findInfoDtoById(long studyId) {
-        return StudyInfoDto.from(findById(studyId));
+    public StudyInfoDto findInfoDtoById(long studyId, UserInfoDto userInfoDto) {
+        Study study = findById(studyId);
+        User presenter = study.getPresenter();
+        User loggedInUser = userService.findById(userInfoDto.getId());
+
+        if (presenter.isSame(loggedInUser)) {
+            return StudyInfoDto.of(study, PRESENTER.getStatus());
+        }
+
+        if (studyParticipantRepository.existsByStudyAndParticipant(study, loggedInUser)) {
+            return StudyInfoDto.of(study, PARTICIPANT.getStatus());
+        }
+
+        return StudyInfoDto.of(study, NON_PARTICIPANT.getStatus());
     }
 
     public List<StudySummaryDto> findPageOfSummaryDto(Pageable pageable) {
@@ -76,11 +91,32 @@ public class StudyService {
         Study newStudy = studyUpdateDto.toEntity();
 
         authenticate(oldStudy.getPresenter(), loginUser.getId());
-        return StudyInfoDto.from(oldStudy.update(newStudy));
+        return StudyInfoDto.of(oldStudy.update(newStudy), PRESENTER.getStatus());
     }
 
     private void authenticate(User oldPresenter, long userId) {
         User presenter = userService.findById(userId);
         presenter.authenticate(oldPresenter);
+    }
+
+    public String participateInStudy(long studyId, UserInfoDto userInfoDto) {
+        Study participatingStudy = findById(studyId);
+        User user = userService.findById(userInfoDto.getId());
+
+        checkPresenter(participatingStudy, user);
+        StudyParticipant studyParticipant = StudyParticipant.builder()
+                .study(participatingStudy)
+                .participant(user)
+                .build();
+
+        studyParticipantRepository.save(studyParticipant);
+
+        return PARTICIPANT.name().toLowerCase();
+    }
+
+    private void checkPresenter(Study participatingStudy, User user) {
+        if (participatingStudy.isCreatedBy(user)) {
+            throw new InvalidParticipatingRequestException();
+        }
     }
 }

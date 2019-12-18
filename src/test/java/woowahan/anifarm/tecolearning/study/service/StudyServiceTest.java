@@ -14,19 +14,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
+import woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
+import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 import woowahan.anifarm.tecolearning.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -116,7 +120,6 @@ class StudyServiceTest {
         assertThat(pageOfSummaryDto.size()).isEqualTo(pageSize);
     }
 
-
     private Page<Study> getPageOfStudy(int pageSize) {
         List<Study> studies = new ArrayList<>();
 
@@ -128,4 +131,35 @@ class StudyServiceTest {
 
     // TODO: 2019-12-12 Study 수정 test
 
+
+    @Test
+    @DisplayName("발제자가 아닌 회원이 스터디에 참여한다.")
+    void participateInStudy() {
+        long studyId = 1L;
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
+        given(studyRepository.findById(studyId)).willReturn(Optional.of(mock(Study.class)));
+        given(userService.findById(userInfoDto.getId())).willReturn(mock(User.class));
+
+        String studyParticipantStatus = injectStudyService.participateInStudy(studyId, userInfoDto);
+
+        assertThat(studyParticipantStatus)
+                .isEqualTo(StudyParticipantStatus.PARTICIPANT.name().toLowerCase());
+    }
+
+    @Test
+    @DisplayName("발제자가 스터디에 참여 시도하는 경우 InvalidParticipatingRequestException 예외 발생")
+    void participateStudy_ifUserIsPresenter() {
+        // Given
+        long studyId = 1L;
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
+        Study mockStudy = mock(Study.class);
+
+        given(studyRepository.findById(studyId)).willReturn(Optional.of(mockStudy));
+        given(userService.findById(userInfoDto.getId())).willReturn(mock(User.class));
+        given(mockStudy.isCreatedBy(any(User.class))).willReturn(true);
+
+        // When, Then
+        assertThrows(InvalidParticipatingRequestException.class,
+                () -> injectStudyService.participateInStudy(studyId, userInfoDto));
+    }
 }
