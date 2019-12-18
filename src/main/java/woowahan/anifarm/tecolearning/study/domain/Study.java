@@ -35,8 +35,6 @@ public class Study extends BaseEntity {
             nullable = false)
     private Integer totalNumberOfRecruitment;
 
-    // TODO: 2019-12-10 participants user -> many to many
-
     @Column(name = "start_date",
             nullable = false)
     private LocalDate startDate;

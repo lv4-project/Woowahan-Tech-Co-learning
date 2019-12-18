@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import woowahan.anifarm.tecolearning.study.domain.Study;
+import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
+import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
@@ -28,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.springframework.data.domain.Sort.by;
 
 @Slf4j
@@ -38,6 +41,9 @@ class StudyServiceTest {
 
     @Mock
     private StudyRepository studyRepository;
+
+    @Mock
+    private StudyParticipantRepository studyParticipantRepository;
 
     @Mock
     private UserService userService;
@@ -66,11 +72,13 @@ class StudyServiceTest {
 
         given(userService.findById(1L)).willReturn(user);
         given(studyRepository.save(any(Study.class))).willReturn(mockStudy);
+        given(studyParticipantRepository.save(any(StudyParticipant.class))).willReturn(mock(StudyParticipant.class));
 
         // when
         StudyInfoDto savedStudyInfoDto = injectStudyService.save(studyCreateDto, userInfoDto);
 
         // then
+        verify(studyParticipantRepository).save(any(StudyParticipant.class));
         assertThat(savedStudyInfoDto.getId()).isEqualTo(expectedStudy.getId());
     }
 

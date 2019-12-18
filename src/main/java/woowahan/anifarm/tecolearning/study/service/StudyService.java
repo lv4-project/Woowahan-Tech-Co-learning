@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import woowahan.anifarm.tecolearning.study.domain.Study;
+import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
+import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
@@ -23,11 +25,14 @@ import java.util.stream.Collectors;
 public class StudyService {
     private final UserService userService;
     private final StudyRepository studyRepository;
+    private final StudyParticipantRepository studyParticipantRepository;
 
     public StudyService(UserService userService,
-                        StudyRepository studyRepository) {
+                        StudyRepository studyRepository,
+                        StudyParticipantRepository studyParticipantRepository) {
         this.userService = userService;
         this.studyRepository = studyRepository;
+        this.studyParticipantRepository = studyParticipantRepository;
     }
 
     public StudyInfoDto save(StudyCreateDto studyCreateDto, UserInfoDto userInfoDto) {
@@ -35,6 +40,14 @@ public class StudyService {
 
         Study study = studyCreateDto.toEntity(user);
         Study saved = studyRepository.save(study);
+
+        StudyParticipant studyParticipant = StudyParticipant.builder()
+                .participant(user)
+                .study(saved)
+                .build();
+
+        studyParticipantRepository.save(studyParticipant);
+
         return StudyInfoDto.from(saved);
     }
 
