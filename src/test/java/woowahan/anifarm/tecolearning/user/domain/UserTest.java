@@ -68,4 +68,13 @@ class UserTest {
         User user = User.builder().id(1L).build();
         assertThat(user.doesNotAuthenticated(99999L)).isTrue();
     }
+
+    @Test
+    @DisplayName("같은 user일 경우 true 반환")
+    void isSame() {
+        User user = User.builder().id(1L).build();
+        User user2 = User.builder().id(1L).build();
+
+        assertThat(user.isSame(user2)).isTrue();
+    }
 }
