@@ -3,8 +3,8 @@
     <v-row>
       <v-col cols="12">
         <v-card
-          v-for="info in infos"
-          :key="info.id"
+          v-for="study in studies"
+          :key="study.id"
           class="mx-auto mb-5"
           max-width="90%"
           outlined
@@ -16,18 +16,18 @@
                 class="text-left text-truncate"
               >
                 <v-list-item-title class="headline mb-1">
-                  {{ info.subject }}
+                  {{ study.subject }}
                 </v-list-item-title>
               </v-col>
               <v-col
                 cols="4"
                 class="text-right pa-0"
               >
-                인원 {{ info.personal }} / {{ info.total }}
+                인원 {{ study.numberOfParticipants }} / {{ study.totalNumberOfRecruitment }}
               </v-col>
               <v-col cols="9">
                 <v-list-item-subtitle>
-                  {{ info.description }}
+                  {{ study.summary }}
                 </v-list-item-subtitle>
               </v-col>
               <v-col
@@ -46,6 +46,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-card>
+        <div id="bottomSensor"></div>
       </v-col>
     </v-row>
   </v-container>
@@ -55,27 +56,43 @@
   `use strict`;
 
   export default {
-    name: 'OngoingStudy',
+    name: 'StudyRecruitment',
     data() {
       return {
-        infos:
-          [
-            {
-              id: `1`,
-              subject: `토비의 스프링`,
-              personal: `99`,
-              total: `99`,
-              description: `예제와 학습테스트를 기반으로 스프링 원리, 테스트 작성, 점진적 리팩토링 연습`,
-            },
-            {
-              id: `2`,
-              subject: `JPA 스터디`,
-              personal: `99`,
-              total: `99`,
-              description: `미니 프로젝트 예제를 vue js와 연동해 작성해보기`,
-            },
-          ],
+        studies: [],
+        pageOffset: 0,
+        pageSize: 5,
       }
     },
-  };
+    methods: {
+      requestStudySummaryPage(pageOffset, pageSize) {
+        const component = this;
+        const request = `${window.location.origin}/api/studies/summary?page=${String(pageOffset)}&size=${String(pageSize)}&sort=createdDate,desc`;
+
+        this.$request.get(request, function (error, response, body) {
+          if (response.statusCode === 200) {
+            component.studies = component.studies.concat(JSON.parse(body));
+            component.pageOffset++;
+          } else {
+            window.console.log(error);
+            alert(body);
+          }
+        });
+      }
+    },
+    mounted() {
+      const bottomSensor = document.getElementById(`bottomSensor`);
+
+      const observer = new IntersectionObserver(entries => {
+        window.console.log(entries);
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          this.requestStudySummaryPage(this.pageOffset, this.pageSize)
+        });
+      });
+      observer.observe(bottomSensor);
+    }
+  }
 </script>
