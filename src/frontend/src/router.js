@@ -10,10 +10,11 @@ import UserProfile from "./components/user/UserProfile";
 import ParticipatingStudy from "./components/user/ParticipatingStudy";
 import UserUpdateForm from "./components/user/UserUpdateForm";
 import GitRedirect from "./components/git/GitRedirect";
+import Map from "./components/map/Map";
+import StudyDetail from "./components/study/StudyDetail";
 
 import Main from "./components/Main";
 import LoginForm from "./components/user/LoginForm";
-import StudyDetail from "./components/study/StudyDetail";
 
 Vue.use(VueRouter);
 
@@ -81,6 +82,11 @@ const routes = [
     name: `gitredirect`,
     path: `/gitredirect`,
     component: GitRedirect,
+  },
+  {
+    name: `map`,
+    path: `/map`,
+    component: Map,
   },
 ];
 
