@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <location
+            location_id="7947003"
+            phone="02-415-3595"
+            place_name="석촌호수 서호"
+            place_url="http://place.map.kakao.com/7947003"
+            x="127.099112837006"
+            y="37.5076807262772"
+    />
+
+    <study_location
+            study_location_id="1"
+            study_id="1"
+            location_id="7947003"
+    />
+</dataset>

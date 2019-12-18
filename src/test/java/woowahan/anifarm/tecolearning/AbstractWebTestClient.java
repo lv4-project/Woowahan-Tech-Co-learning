@@ -38,12 +38,14 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @DatabaseSetup(value = {
         "/woowahan/anifarm/tecolearning/user.xml",
         "/woowahan/anifarm/tecolearning/study.xml",
-        "/woowahan/anifarm/tecolearning/study_output.xml"
+        "/woowahan/anifarm/tecolearning/study_output.xml",
+        "/woowahan/anifarm/tecolearning/study_location.xml"
 }, type = DatabaseOperation.CLEAN_INSERT)
 @DatabaseTearDown(value = {
         "/woowahan/anifarm/tecolearning/user.xml",
         "/woowahan/anifarm/tecolearning/study.xml",
-        "/woowahan/anifarm/tecolearning/study_output.xml"
+        "/woowahan/anifarm/tecolearning/study_output.xml",
+        "/woowahan/anifarm/tecolearning/study_location.xml"
 }, type = DatabaseOperation.DELETE_ALL)
 @ExtendWith(RestDocumentationExtension.class)
 public class AbstractWebTestClient {
@@ -118,6 +120,8 @@ public class AbstractWebTestClient {
 
     protected <T, R> EntityExchangeResult<R> postJsonRequest(String uri, T dto, Class<R> returnType) {
         return post(uri, dto)
+                .expectStatus()
+                .isOk()
                 .expectBody(returnType).returnResult();
     }
 
@@ -136,7 +140,7 @@ public class AbstractWebTestClient {
                 .exchange();
     }
 
-    private <T> WebTestClient.ResponseSpec post(String uri, T dto) {
+    protected  <T> WebTestClient.ResponseSpec post(String uri, T dto) {
         return webTestClient.post()
                 .uri(uri)
                 .cookie(LoggedInInterceptor.TOKEN, token)
@@ -193,7 +197,6 @@ public class AbstractWebTestClient {
                 .uri(uri)
                 .cookie(LoggedInInterceptor.TOKEN, token)
                 .exchange();
-
     }
 
     protected EntityExchangeResult<byte[]> deleteRequest(String uri) {

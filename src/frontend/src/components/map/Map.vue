@@ -110,6 +110,7 @@
         this.infowindow.open(this.map, marker);
       },
       sendSelectedPlace() {
+        window.console.log(this.selectedPlace);
         this.$emit(`sendSelectedPlace`, this.selectedPlace);
       }
     },
