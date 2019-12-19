@@ -102,8 +102,6 @@
 <script>
   `use strict`;
 
-  import {eventBus} from "../../main";
-
   export default {
     name: "StudyGeneration",
     data() {
@@ -173,9 +171,7 @@
 
         this.$request(studyCreationRequest, function (error, response, body) {
           if (response.statusCode === 200) {
-            component.$router.push(`/study-detail`).then(() => {
-              eventBus.$emit(`newRecruitmentCreated`, body);
-            });
+            component.$router.push(`/studies/${body.id}`);
           } else if (response.statusCode === 401) {
             component.$router.push(`/login`)
           } else {

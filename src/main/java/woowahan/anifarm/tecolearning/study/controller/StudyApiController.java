@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import woowahan.anifarm.tecolearning.auth.advice.LoggedInUser;
 import woowahan.anifarm.tecolearning.study.service.StudyService;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyDetailInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
@@ -25,8 +26,8 @@ public class StudyApiController {
     }
 
     @GetMapping("/{studyId}")
-    public ResponseEntity<StudyInfoDto> read(@PathVariable long studyId,
-                                             @LoggedInUser UserInfoDto userInfoDto) {
+    public ResponseEntity<StudyDetailInfoDto> read(@PathVariable long studyId,
+                                                   @LoggedInUser UserInfoDto userInfoDto) {
         return ResponseEntity.ok(studyService.findInfoDtoById(studyId, userInfoDto));
     }
 

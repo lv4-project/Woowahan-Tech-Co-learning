@@ -36,6 +36,7 @@
               >
                 <v-card-actions class="pa-0 float-right">
                   <v-btn
+                    @click="showDetail(study.id)"
                     class="pa-1"
                     color="primary"
                   >
@@ -78,7 +79,10 @@
             alert(body);
           }
         });
-      }
+      },
+      showDetail(studyId) {
+        this.$router.push(`/studies/${studyId}`)
+      },
     },
     mounted() {
       const bottomSensor = document.getElementById(`bottomSensor`);

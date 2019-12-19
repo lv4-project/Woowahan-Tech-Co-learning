@@ -11,10 +11,12 @@ import ParticipatingStudy from "./components/user/ParticipatingStudy";
 import UserUpdateForm from "./components/user/UserUpdateForm";
 import GitRedirect from "./components/git/GitRedirect";
 import Map from "./components/map/Map";
-import StudyDetail from "./components/study/StudyDetail";
 
 import Main from "./components/Main";
 import LoginForm from "./components/user/LoginForm";
+import StudyOutputGeneration from "./components/studyoutput/StudyOutputGeneration";
+import StudyOngoingDetail from "./components/study/StudyOngoingDetail";
+import StudyOutputEdit from "./components/studyoutput/StudyOutputEdit";
 
 Vue.use(VueRouter);
 
@@ -38,11 +40,6 @@ const mainChild = [
     name: `StudyFinished`,
     path: `finished`,
     component: StudyFinished,
-  },
-  {
-    name: `StudyDetail`,
-    path: `study-detail`,
-    component: StudyDetail,
   },
   {
     name: `UserProfile`,
@@ -84,7 +81,23 @@ const routes = [
     component: GitRedirect,
   },
   {
-    name: `map`,
+    name: `StudyOutputGeneration`,
+    path: `/studies/:studyId/outputs`,
+    component: StudyOutputGeneration,
+  },
+  {
+    name: `StudyOutputEdit`,
+    path: `/studies/:studyId/outputs/:outputId`,
+    component: StudyOutputEdit,
+  },
+
+  {
+    name: `StudyOngoingDetail`,
+    path: `/studies/:studyId`,
+    component: StudyOngoingDetail,
+  },
+  {
+    name: `Map`,
     path: `/map`,
     component: Map,
   },

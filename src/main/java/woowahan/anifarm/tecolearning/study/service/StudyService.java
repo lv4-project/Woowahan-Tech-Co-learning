@@ -8,10 +8,7 @@ import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
-import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
-import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
-import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
-import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.*;
 import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
 import woowahan.anifarm.tecolearning.study.service.exception.StudyNotFoundException;
 import woowahan.anifarm.tecolearning.user.domain.User;
@@ -58,20 +55,20 @@ public class StudyService {
         return studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
     }
 
-    public StudyInfoDto findInfoDtoById(long studyId, UserInfoDto userInfoDto) {
+    public StudyDetailInfoDto findInfoDtoById(long studyId, UserInfoDto userInfoDto) {
         Study study = findById(studyId);
         User presenter = study.getPresenter();
         User loggedInUser = userService.findById(userInfoDto.getId());
 
         if (presenter.isSame(loggedInUser)) {
-            return StudyInfoDto.of(study, PRESENTER.getStatus());
+            return StudyDetailInfoDto.of(study, PRESENTER.getStatus());
         }
 
         if (studyParticipantRepository.existsByStudyAndParticipant(study, loggedInUser)) {
-            return StudyInfoDto.of(study, PARTICIPANT.getStatus());
+            return StudyDetailInfoDto.of(study, PARTICIPANT.getStatus());
         }
-
-        return StudyInfoDto.of(study, NON_PARTICIPANT.getStatus());
+        // TODO: 2019-12-19  return StudyDetailInfoDto.from(findById(studyId)); 로 변경
+        return StudyDetailInfoDto.of(study, NON_PARTICIPANT.getStatus());
     }
 
     public List<StudySummaryDto> findPageOfSummaryDto(Pageable pageable) {

@@ -14,7 +14,11 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("발제자와 같은 회원이 정상적으로 산출물 작성")
     void create() {
-        StudyOutputDto outputCreateDto = new StudyOutputDto("python 1장", "# 이게 이렇게 된다고?");
+        StudyOutputDto outputCreateDto =
+                StudyOutputDto.builder()
+                        .title("python 1장")
+                        .contents("# 이게 이렇게 된다고?")
+                        .build();
         // TODO: 2019-12-16 post method 에 status check 추가?
         StudyOutputDto studyOutputDto =
                 postJsonRequest("/api/studies/1/outputs", outputCreateDto, StudyOutputDto.class)
@@ -27,7 +31,10 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("발제자와 다른 회원이 작성을 시도할 경우, Error message?")
     void create_fail() {
-        StudyOutputDto outputCreateDto = new StudyOutputDto("php 1장", "# 이게 안 된다고?");
+        StudyOutputDto outputCreateDto = StudyOutputDto.builder()
+                .title("php 1장")
+                .contents("# 이게 안 된다고?")
+                .build();
         // TODO: 2019-12-16 exception 바꾸기, RestControllerAdvice convention 정하기
         postWithoutLogin("/api/studies/1/outputs" + "/" + 1, outputCreateDto)
                 .expectStatus().is5xxServerError();
@@ -55,7 +62,10 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("발제자와 같은 회원이 산출물 수정")
     void update() {
-        StudyOutputDto studyOutputDto = new StudyOutputDto("Updated title", "updated contents~!~!");
+        StudyOutputDto studyOutputDto = StudyOutputDto.builder()
+                .title("Updated title")
+                .contents("updated contents~!~!")
+                .build();
         StudyOutputDto updatedDto = put(API_OUTPUTS + "/" + 1, studyOutputDto)
                 .expectStatus().isOk()
                 .expectBody(StudyOutputDto.class)
@@ -69,7 +79,10 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("발제자와 다른 회원이 산출물 수정할 경우, 안됨^^")
     void update_fail() {
-        StudyOutputDto studyOutputDto = new StudyOutputDto("Updated title", "updated contents~!~!");
+        StudyOutputDto studyOutputDto = StudyOutputDto.builder()
+                .title("Updated title")
+                .contents("updated contents~!~!")
+                .build();
         putWithoutLogin(API_OUTPUTS + "/" + 1, studyOutputDto)
                 .expectStatus().is5xxServerError();
     }
@@ -77,8 +90,13 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("스터디에 해당하는 모든 산출물 조회")
     void readAll() {
+        StudyOutputDto sampleOutput = StudyOutputDto.builder()
+                .title("python 1장")
+                .contents("# 이게 이렇게 된다고?")
+                .build();
+
         StudyOutputDto studyOutputDto = postJsonRequest("/api/studies/1/outputs",
-                new StudyOutputDto("python 1장", "# 이게 이렇게 된다고?"),
+                sampleOutput,
                 StudyOutputDto.class)
                 .getResponseBody();
 

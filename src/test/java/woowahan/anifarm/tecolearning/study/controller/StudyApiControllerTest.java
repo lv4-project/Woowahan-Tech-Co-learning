@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
 import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
+import woowahan.anifarm.tecolearning.study.service.dto.StudyDetailInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
 
@@ -50,7 +51,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("스터디를 조회한다")
     void findStudy() {
-        StudyInfoDto study = getRequest(API_STUDIES + "/" + SAMPLE_STUDY_ID, StudyInfoDto.class);
+        StudyDetailInfoDto study = getRequest(API_STUDIES + "/" + SAMPLE_STUDY_ID, StudyDetailInfoDto.class);
 
         assertThat(study.getId()).isEqualTo(SAMPLE_STUDY_ID);
         assertThat(study.getStartDate()).isEqualTo(LocalDate.of(2019, 12, 12));
@@ -61,7 +62,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("발제자가 스터디를 조회하는 경우, studyParticipantStatus값은 presenter다.")
     void findStudy_ifUserIsPresenter() {
-        StudyInfoDto study = getRequest(API_STUDIES + "/" + SAMPLE_STUDY_ID, StudyInfoDto.class);
+        StudyDetailInfoDto study = getRequest(API_STUDIES + "/" + SAMPLE_STUDY_ID, StudyDetailInfoDto.class);
 
         assertThat(study.getStudyParticipantStatus()).isEqualTo("presenter");
     }
@@ -69,7 +70,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("회원이고 비참가자가 스터디를 조회하는 경우, studyParticipantStatus값은 nonParticipant다.")
     void findStudy_ifUserIsMemberAndNonParticipant() {
-        StudyInfoDto study = getRequest(API_STUDIES + "/2", StudyInfoDto.class);
+        StudyDetailInfoDto study = getRequest(API_STUDIES + "/2", StudyDetailInfoDto.class);
 
         assertThat(study.getStudyParticipantStatus()).isEqualTo("nonParticipant");
     }
@@ -78,7 +79,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     @DisplayName("회원이고 참가자가 조회하는 경우, studyParticipantStatus값은 participant다.")
     void findStudy_ifUserIsMemberAndParticipant() {
         post(API_STUDIES + "/2/participants", Void.class).expectStatus().isOk();
-        StudyInfoDto study = getRequest(API_STUDIES + "/2", StudyInfoDto.class);
+        StudyDetailInfoDto study = getRequest(API_STUDIES + "/2", StudyDetailInfoDto.class);
 
         assertThat(study.getStudyParticipantStatus()).isEqualTo("participant");
     }
@@ -105,10 +106,10 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
                 .description("뭐하지?")
                 .build();
 
-        StudyInfoDto updatedInfoDto = put(API_STUDIES + "/" + SAMPLE_STUDY_ID, updateDto)
+        StudyDetailInfoDto updatedInfoDto = put(API_STUDIES + "/" + SAMPLE_STUDY_ID, updateDto)
                 .expectStatus()
                 .isOk()
-                .expectBody(StudyInfoDto.class)
+                .expectBody(StudyDetailInfoDto.class)
                 .returnResult()
                 .getResponseBody();
 

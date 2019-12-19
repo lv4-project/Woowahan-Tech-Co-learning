@@ -17,7 +17,6 @@ public class StudyOutputApiController {
         this.studyOutputService = studyOutputService;
     }
 
-    // TODO: 2019-12-16 API convention 
     @PostMapping("/api/studies/{studyId}/outputs")
     public ResponseEntity<StudyOutputDto> create(@PathVariable long studyId,
                                                  @RequestBody StudyOutputDto studyOutputDto,
