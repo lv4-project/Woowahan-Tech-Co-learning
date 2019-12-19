@@ -39,13 +39,15 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
         "/woowahan/anifarm/tecolearning/user.xml",
         "/woowahan/anifarm/tecolearning/study.xml",
         "/woowahan/anifarm/tecolearning/study_output.xml",
-        "/woowahan/anifarm/tecolearning/study_location.xml"
+        "/woowahan/anifarm/tecolearning/study_location.xml",
+        "/woowahan/anifarm/tecolearning/study_participant.xml"
 }, type = DatabaseOperation.CLEAN_INSERT)
 @DatabaseTearDown(value = {
         "/woowahan/anifarm/tecolearning/user.xml",
         "/woowahan/anifarm/tecolearning/study.xml",
         "/woowahan/anifarm/tecolearning/study_output.xml",
-        "/woowahan/anifarm/tecolearning/study_location.xml"
+        "/woowahan/anifarm/tecolearning/study_location.xml",
+        "/woowahan/anifarm/tecolearning/study_participant.xml"
 }, type = DatabaseOperation.DELETE_ALL)
 @ExtendWith(RestDocumentationExtension.class)
 public class AbstractWebTestClient {
