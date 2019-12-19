@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stages("Build") {
+        stage("Build") {
             steps {
                 sh "sudo sh deploy.sh"
             }
