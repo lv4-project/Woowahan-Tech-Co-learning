@@ -21,23 +21,55 @@
         required
       />
 
-      <v-text-field
-        v-model="startDate.init"
-        :rules="startDate.rules"
-        :maxlength="startDate.max"
-        label="시작 날짜"
-        type="text"
-        required
-      />
-
-      <v-text-field
-        v-model="endDate.init"
-        :rules="endDate.rules"
-        :maxlength="endDate.max"
-        label="끝나는 날짜"
-        type="text"
-        required
-      />
+      <v-row>
+        <v-col cols="6">
+          <v-menu
+            v-model="startDate.view"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="startDate.init"
+                label="시작 날짜"
+                readonly
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="startDate.init"
+              @input="startDate.view = false"
+            />
+          </v-menu>
+        </v-col>
+        <v-spacer/>
+        <v-col cols="6">
+          <v-menu
+            v-model="endDate.view"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="endDate.init"
+                label="끝나는 날짜"
+                readonly
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="endDate.init"
+              @input="endDate.view = false"
+            />
+          </v-menu>
+        </v-col>
+      </v-row>
 
       <v-text-field
         v-model="location"
@@ -80,6 +112,12 @@
 
       return {
         valid: true,
+
+        date: new Date().toISOString().substr(0, 10),
+        menu: false,
+        modal: false,
+        menu2: false,
+
         subject: {
           name: ``,
           length: 60,
@@ -96,6 +134,7 @@
           max: 2,
         },
         startDate: {
+          view: ``,
           init: ``,
           rules: [
             v => validateBlank(v, `기간을 입력해주세요.`),
@@ -103,6 +142,7 @@
           max: 10,
         },
         endDate: {
+          view: ``,
           init: ``,
           rules: [
             v => validateBlank(v, `기간을 입력해주세요.`),
