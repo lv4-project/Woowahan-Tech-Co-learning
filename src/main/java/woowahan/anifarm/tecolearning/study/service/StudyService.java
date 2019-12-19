@@ -51,7 +51,7 @@ public class StudyService {
 
         studyParticipantRepository.save(studyParticipant);
 
-        return StudyInfoDto.of(saved, PRESENTER.name().toLowerCase());
+        return StudyInfoDto.of(saved, PRESENTER.getStatus());
     }
 
     public Study findById(long studyId) {
@@ -103,7 +103,7 @@ public class StudyService {
         Study participatingStudy = findById(studyId);
         User user = userService.findById(userInfoDto.getId());
 
-        checkPresenter(participatingStudy, user);
+        checkParticipating(participatingStudy, user);
         StudyParticipant studyParticipant = StudyParticipant.builder()
                 .study(participatingStudy)
                 .participant(user)
@@ -111,11 +111,11 @@ public class StudyService {
 
         studyParticipantRepository.save(studyParticipant);
 
-        return PARTICIPANT.name().toLowerCase();
+        return PARTICIPANT.getStatus();
     }
 
-    private void checkPresenter(Study participatingStudy, User user) {
-        if (participatingStudy.isCreatedBy(user)) {
+    private void checkParticipating(Study participatingStudy, User user) {
+        if (studyParticipantRepository.existsByStudyAndParticipant(participatingStudy, user)) {
             throw new InvalidParticipatingRequestException();
         }
     }

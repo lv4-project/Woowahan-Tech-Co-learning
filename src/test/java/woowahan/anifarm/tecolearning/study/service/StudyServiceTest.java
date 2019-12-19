@@ -147,7 +147,7 @@ class StudyServiceTest {
     }
 
     @Test
-    @DisplayName("발제자가 스터디에 참여 시도하는 경우 InvalidParticipatingRequestException 예외 발생")
+    @DisplayName("스터디 참가자가 스터디에 참여 시도하는 경우 InvalidParticipatingRequestException 예외 발생")
     void participateStudy_ifUserIsPresenter() {
         // Given
         long studyId = 1L;
@@ -156,7 +156,7 @@ class StudyServiceTest {
 
         given(studyRepository.findById(studyId)).willReturn(Optional.of(mockStudy));
         given(userService.findById(userInfoDto.getId())).willReturn(mock(User.class));
-        given(mockStudy.isCreatedBy(any(User.class))).willReturn(true);
+        given(studyParticipantRepository.existsByStudyAndParticipant(any(Study.class), any(User.class))).willReturn(true);
 
         // When, Then
         assertThrows(InvalidParticipatingRequestException.class,
