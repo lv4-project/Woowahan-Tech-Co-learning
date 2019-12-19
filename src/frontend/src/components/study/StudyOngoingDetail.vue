@@ -79,6 +79,19 @@
         </v-expansion-panels>
       </v-col>
     </v-row>
+
+    <v-row v-if="studyInfo.status === `RECRUITING`">
+      <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `nonParticipant`">
+        <v-btn @click="participateInStudy" color="primary">함께하고싶소</v-btn>
+      </v-col>
+      <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `presenter`">
+        <v-btn color="primary">스터디 시작하기</v-btn>
+        <v-btn color="primary">스터디 폭파</v-btn>
+      </v-col>
+      <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `participant`">
+        <v-btn color="primary">나갈래요</v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -116,6 +129,17 @@
       },
       editOutput(outputId) {
         this.$router.push(`/studies/${this.studyId}/outputs/${outputId}`);
+      },
+      participateInStudy() {
+        const component = this;
+
+        this.$request.post(`${window.location.origin}/api/studies/${this.studyId}/participants`,
+          function (error, response, body) {
+            if (response.statusCode === 200) {
+              window.console.log(body);
+              component.studyInfo.studyParticipantStatus = body;
+            }
+        });
       }
     },
     created() {
