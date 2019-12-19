@@ -16,5 +16,6 @@ pipeline {
             steps {
                 sh 'sudo sh /home/ubuntu/switch.sh'
             }
+        }
     }
 }
