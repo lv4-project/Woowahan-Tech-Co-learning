@@ -34,7 +34,7 @@ public class Study extends BaseEntity {
     @JoinColumn(name = "presenter_id", foreignKey = @ForeignKey(name = "fk_study_user"))
     private User presenter;
 
-    @Column(name = "total_number_of_participants",
+    @Column(name = "total_number_of_recruitment",
             nullable = false)
     private Integer totalNumberOfRecruitment;
 
