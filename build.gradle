@@ -56,7 +56,14 @@ ext {
     snippetsDir = file('build/generated-snippets')
 }
 
-task setUp(type: NpmTask) {
+task preSetUp(type: NpmTask) {
+    description = "Install vue-simplemde vue-markdown packages"
+    args = ['install', '--save', 'vue-simplemde', 'vue-markdown']
+    inputs.files file('package.json')
+    outputs.files file('node_modules')
+}
+
+task setUp(type: NpmTask, dependsOn: preSetUp) {
     description = "Install Node.js packages"
     args = ['install']
     inputs.files file('package.json')
@@ -70,7 +77,7 @@ task buildFrontEnd(type: NpmTask, dependsOn: setUp) {
 
 bootJar {
     dependsOn asciidoctor
-    from ("${asciidoctor.outputDir}/html5") {
+    from("${asciidoctor.outputDir}/html5") {
         into 'static/docs'
     }
 }
