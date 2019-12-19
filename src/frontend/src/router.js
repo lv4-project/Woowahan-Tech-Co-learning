@@ -9,7 +9,6 @@ import StudyFinished from "./components/study/StudyFinished";
 import UserProfile from "./components/user/UserProfile";
 import ParticipatingStudy from "./components/user/ParticipatingStudy";
 import UserUpdateForm from "./components/user/UserUpdateForm";
-import GitRedirect from "./components/git/GitRedirect";
 import Map from "./components/map/Map";
 
 import Main from "./components/Main";
@@ -74,11 +73,6 @@ const routes = [
     name: `SignUpForm`,
     path: `/signup`,
     component: SignUpForm,
-  },
-  {
-    name: `gitredirect`,
-    path: `/gitredirect`,
-    component: GitRedirect,
   },
   {
     name: `StudyOutputGeneration`,

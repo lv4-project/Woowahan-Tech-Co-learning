@@ -56,6 +56,10 @@ public class LoggedInInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String getToken(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(TOKEN))
                 .findFirst()

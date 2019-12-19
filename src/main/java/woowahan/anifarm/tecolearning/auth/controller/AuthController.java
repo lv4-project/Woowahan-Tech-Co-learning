@@ -1,6 +1,7 @@
 package woowahan.anifarm.tecolearning.auth.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import woowahan.anifarm.tecolearning.auth.service.OauthService;
 import woowahan.anifarm.tecolearning.user.dto.UserLoginDto;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static woowahan.anifarm.tecolearning.auth.advice.LoggedInInterceptor.createJWTCookie;
 
-@RestController
+@Controller
 @RequestMapping("/api/oauth")
 public class AuthController {
     private final OauthService oauthService;
@@ -19,10 +20,10 @@ public class AuthController {
     }
 
     @GetMapping
-    public ResponseEntity<String> login(@RequestParam String code, HttpServletResponse response) {
+    public String login(@RequestParam String code, HttpServletResponse response) {
         response.addCookie(createJWTCookie(oauthService.gitLogin(code).getToken()));
 
-        return ResponseEntity.ok().build();
+        return "redirect:/";
     }
 
     @PostMapping("/login")

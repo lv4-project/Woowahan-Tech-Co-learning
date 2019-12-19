@@ -37,7 +37,7 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                 .build();
         // TODO: 2019-12-16 exception 바꾸기, RestControllerAdvice convention 정하기
         postWithoutLogin("/api/studies/1/outputs" + "/" + 1, outputCreateDto)
-                .expectStatus().is5xxServerError();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -84,7 +84,7 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                 .contents("updated contents~!~!")
                 .build();
         putWithoutLogin(API_OUTPUTS + "/" + 1, studyOutputDto)
-                .expectStatus().is5xxServerError();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
