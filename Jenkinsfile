@@ -5,6 +5,7 @@ pipeline {
             steps {
                 sh 'sudo sh /home/ubuntu/run_new_was.sh'
             }
+        }
 
         stage('health check') {
             steps {
