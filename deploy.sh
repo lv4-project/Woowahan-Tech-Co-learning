@@ -1,1 +1,2 @@
-$WORKSPACE/gradlew clean build
+git pull origin develop
+./gradlew clean build

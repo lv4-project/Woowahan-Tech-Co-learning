@@ -7,6 +7,7 @@ import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 Vue.prototype.$request = request;
+export const eventBus = new Vue();
 
 new Vue({
   router,
