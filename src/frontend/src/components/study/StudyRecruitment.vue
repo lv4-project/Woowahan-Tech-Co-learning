@@ -68,7 +68,7 @@
     methods: {
       requestStudySummaryPage(pageOffset, pageSize) {
         const component = this;
-        const request = `${window.location.origin}/api/studies/summary?page=${String(pageOffset)}&size=${String(pageSize)}&sort=createdDate,desc`;
+        const request = `${window.location.origin}/api/studies/summary/participating?page=${String(pageOffset)}&size=${String(pageSize)}&sort=createdDate,desc`;
 
         this.$request.get(request, function (error, response, body) {
           if (response.statusCode === 200) {
@@ -88,7 +88,6 @@
       const bottomSensor = document.getElementById(`bottomSensor`);
 
       const observer = new IntersectionObserver(entries => {
-        window.console.log(entries);
         entries.forEach(entry => {
           if (!entry.isIntersecting) {
             return;

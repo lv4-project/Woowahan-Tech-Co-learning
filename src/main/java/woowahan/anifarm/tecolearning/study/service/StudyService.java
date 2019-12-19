@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
+import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.*;
@@ -73,6 +74,15 @@ public class StudyService {
 
     public List<StudySummaryDto> findPageOfSummaryDto(Pageable pageable) {
         Page<Study> pageOfStudy = studyRepository.findAll(pageable);
+
+        List<StudySummaryDto> studInfoDtos = pageOfStudy.stream()
+                .map(StudySummaryDto::from)
+                .collect(Collectors.toList());
+        return Collections.unmodifiableList(studInfoDtos);
+    }
+
+    public List<StudySummaryDto> findPageOfSummaryDto(StudyStatus status, Pageable pageable) {
+        Page<Study> pageOfStudy = studyRepository.findAllByStatus(status, pageable);
 
         List<StudySummaryDto> studInfoDtos = pageOfStudy.stream()
                 .map(StudySummaryDto::from)

@@ -18,6 +18,7 @@ public class StudySummaryDto {
     private int numberOfParticipants;
     private String location;
     private String summary;
+    private String studyStatus;
 
     @Builder
     public StudySummaryDto(long id,
@@ -26,7 +27,8 @@ public class StudySummaryDto {
                            int totalNumberOfRecruitment,
                            int numberOfParticipants,
                            String location,
-                           String summary) {
+                           String summary,
+                           String studyStatus) {
         this.id = id;
         this.presenterName = presenterName;
         this.subject = subject;
@@ -34,6 +36,7 @@ public class StudySummaryDto {
         this.numberOfParticipants = numberOfParticipants;
         this.location = location;
         this.summary = summary;
+        this.studyStatus = studyStatus;
     }
 
     public static StudySummaryDto from(Study study) {
@@ -47,6 +50,7 @@ public class StudySummaryDto {
                 .numberOfParticipants(1) // TODO: 2019-12-15  Study 도메인 객체에 participants 필드 만들 것.
                 .location(study.getLocation())
                 .summary(study.getDescription()) // TODO: 2019-12-15 도메인 객체에 summary 필드 만들 것.
+                .studyStatus(study.getStatus().getName())
                 .build();
     }
 }

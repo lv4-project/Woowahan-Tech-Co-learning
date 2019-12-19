@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus;
+import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
@@ -91,6 +92,7 @@ class StudyServiceTest {
 
         given(mockStudy.getId()).willReturn(1L);
         given(mockStudy.getPresenter()).willReturn(user);
+        given(mockStudy.getStatus()).willReturn(StudyStatus.RECRUITING);
 
         return mockStudy;
     }
@@ -111,10 +113,11 @@ class StudyServiceTest {
         PageRequest pageRequest = PageRequest.of(offset, pageSize, sort);
 
         Page<Study> pageOfStudy = getPageOfStudy(pageSize);
-        given(studyRepository.findAll(pageRequest)).willReturn(pageOfStudy);
+        given(studyRepository.findAllByStatus(StudyStatus.RECRUITING, pageRequest)).willReturn(pageOfStudy);
 
         // When
-        List<StudySummaryDto> pageOfSummaryDto = injectStudyService.findPageOfSummaryDto(pageRequest);
+        List<StudySummaryDto> pageOfSummaryDto =
+                injectStudyService.findPageOfSummaryDto(StudyStatus.RECRUITING, pageRequest);
 
         // Then
         assertThat(pageOfSummaryDto.size()).isEqualTo(pageSize);
