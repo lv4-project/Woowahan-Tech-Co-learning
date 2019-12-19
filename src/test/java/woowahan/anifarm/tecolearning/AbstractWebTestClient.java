@@ -140,7 +140,7 @@ public class AbstractWebTestClient {
                 .exchange();
     }
 
-    protected  <T> WebTestClient.ResponseSpec post(String uri, T dto) {
+    protected <T> WebTestClient.ResponseSpec post(String uri, T dto) {
         return webTestClient.post()
                 .uri(uri)
                 .cookie(LoggedInInterceptor.TOKEN, token)

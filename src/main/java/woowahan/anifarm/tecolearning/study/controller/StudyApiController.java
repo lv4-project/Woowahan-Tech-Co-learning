@@ -2,6 +2,7 @@ package woowahan.anifarm.tecolearning.study.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import woowahan.anifarm.tecolearning.auth.advice.LoggedInUser;
 import woowahan.anifarm.tecolearning.study.service.StudyService;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
@@ -24,8 +25,9 @@ public class StudyApiController {
     }
 
     @GetMapping("/{studyId}")
-    public ResponseEntity<StudyInfoDto> read(@PathVariable long studyId) {
-        return ResponseEntity.ok(studyService.findInfoDtoById(studyId));
+    public ResponseEntity<StudyInfoDto> read(@PathVariable long studyId,
+                                             @LoggedInUser UserInfoDto userInfoDto) {
+        return ResponseEntity.ok(studyService.findInfoDtoById(studyId, userInfoDto));
     }
 
     @PutMapping("/{studyId}")
@@ -34,5 +36,11 @@ public class StudyApiController {
         // TODO: 2019-12-12 User 받아서 쓰기
         UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
         return ResponseEntity.ok(studyService.update(studyId, studyUpdateDto, userInfoDto));
+    }
+
+    @PostMapping("/{studyId}/participants")
+    public ResponseEntity<String> participateInStudy(@PathVariable long studyId,
+                                                     @LoggedInUser UserInfoDto userInfoDto) {
+        return ResponseEntity.ok(studyService.participateInStudy(studyId, userInfoDto));
     }
 }

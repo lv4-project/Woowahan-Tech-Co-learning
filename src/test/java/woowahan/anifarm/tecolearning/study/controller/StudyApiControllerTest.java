@@ -44,6 +44,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         assertThat(studyInfoDto.getLocation()).isEqualTo(studyCreateDto.getLocation());
         assertThat(studyInfoDto.getDescription()).isEqualTo(studyCreateDto.getDescription());
         assertThat(studyInfoDto.getStatus()).isEqualTo(StudyStatus.RECRUITING);
+        assertThat(studyInfoDto.getStudyParticipantStatus()).isEqualTo("presenter");
     }
 
     @Test
@@ -55,6 +56,31 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         assertThat(study.getStartDate()).isEqualTo(LocalDate.of(2019, 12, 12));
         assertThat(study.getSubject()).isEqualTo("spring");
         assertThat(study.getPresenter().getId()).isEqualTo(SAMPLE_USER_ID);
+    }
+
+    @Test
+    @DisplayName("발제자가 스터디를 조회하는 경우, studyParticipantStatus값은 presenter다.")
+    void findStudy_ifUserIsPresenter() {
+        StudyInfoDto study = getRequest(API_STUDIES + "/" + SAMPLE_STUDY_ID, StudyInfoDto.class);
+
+        assertThat(study.getStudyParticipantStatus()).isEqualTo("presenter");
+    }
+
+    @Test
+    @DisplayName("회원이고 비참가자가 스터디를 조회하는 경우, studyParticipantStatus값은 nonParticipant다.")
+    void findStudy_ifUserIsMemberAndNonParticipant() {
+        StudyInfoDto study = getRequest(API_STUDIES + "/2", StudyInfoDto.class);
+
+        assertThat(study.getStudyParticipantStatus()).isEqualTo("nonParticipant");
+    }
+
+    @Test
+    @DisplayName("회원이고 참가자가 조회하는 경우, studyParticipantStatus값은 participant다.")
+    void findStudy_ifUserIsMemberAndParticipant() {
+        post(API_STUDIES + "/2/participants", Void.class).expectStatus().isOk();
+        StudyInfoDto study = getRequest(API_STUDIES + "/2", StudyInfoDto.class);
+
+        assertThat(study.getStudyParticipantStatus()).isEqualTo("participant");
     }
 
     @Test
@@ -96,4 +122,23 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
 
     // TODO: 2019-12-12 로그인 하지 않은 유저에 대한 TEST
     // TODO: 2019-12-12 발제자가 다른 경우
+
+    @Test
+    @DisplayName("발제자가 아닌 회원이 스터디에 참가한다.")
+    void participateStudy() {
+        String studyParticipantStatus = post(API_STUDIES + "/2/participants", Void.class)
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(studyParticipantStatus).isEqualTo("participant");
+    }
+
+    @Test
+    @DisplayName("발제자가 자기 스터디에 참가 신청 요청을 보내는 경우 400 response")
+    void participateStudy_ifPresenter_requestParticipate() {
+        post(API_STUDIES + "/1/participants", Void.class)
+                .expectStatus().isBadRequest();
+    }
 }

@@ -23,6 +23,7 @@ public class StudyInfoDto {
     private String location;
     private String description;
     private StudyStatus status;
+    private String studyParticipantStatus;
 
     @Builder
     public StudyInfoDto(long id,
@@ -33,7 +34,8 @@ public class StudyInfoDto {
                         LocalDate endDate,
                         String location,
                         String description,
-                        StudyStatus status) {
+                        StudyStatus status,
+                        String studyParticipantStatus) {
         this.id = id;
         this.presenter = presenter;
         this.subject = subject;
@@ -43,9 +45,10 @@ public class StudyInfoDto {
         this.location = location;
         this.description = description;
         this.status = status;
+        this.studyParticipantStatus = studyParticipantStatus;
     }
 
-    public static StudyInfoDto from(Study study) {
+    public static StudyInfoDto of(Study study, String participatingStatus) {
         UserInfoDto presenter = UserInfoDto.from(study.getPresenter());
 
         return StudyInfoDto.builder()
@@ -58,6 +61,7 @@ public class StudyInfoDto {
                 .location(study.getLocation())
                 .description(study.getDescription())
                 .status(study.getStatus())
+                .studyParticipantStatus(participatingStatus)
                 .build();
     }
 }
