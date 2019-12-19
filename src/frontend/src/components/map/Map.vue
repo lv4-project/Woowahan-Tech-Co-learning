@@ -112,6 +112,7 @@
       sendSelectedPlace() {
         window.console.log(this.selectedPlace);
         this.$emit(`sendSelectedPlace`, this.selectedPlace);
+        window.history.back();
       }
     },
     mounted() {

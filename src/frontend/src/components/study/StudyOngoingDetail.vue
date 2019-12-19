@@ -80,12 +80,22 @@
       </v-col>
     </v-row>
 
+    <v-row v-if="studyInfo.studyParticipantStatus === `presenter`">
+      <v-btn
+        @click="showMap"
+        color="primary"
+      >
+        위치 추가하기
+      </v-btn>
+    </v-row>
+
     <v-row v-if="studyInfo.status === `RECRUITING`">
       <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `nonParticipant`">
         <v-btn @click="participateInStudy" color="primary">함께하고싶소</v-btn>
       </v-col>
       <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `presenter`">
         <v-btn color="primary">스터디 시작하기</v-btn>
+        <v-space></v-space>
         <v-btn color="primary">스터디 폭파</v-btn>
       </v-col>
       <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `participant`">
@@ -140,6 +150,9 @@
               component.studyInfo.studyParticipantStatus = body;
             }
         });
+      },
+      showMap() {
+        this.$router.push({name: `Map`});
       }
     },
     created() {
