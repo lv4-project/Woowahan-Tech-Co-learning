@@ -22,38 +22,43 @@ Vue.use(VueRouter);
 const mainChild = [
   {
     name: `StudyGeneration`,
-    path: `generation`,
+    path: `/generation`,
     component: StudyGeneration,
   },
   {
     name: `StudyRecruitment`,
-    path: `recruitment`,
+    path: `/recruitment`,
     component: StudyRecruitment,
   },
   {
     name: `StudyOngoing`,
-    path: `ongoing`,
+    path: `/ongoing`,
     component: StudyOngoing,
   },
   {
     name: `StudyFinished`,
-    path: `finished`,
+    path: `/finished`,
     component: StudyFinished,
   },
   {
     name: `UserProfile`,
-    path: `profile`,
+    path: `/profile`,
     component: UserProfile,
   },
   {
     name: `ParticipatingStudy`,
-    path: `participating-study`,
+    path: `/participating-study`,
     component: ParticipatingStudy,
   },
   {
     name: `UserUpdateForm`,
-    path: `update`,
+    path: `/update`,
     component: UserUpdateForm,
+  },
+  {
+    name: `StudyOngoingDetail`,
+    path: `/studies/:studyId`,
+    component: StudyOngoingDetail,
   },
 ];
 
@@ -83,12 +88,6 @@ const routes = [
     name: `StudyOutputEdit`,
     path: `/studies/:studyId/outputs/:outputId`,
     component: StudyOutputEdit,
-  },
-
-  {
-    name: `StudyOngoingDetail`,
-    path: `/studies/:studyId`,
-    component: StudyOngoingDetail,
   },
   {
     name: `Map`,

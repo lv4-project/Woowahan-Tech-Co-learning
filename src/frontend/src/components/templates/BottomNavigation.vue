@@ -4,7 +4,7 @@
     grow
   >
     <v-btn
-      @click="changeView(`recruitment`)"
+      @click="changeView(`StudyRecruitment`)"
       icon
     >
       <span>모집</span>
@@ -12,7 +12,7 @@
     </v-btn>
 
     <v-btn
-      @click="changeView(`ongoing`)"
+      @click="changeView(`StudyOngoing`)"
       icon
     >
       <span>진행</span>
@@ -20,7 +20,7 @@
     </v-btn>
 
     <v-btn
-      @click="changeView(`finished`)"
+      @click="changeView(`StudyFinished`)"
       icon
     >
       <span>완료</span>
@@ -28,7 +28,7 @@
     </v-btn>
 
     <v-btn
-      @click="changeView(`profile`)"
+      @click="changeView(`UserProfile`)"
       icon
     >
       <span>프로필</span>
@@ -42,7 +42,7 @@
     name: "BottomNavigation",
     methods: {
       changeView(componentName) {
-        this.$router.push(componentName)
+        this.$router.push({name : componentName})
       },
     },
   }

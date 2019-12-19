@@ -81,7 +81,7 @@
         });
       },
       showDetail(studyId) {
-        this.$router.push(`/studies/${studyId}`)
+        this.$router.push(`studies/${studyId}`)
       },
     },
     mounted() {

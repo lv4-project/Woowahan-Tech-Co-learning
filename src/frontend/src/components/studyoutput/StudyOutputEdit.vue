@@ -47,7 +47,6 @@
   </v-container>
 </template>
 
-
 <script>
   import VueSimplemde from 'vue-simplemde';
 

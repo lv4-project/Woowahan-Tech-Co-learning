@@ -49,7 +49,7 @@
     },
     methods: {
       turnIntoEdit() {
-        this.$router.push(`update`);
+        this.$router.push({name: `UserUpdateForm`});
       },
       getCookie(cookie_name) {
         let x, y;

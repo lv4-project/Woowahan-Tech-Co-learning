@@ -1,5 +1,6 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
+import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import woowahan.anifarm.tecolearning.auth.advice.LoggedInUser;
@@ -20,8 +21,8 @@ public class StudyApiController {
     }
 
     @PostMapping
-    public ResponseEntity<StudyInfoDto> create(@RequestBody StudyCreateDto studyCreateDto) {
-        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
+    public ResponseEntity<StudyInfoDto> create(@RequestBody StudyCreateDto studyCreateDto,
+                                               @LoggedInUser UserInfoDto userInfoDto) {
         return ResponseEntity.ok(studyService.save(studyCreateDto, userInfoDto));
     }
 
@@ -33,9 +34,8 @@ public class StudyApiController {
 
     @PutMapping("/{studyId}")
     public ResponseEntity<StudyInfoDto> update(@PathVariable long studyId,
-                                               @RequestBody StudyUpdateDto studyUpdateDto) {
-        // TODO: 2019-12-12 User 받아서 쓰기
-        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
+                                               @RequestBody StudyUpdateDto studyUpdateDto,
+                                               @LoggedInUser UserInfoDto userInfoDto) {
         return ResponseEntity.ok(studyService.update(studyId, studyUpdateDto, userInfoDto));
     }
 
