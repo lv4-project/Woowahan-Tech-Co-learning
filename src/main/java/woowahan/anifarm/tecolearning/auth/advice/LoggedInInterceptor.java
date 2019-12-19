@@ -6,12 +6,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import woowahan.anifarm.tecolearning.auth.service.OauthService;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
+import woowahan.anifarm.tecolearning.auth.service.exception.TokenNotFoundException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 @Slf4j
 @Component
@@ -26,20 +28,17 @@ public class LoggedInInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = getToken(request);
-
         try {
+            String token = getToken(request);
             return oauthService.oauth(token);
-        } catch (JWTValidException e) {
+        } catch (JWTValidException | TokenNotFoundException e) {
             writeInResponse(response, e.getMessage());
-
             return false;
         }
     }
 
     private void writeInResponse(HttpServletResponse response, String message) throws IOException {
         log.error("{}", message);
-
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -57,15 +56,10 @@ public class LoggedInInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String getToken(HttpServletRequest request) {
-        String token = null;
-
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(TOKEN)) {
-                token = cookie.getValue();
-            }
-        }
-
-        return token;
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(TOKEN))
+                .findFirst()
+                .orElseThrow(TokenNotFoundException::new).getValue();
     }
 
     public static Cookie createJWTCookie(String token) {
