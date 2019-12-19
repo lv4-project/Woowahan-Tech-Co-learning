@@ -8,12 +8,11 @@ import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Getter
 @EqualsAndHashCode(of = "id")
-public class StudyParticipant implements Serializable {
+public class StudyParticipant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +31,6 @@ public class StudyParticipant implements Serializable {
     @Builder
     public StudyParticipant(Long id, User participant, Study study) {
         this.id = id;
-        this.participant = participant;
-        this.study = study;
-    }
-
-    @Builder
-    public StudyParticipant(User participant, Study study) {
         this.participant = participant;
         this.study = study;
     }
