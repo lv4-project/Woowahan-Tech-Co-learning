@@ -13,6 +13,7 @@ import woowahan.anifarm.tecolearning.study.service.dto.StudyUpdateDto;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.SAMPLE_USER_ID;
 
 @Slf4j
@@ -141,5 +142,40 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     void participateStudy_ifPresenter_requestParticipate() {
         post(API_STUDIES + "/1/participants", Void.class)
                 .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @DisplayName("발제자가 자기 스터디를 폭파한다.")
+    void removeStudy_ifPresenter() {
+        String url = "/1/participants/size";
+
+        Integer beforeDelete = get(API_STUDIES + url)
+                .expectStatus().isOk()
+                .expectBody(Integer.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertEquals(2, beforeDelete);
+
+        delete(API_STUDIES + "/" + SAMPLE_STUDY_ID)
+                .expectStatus()
+                .isOk();
+
+        Integer afterDelete = get(API_STUDIES + url)
+                .expectStatus()
+                .isOk()
+                .expectBody(Integer.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertEquals(0, afterDelete);
+    }
+
+    @Test
+    @DisplayName("발제자가 아닌 경우 스터리르 폭파 시도할 시 BadRequest")
+    void removeStudy_ifNotPresenter() {
+        delete(API_STUDIES + "/2")
+                .expectStatus()
+                .isBadRequest();
     }
 }

@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
+import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.studyoutput.domain.StudyOutput;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
@@ -101,5 +102,11 @@ public class Study extends BaseEntity {
 
     public boolean isCreatedBy(User user) {
         return presenter.equals(user);
+    }
+
+    public void checkPresenter(long id) {
+        if (presenter.doesNotAuthenticated(id)) {
+            throw new NotPresenterException();
+        }
     }
 }

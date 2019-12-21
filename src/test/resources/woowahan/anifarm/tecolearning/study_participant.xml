@@ -5,4 +5,10 @@
            participant_id="1"
            study_id="1"
     />
+
+    <study_participant
+            study_participant_id="2"
+            participant_id="2"
+            study_id="1"
+    />
 </dataset>

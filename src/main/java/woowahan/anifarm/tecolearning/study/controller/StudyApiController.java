@@ -1,6 +1,5 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
-import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import woowahan.anifarm.tecolearning.auth.advice.LoggedInUser;
@@ -43,5 +42,17 @@ public class StudyApiController {
     public ResponseEntity<String> participateInStudy(@PathVariable long studyId,
                                                      @LoggedInUser UserInfoDto userInfoDto) {
         return ResponseEntity.ok(studyService.participateInStudy(studyId, userInfoDto));
+    }
+
+    @DeleteMapping("/{studyId}")
+    public ResponseEntity<Void> deleteStudy(@PathVariable long studyId,
+                                            @LoggedInUser UserInfoDto userInfoDto) {
+        studyService.delete(studyId, userInfoDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{studyId}/participants/size")
+    public ResponseEntity<Integer> countOfParticipant(@PathVariable long studyId) {
+        return ResponseEntity.ok().body(studyService.countOfParticipant(studyId));
     }
 }

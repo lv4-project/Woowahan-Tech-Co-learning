@@ -7,4 +7,8 @@ import woowahan.anifarm.tecolearning.user.domain.User;
 
 public interface StudyParticipantRepository extends JpaRepository<StudyParticipant, Long> {
     boolean existsByStudyAndParticipant(Study study, User user);
+
+    void deleteByStudy(Study study);
+
+    int countByStudyId(long studyId);
 }

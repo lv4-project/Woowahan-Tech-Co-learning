@@ -126,4 +126,16 @@ public class StudyService {
             throw new InvalidParticipatingRequestException();
         }
     }
+
+    public void delete(long studyId, UserInfoDto userInfoDto) {
+        Study study = findById(studyId);
+
+        study.checkPresenter(userInfoDto.getId());
+        studyRepository.delete(study);
+        studyParticipantRepository.deleteByStudy(study);
+    }
+
+    public int countOfParticipant(long studyId) {
+        return studyParticipantRepository.countByStudyId(studyId);
+    }
 }

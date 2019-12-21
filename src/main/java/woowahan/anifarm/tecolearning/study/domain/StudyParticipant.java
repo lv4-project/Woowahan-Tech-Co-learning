@@ -1,8 +1,6 @@
 package woowahan.anifarm.tecolearning.study.domain;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.user.domain.User;
@@ -10,6 +8,7 @@ import woowahan.anifarm.tecolearning.user.domain.User;
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @EqualsAndHashCode(of = "id")
 public class StudyParticipant {

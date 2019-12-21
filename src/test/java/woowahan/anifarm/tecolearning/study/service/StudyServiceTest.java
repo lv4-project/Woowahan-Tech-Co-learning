@@ -16,6 +16,7 @@ import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus;
 import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
+import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
@@ -34,13 +35,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.data.domain.Sort.by;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 class StudyServiceTest {
+    private static final Long STUDY_ID = 1L;
+    private static final Long USER_ID = 1L;
+
     @InjectMocks
     private StudyService injectStudyService;
 
@@ -57,7 +60,7 @@ class StudyServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = User.builder().id(1L)
+        user = User.builder().id(USER_ID)
                 .email("email@email.com")
                 .nickName("learner")
                 .password("passwordpass")
@@ -71,11 +74,11 @@ class StudyServiceTest {
         // TODO: 2019-12-11 리펙토링
         // given
         StudyCreateDto studyCreateDto = StudyCreateDto.builder().build();
-        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
-        Study expectedStudy = Study.builder().id(1L).build();
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(USER_ID).build();
+        Study expectedStudy = Study.builder().id(STUDY_ID).build();
         Study mockStudy = getMockStudy();
 
-        given(userService.findById(1L)).willReturn(user);
+        given(userService.findById(USER_ID)).willReturn(user);
         given(studyRepository.save(any(Study.class))).willReturn(mockStudy);
         given(studyParticipantRepository.save(any(StudyParticipant.class))).willReturn(mock(StudyParticipant.class));
 
@@ -90,7 +93,7 @@ class StudyServiceTest {
     private Study getMockStudy() {
         Study mockStudy = mock(Study.class);
 
-        given(mockStudy.getId()).willReturn(1L);
+        given(mockStudy.getId()).willReturn(STUDY_ID);
         given(mockStudy.getPresenter()).willReturn(user);
         given(mockStudy.getStatus()).willReturn(StudyStatus.RECRUITING);
 
@@ -138,12 +141,11 @@ class StudyServiceTest {
     @Test
     @DisplayName("발제자가 아닌 회원이 스터디에 참여한다.")
     void participateInStudy() {
-        long studyId = 1L;
-        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
-        given(studyRepository.findById(studyId)).willReturn(Optional.of(mock(Study.class)));
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(USER_ID).build();
+        given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mock(Study.class)));
         given(userService.findById(userInfoDto.getId())).willReturn(mock(User.class));
 
-        String studyParticipantStatus = injectStudyService.participateInStudy(studyId, userInfoDto);
+        String studyParticipantStatus = injectStudyService.participateInStudy(STUDY_ID, userInfoDto);
 
         assertThat(studyParticipantStatus)
                 .isEqualTo(StudyParticipantStatus.PARTICIPANT.name().toLowerCase());
@@ -153,16 +155,58 @@ class StudyServiceTest {
     @DisplayName("스터디 참가자가 스터디에 참여 시도하는 경우 InvalidParticipatingRequestException 예외 발생")
     void participateStudy_ifUserIsPresenter() {
         // Given
-        long studyId = 1L;
-        UserInfoDto userInfoDto = UserInfoDto.builder().id(1L).build();
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(USER_ID).build();
         Study mockStudy = mock(Study.class);
 
-        given(studyRepository.findById(studyId)).willReturn(Optional.of(mockStudy));
+        given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
         given(userService.findById(userInfoDto.getId())).willReturn(mock(User.class));
         given(studyParticipantRepository.existsByStudyAndParticipant(any(Study.class), any(User.class))).willReturn(true);
 
         // When, Then
         assertThrows(InvalidParticipatingRequestException.class,
-                () -> injectStudyService.participateInStudy(studyId, userInfoDto));
+                () -> injectStudyService.participateInStudy(STUDY_ID, userInfoDto));
+    }
+
+    @Test
+    @DisplayName("발제자가 아닐 경우 스터디 폭파 요청하는 경우 NotPresenterException 에러")
+    void deleteStudy_ifNotresenter() {
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(USER_ID).build();
+        Study mockStudy = mock(Study.class);
+
+        given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
+        doThrow(NotPresenterException.class).when(mockStudy).checkPresenter(anyLong());
+
+        assertThrows(NotPresenterException.class, () -> {
+            injectStudyService.delete(STUDY_ID, userInfoDto);
+        });
+    }
+
+    @Test
+    @DisplayName("발제자일 경우 스터디 폭파 요청하는 경우 성공")
+    void deleteStudy_ifPresenter() {
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(USER_ID).build();
+        Study mockStudy = mock(Study.class);
+
+        given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
+        doNothing().when(mockStudy).checkPresenter(anyLong());
+
+        injectStudyService.delete(STUDY_ID, userInfoDto);
+
+        verify(studyRepository).delete(any(Study.class));
+    }
+
+    @Test
+    @DisplayName("발제자일 경우 스터디 폭파 요청하는 경우 참가자들 삭제")
+    void deleteStudyAndParticipant_ifPresenter() {
+        UserInfoDto userInfoDto = UserInfoDto.builder().id(USER_ID).build();
+        Study mockStudy = mock(Study.class);
+
+        given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
+        doNothing().when(mockStudy).checkPresenter(anyLong());
+
+        injectStudyService.delete(STUDY_ID, userInfoDto);
+
+        verify(studyRepository).delete(any(Study.class));
+        verify(studyParticipantRepository).deleteByStudy(any(Study.class));
     }
 }
