@@ -7,10 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
-import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
-import java.io.UnsupportedEncodingException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;

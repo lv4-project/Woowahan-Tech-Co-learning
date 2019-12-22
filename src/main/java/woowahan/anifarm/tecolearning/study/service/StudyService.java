@@ -7,10 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
-import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.*;
-import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
 import woowahan.anifarm.tecolearning.study.service.exception.StudyNotFoundException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
@@ -26,14 +24,14 @@ import static woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus.
 public class StudyService {
     private final UserService userService;
     private final StudyRepository studyRepository;
-    private final StudyParticipantRepository studyParticipantRepository;
+    private final StudyParticipantService studyParticipantService;
 
     public StudyService(UserService userService,
                         StudyRepository studyRepository,
-                        StudyParticipantRepository studyParticipantRepository) {
+                        StudyParticipantService studyParticipantService) {
         this.userService = userService;
         this.studyRepository = studyRepository;
-        this.studyParticipantRepository = studyParticipantRepository;
+        this.studyParticipantService = studyParticipantService;
     }
 
     public StudyInfoDto save(StudyCreateDto studyCreateDto, UserInfoDto userInfoDto) {
@@ -47,7 +45,7 @@ public class StudyService {
                 .study(saved)
                 .build();
 
-        studyParticipantRepository.save(studyParticipant);
+        studyParticipantService.save(studyParticipant);
 
         return StudyInfoDto.of(saved, PRESENTER.getStatus());
     }
@@ -65,7 +63,7 @@ public class StudyService {
             return StudyDetailInfoDto.of(study, PRESENTER.getStatus());
         }
 
-        if (studyParticipantRepository.existsByStudyAndParticipant(study, loggedInUser)) {
+        if (studyParticipantService.existsByStudyAndParticipant(study, loggedInUser)) {
             return StudyDetailInfoDto.of(study, PARTICIPANT.getStatus());
         }
         // TODO: 2019-12-19  return StudyDetailInfoDto.from(findById(studyId)); 로 변경
@@ -110,21 +108,14 @@ public class StudyService {
         Study participatingStudy = findById(studyId);
         User user = userService.findById(userInfoDto.getId());
 
-        checkParticipating(participatingStudy, user);
         StudyParticipant studyParticipant = StudyParticipant.builder()
                 .study(participatingStudy)
                 .participant(user)
                 .build();
 
-        studyParticipantRepository.save(studyParticipant);
+        studyParticipantService.save(studyParticipant);
 
         return PARTICIPANT.getStatus();
-    }
-
-    private void checkParticipating(Study participatingStudy, User user) {
-        if (studyParticipantRepository.existsByStudyAndParticipant(participatingStudy, user)) {
-            throw new InvalidParticipatingRequestException();
-        }
     }
 
     public void delete(long studyId, UserInfoDto userInfoDto) {
@@ -132,10 +123,6 @@ public class StudyService {
 
         study.checkPresenter(userInfoDto.getId());
         studyRepository.delete(study);
-        studyParticipantRepository.deleteByStudy(study);
-    }
-
-    public int countOfParticipant(long studyId) {
-        return studyParticipantRepository.countByStudyId(studyId);
+        studyParticipantService.deleteByStudy(study);
     }
 }

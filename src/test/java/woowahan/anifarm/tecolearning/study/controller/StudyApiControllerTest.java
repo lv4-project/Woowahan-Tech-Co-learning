@@ -126,25 +126,6 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
     // TODO: 2019-12-12 발제자가 다른 경우
 
     @Test
-    @DisplayName("발제자가 아닌 회원이 스터디에 참가한다.")
-    void participateStudy() {
-        String studyParticipantStatus = post(API_STUDIES + "/2/participants", Void.class)
-                .expectStatus().isOk()
-                .expectBody(String.class)
-                .returnResult()
-                .getResponseBody();
-
-        assertThat(studyParticipantStatus).isEqualTo("participant");
-    }
-
-    @Test
-    @DisplayName("발제자가 자기 스터디에 참가 신청 요청을 보내는 경우 400 response")
-    void participateStudy_ifPresenter_requestParticipate() {
-        post(API_STUDIES + "/1/participants", Void.class)
-                .expectStatus().isBadRequest();
-    }
-
-    @Test
     @DisplayName("발제자가 자기 스터디를 폭파한다.")
     void removeStudy_ifPresenter() {
         String url = "/1/participants/size";
