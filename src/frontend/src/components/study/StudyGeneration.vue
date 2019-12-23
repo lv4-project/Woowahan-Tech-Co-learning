@@ -78,32 +78,40 @@
         required
       />
 
-      <v-textarea
+      <VueSimplemde
+        :sanitize=true
+        :configs=mdConfigs
         v-model="description"
-        label="스터디 설명"
-        required
+        preview-class="markdown-body"
       />
 
-      <v-btn
-        @click="requestStudyGeneration"
-        color="primary"
-      >
-        생성
-      </v-btn>
-      <v-btn
-        color="error"
-      >
-        취소
-      </v-btn>
+      <v-card-actions>
+        <v-spacer/>
+        <v-btn
+          @click="requestStudyGeneration"
+          color="primary"
+        >
+          생성
+        </v-btn>
+        <v-btn
+          color="error"
+        >
+          취소
+        </v-btn>
+      </v-card-actions>
     </v-form>
   </v-container>
 </template>
 
 <script>
   `use strict`;
+  import VueSimplemde from 'vue-simplemde';
 
   export default {
     name: "StudyGeneration",
+    components: {
+      VueSimplemde,
+    },
     data() {
       const validateBlank = (v, message) => !!v || message;
       const validateLength = (v, length, message) => (v && v.length <= length) || message;
@@ -115,6 +123,10 @@
         menu: false,
         modal: false,
         menu2: false,
+
+        mdConfigs: {
+          spellChecker: false,
+        },
 
         subject: {
           name: ``,

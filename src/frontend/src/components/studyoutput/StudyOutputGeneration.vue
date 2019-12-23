@@ -9,38 +9,40 @@
     <v-row>
       <v-col>
         <VueSimplemde
-            :configs=mdConfigs
-            v-model="output.contents"
-            preview-class="markdown-body"
+          :configs=mdConfigs
+          v-model="output.contents"
+          :sanitize=true
+          preview-class="markdown-body"
         />
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row dense>
       <v-col>
         <v-snackbar
-            v-model="snackbar"
-            :timeout="2000"
+          v-model="snackbar"
+          :timeout="2000"
         >
           {{ snackbarText }}
           <v-btn
-              color="blue"
-              text
-              @click="snackbar = false"
+            color="blue"
+            text
+            @click="snackbar = false"
           >
             Close
           </v-btn>
         </v-snackbar>
-
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row dense>
       <v-col class="d-flex flex-row-reverse">
         <v-btn
-            @click=writeOutput
-            color="primary">
-          잘 들어갔고
+          @click=writeOutput
+          text
+          color="primary"
+        >
+          WRITE
         </v-btn>
       </v-col>
     </v-row>

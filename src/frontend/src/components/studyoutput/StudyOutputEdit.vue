@@ -9,9 +9,10 @@
     <v-row>
       <v-col>
         <VueSimplemde
-            :configs=mdConfigs
-            v-model="output.contents"
-            preview-class="markdown-body"
+          :sanitize=true
+          :configs=mdConfigs
+          v-model="output.contents"
+          preview-class="markdown-body"
         />
       </v-col>
     </v-row>
@@ -19,14 +20,14 @@
     <v-row>
       <v-col>
         <v-snackbar
-            v-model="snackbar"
-            :timeout="2000"
+          v-model="snackbar"
+          :timeout="2000"
         >
           {{ snackbarText }}
           <v-btn
-              color="blue"
-              text
-              @click="snackbar = false"
+            color="blue"
+            text
+            @click="snackbar = false"
           >
             Close
           </v-btn>
@@ -38,9 +39,11 @@
     <v-row>
       <v-col class="d-flex flex-row-reverse">
         <v-btn
-            @click=editOutput
-            color="primary">
-          잘 들어갔고
+          @click=editOutput
+          text
+          color="primary"
+        >
+          MODIFY
         </v-btn>
       </v-col>
     </v-row>
@@ -74,17 +77,16 @@
     },
     methods: {
       editOutput() {
-        const component = this;
         if (!this.checkValid()) {
           return;
         }
         this.$request.put({
-          url: `${window.location.origin}/api/outputs/${component.outputId}`,
+          url: `${window.location.origin}/api/outputs/${this.outputId}`,
           body: this.output,
           json: true,
-        }, function (error, response, body) {
+        }, (error, response, body) => {
           if ((response && response.statusCode) === 200) {
-            component.$router.push(`/studies/${component.studyId}`);
+            this.$router.push(`/studies/${this.studyId}`);
           } else {
             window.alert(body);
           }
@@ -106,11 +108,10 @@
       },
     },
     created() {
-      const component = this;
       if (this.outputId != null) {
         this.$request.get(`${window.location.origin}/api/outputs/${this.outputId}`,
-          function (error, response, body) {
-            component.output = JSON.parse(body);
+          (error, response, body) => {
+            this.output = JSON.parse(body);
           });
       }
     },

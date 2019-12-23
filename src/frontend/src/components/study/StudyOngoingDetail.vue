@@ -1,37 +1,149 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <h1>
-          제목
-          {{ studyInfo.subject }}
-        </h1>
-      </v-col>
-      <v-col cols="12">
-        발제자 : {{ studyInfo.presenter.nickName }}
-      </v-col>
-      <v-col cols="12">
-        총 모집 인원 : {{ studyInfo.totalNumberOfRecruitment }}
-      </v-col>
-      <v-col cols="12">
-        시작 날짜 : {{ studyInfo.startDate }}
-      </v-col>
-      <v-col cols="12">
-        끝나는 날짜 : {{ studyInfo.endDate }}
-      </v-col>
-      <v-col cols="12">
-        위치 : {{ studyInfo.location }}
-      </v-col>
-      <v-col cols="12">
-        스터디 설명 : {{ studyInfo.description }}
-      </v-col>
-    </v-row>
+    <v-card
+      class="mx-auto"
+      elevation="1"
+    >
+      <v-card-text>
+        <v-row dense>
+          <v-col cols="auto">
+            <h1 class="black--text">
+              {{ studyInfo.subject }}
+            </h1>
+          </v-col>
+          <v-spacer/>
+          <v-col cols="auto">
+            <v-chip outlined>
+              <v-icon
+                color="indigo"
+                left
+              >
+                mdi-account
+              </v-icon>
+              {{ studyInfo.presenter.nickName }}
+            </v-chip>
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col>
-        Study Outputs
-      </v-col>
-    </v-row>
+        <v-row dense>
+          <v-col cols="auto">
+            <p>{{ studyInfo.startDate }} ~ {{ studyInfo.endDate }}</p>
+          </v-col>
+          <v-spacer/>
+          <v-col cols="auto">
+            <v-menu
+              v-model="menu"
+              transition="scale-transition"
+              origin="top right"
+            >
+              <template v-slot:activator="{ on }">
+                <v-chip
+                  pill
+                  v-on="on"
+                >
+                  <v-icon left>
+                    mdi-account-group
+                  </v-icon>
+                  2 / {{ studyInfo.totalNumberOfRecruitment }}
+                </v-chip>
+              </template>
+              <v-card width="300">
+                <v-list dark>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>Joined Crew</v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn
+                        icon
+                        @click="menu = false"
+                      >
+                        <v-icon>mdi-close-circle</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+                <v-list>
+                  <v-list-item @click="() => {}">
+                    <v-list-item-action>
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-subtitle>kingducksu@yogi.yo</v-list-item-subtitle>
+                  </v-list-item>
+                </v-list>
+                <v-list>
+                  <v-list-item @click="() => {}">
+                    <v-list-item-action>
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-subtitle>mir@dduho.dev</v-list-item-subtitle>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-menu>
+          </v-col>
+        </v-row>
+
+
+        <v-divider/>
+
+        <v-row>
+          <v-col class="black--text">
+            <vue-markdown>
+              {{ studyInfo.description }}
+            </vue-markdown>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-icon>mdi-map-marker</v-icon>
+            {{ studyInfo.location }}
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions v-if="studyInfo.status === `RECRUITING`">
+        <template v-if="studyInfo.studyParticipantStatus === `presenter`">
+          <v-btn
+            text
+            color="primary"
+          >
+            START STUDY
+          </v-btn>
+          <v-spacer/>
+          <v-btn
+            text
+            color="error"
+          >
+            DROP STUDY
+          </v-btn>
+        </template>
+
+        <template
+          v-if="studyInfo.studyParticipantStatus === `participant`"
+        >
+          <v-row justify="center">
+            <v-btn
+              text
+              color="error"
+            >
+              EXIT STUDY
+            </v-btn>
+          </v-row>
+        </template>
+
+        <template v-if="studyInfo.studyParticipantStatus === `nonParticipant`">
+          <v-row justify="center">
+            <v-btn
+              @click="participateInStudy"
+              text
+              color="primary"
+            >
+              JOIN STUDY
+            </v-btn>
+          </v-row>
+        </template>
+      </v-card-actions>
+    </v-card>
 
     <v-row>
       <v-col class="d-flex flex-row-reverse">
@@ -48,8 +160,8 @@
       <v-col>
         <v-expansion-panels :multiple=true>
           <v-expansion-panel
-            v-for="(output, i) in studyInfo.studyOutput"
-            :key="i + output.title"
+            v-for="output in studyInfo.studyOutput"
+            :key="output.id"
           >
             <v-expansion-panel-header>
               {{ output.title }}
@@ -59,21 +171,27 @@
                 {{ output.contents }}
               </vue-markdown>
 
-              <v-card-actions>
+              <v-row>
                 <v-spacer/>
-                <v-btn
-                  @click="removeOutput(output.id)"
-                  color="error"
-                >
-                  삭제
-                </v-btn>
-                <v-btn
-                  @click="editOutput(output.id)"
-                  color="primary"
-                >
-                  수정
-                </v-btn>
-              </v-card-actions>
+                <v-col cols="auto">
+                  <v-btn
+                    @click="editOutput(output.id)"
+                    icon
+                    text
+                  >
+                    <v-icon>mdi-square-edit-outline</v-icon>
+                  </v-btn>
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn
+                    @click="removeOutput(output.id)"
+                    icon
+                    text
+                  >
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -87,20 +205,6 @@
       >
         위치 추가하기
       </v-btn>
-    </v-row>
-
-    <v-row v-if="studyInfo.status === `RECRUITING`">
-      <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `nonParticipant`">
-        <v-btn @click="participateInStudy" color="primary">함께하고싶소</v-btn>
-      </v-col>
-      <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `presenter`">
-        <v-btn color="primary">스터디 시작하기</v-btn>
-        <v-space></v-space>
-        <v-btn color="primary">스터디 폭파</v-btn>
-      </v-col>
-      <v-col cols="12" v-if="studyInfo.studyParticipantStatus === `participant`">
-        <v-btn color="primary">나갈래요</v-btn>
-      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -116,8 +220,8 @@
     data() {
       return {
         studyId: this.$route.params.studyId,
-
-        studyInfo: {},
+        studyInfo: {presenter: {},},
+        menu: ``,
       }
     },
     methods: {
@@ -141,15 +245,12 @@
         this.$router.push(`/studies/${this.studyId}/outputs/${outputId}`);
       },
       participateInStudy() {
-        const component = this;
-
         this.$request.post(`${window.location.origin}/api/studies/${this.studyId}/participants`,
           function (error, response, body) {
             if (response.statusCode === 200) {
-              window.console.log(body);
-              component.studyInfo.studyParticipantStatus = body;
+              this.studyInfo.studyParticipantStatus = body;
             }
-        });
+          });
       },
       showMap() {
         this.$router.push({name: `Map`});
