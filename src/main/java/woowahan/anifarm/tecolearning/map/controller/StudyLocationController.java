@@ -3,6 +3,7 @@ package woowahan.anifarm.tecolearning.map.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import woowahan.anifarm.tecolearning.map.dto.LocationDto;
+import woowahan.anifarm.tecolearning.map.dto.StudyLocationDto;
 import woowahan.anifarm.tecolearning.map.service.StudyLocationService;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class StudyLocationController {
     }
 
     @GetMapping("/studies/{studyId}/locations")
-    public ResponseEntity<List<LocationDto>> read(@PathVariable long studyId) {
+    public ResponseEntity<List<StudyLocationDto>> read(@PathVariable long studyId) {
         return ResponseEntity.ok(studyLocationService.read(studyId));
     }
 

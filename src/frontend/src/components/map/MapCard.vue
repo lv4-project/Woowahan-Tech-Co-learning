@@ -1,60 +1,46 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-form
-          v-on:submit.prevent="searchPlaces()"
-        >
-          <v-container>
-            <v-row>
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <v-text-field
-                  v-model="keyword"
-                  label="키워드"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-
-              <v-btn
-                color="success"
-                class="mr-4"
-                type="submit"
-              >
-                검색
-              </v-btn>
-
-            </v-row>
-          </v-container>
-        </v-form>
-
-        <v-card
-          v-for="place in places"
-          :key="place.id"
-          class="mx-auto mb-5"
-          outlined
-          style="padding: 0"
-          @click="changeMarkers"
-        >
-          <div :data-id="place.id">
-            <div>
-              {{place.place_name}}
+    <v-form
+      v-on:submit.prevent="searchPlaces"
+    >
+      <v-text-field
+        v-model="keyword"
+        @click:append="searchPlaces"
+        append-icon="mdi-magnify"
+        label="키워드"
+        required
+      >
+      </v-text-field>
+    </v-form>
+    <v-container
+      id="scroll-target"
+      style="max-height: 150px; padding: 0px"
+      class="overflow-y-auto"
+    >
+      <v-card
+        v-for="place in places"
+        :key="place.id"
+        @click="changeMarkers"
+        outlined
+      >
+        <v-list-item>
+          <v-list-item-content>
+            <div :data-id="place.id">
+              <v-list-item-title>
+                {{place.place_name}}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                {{place.address_name}}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>
+                {{place.phone}}
+              </v-list-item-subtitle>
             </div>
+          </v-list-item-content>
+        </v-list-item>
 
-            <div>
-              {{place.address_name}}
-            </div>
-
-            <div>
-              {{place.phone}}
-            </div>
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
+      </v-card>
+    </v-container>
   </v-container>
 </template>
 

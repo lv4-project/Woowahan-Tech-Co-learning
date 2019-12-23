@@ -9,13 +9,13 @@ import StudyFinished from "./components/study/StudyFinished";
 import UserProfile from "./components/user/UserProfile";
 import ParticipatingStudy from "./components/user/ParticipatingStudy";
 import UserUpdateForm from "./components/user/UserUpdateForm";
-import Map from "./components/map/Map";
 
 import Main from "./components/Main";
 import LoginForm from "./components/user/LoginForm";
 import StudyOutputGeneration from "./components/studyoutput/StudyOutputGeneration";
 import StudyOngoingDetail from "./components/study/StudyOngoingDetail";
 import StudyOutputEdit from "./components/studyoutput/StudyOutputEdit";
+
 
 Vue.use(VueRouter);
 
@@ -88,11 +88,6 @@ const routes = [
     name: `StudyOutputEdit`,
     path: `/studies/:studyId/outputs/:outputId`,
     component: StudyOutputEdit,
-  },
-  {
-    name: `Map`,
-    path: `/map`,
-    component: Map,
   },
 ];
 

@@ -84,22 +84,18 @@
           </v-col>
         </v-row>
 
-
         <v-divider/>
 
-        <v-row>
+        <v-row class="my-10">
           <v-col class="black--text">
             <vue-markdown>
               {{ studyInfo.description }}
             </vue-markdown>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col>
-            <v-icon>mdi-map-marker</v-icon>
-            {{ studyInfo.location }}
-          </v-col>
-        </v-row>
+
+        <LocationHistoryBtn :studyId="studyId"/>
+
       </v-card-text>
       <v-card-actions v-if="studyInfo.status === `RECRUITING`">
         <template v-if="studyInfo.studyParticipantStatus === `presenter`">
@@ -197,30 +193,23 @@
         </v-expansion-panels>
       </v-col>
     </v-row>
-
-    <v-row v-if="studyInfo.studyParticipantStatus === `presenter`">
-      <v-btn
-        @click="showMap"
-        color="primary"
-      >
-        위치 추가하기
-      </v-btn>
-    </v-row>
   </v-container>
 </template>
 
 <script>
   import VueMarkdown from 'vue-markdown';
+  import LocationHistoryBtn from "../map/LocationHistoryBtn";
 
   export default {
     name: "StudyDetail",
     components: {
+      LocationHistoryBtn,
       VueMarkdown,
     },
     data() {
       return {
         studyId: this.$route.params.studyId,
-        studyInfo: {presenter: {},},
+        studyInfo: {},
         menu: ``,
       }
     },
@@ -246,24 +235,21 @@
       },
       participateInStudy() {
         this.$request.post(`${window.location.origin}/api/studies/${this.studyId}/participants`,
-          function (error, response, body) {
+          (error, response, body) => {
             if (response.statusCode === 200) {
               this.studyInfo.studyParticipantStatus = body;
             }
           });
       },
-      showMap() {
-        this.$router.push({name: `Map`});
-      }
     },
     created() {
-      const component = this;
-      this.$request.get(`${window.location.origin}/api/studies/${component.studyId}`,
-        function (error, response, body) {
+      this.$request.get(`${window.location.origin}/api/studies/${this.studyId}`,
+        (error, response, body) => {
           if ((response && response.statusCode) === 200) {
-            component.studyInfo = JSON.parse(body);
+            this.studyInfo = JSON.parse(body);
+            window.console.log(this.studyInfo);
           } else if (response.statusCode === 401) {
-            component.$router.push(`/login`)
+            this.$router.push(`/login`)
           } else {
             // TODO snackbar로 대체
             window.alert("그런 study 없음");

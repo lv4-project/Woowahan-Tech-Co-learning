@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import woowahan.anifarm.tecolearning.map.domain.StudyLocation;
 import woowahan.anifarm.tecolearning.map.domain.StudyLocationRepository;
 import woowahan.anifarm.tecolearning.map.dto.LocationDto;
+import woowahan.anifarm.tecolearning.map.dto.StudyLocationDto;
 import woowahan.anifarm.tecolearning.study.service.StudyService;
 
 import java.util.List;
@@ -37,10 +38,9 @@ public class StudyLocationService {
         studyLocationRepository.deleteById(studyLocationId);
     }
 
-    public List<LocationDto> read(long studyId) {
+    public List<StudyLocationDto> read(long studyId) {
         return studyLocationRepository.findAllByStudyId(studyId).stream()
-                .map(StudyLocation::getLocation)
-                .map(LocationDto::from)
+                .map(StudyLocationDto::from)
                 .collect(Collectors.toList());
     }
 }

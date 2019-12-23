@@ -1,30 +1,33 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
+    <v-row justify="center">
+      <v-col cols="11">
         <div
           id="map"
-          style="width: 100vw; height: 100vw">
-        </div>
+          style="width: 100%; height: 250px; padding: 8px"
+        />
       </v-col>
-
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <MapCard
+          :ps="ps"
+          @updateMap="updateMap"
+          @updateMarkers="updateMarkers"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col cols="12">
         <v-btn
-          color="success"
+          @click="sendSelectedPlace"
+          color="primary"
           class="mr-4"
           type="submit"
-          @click="sendSelectedPlace"
         >
           확인
         </v-btn>
       </v-col>
-
-      <MapCard
-        :ps="ps"
-        @updateMap="updateMap"
-        @updateMarkers="updateMarkers"
-      />
-
     </v-row>
   </v-container>
 </template>
@@ -43,8 +46,11 @@
         markers: [],
         infowindow: {},
         map: {},
-        selectedPlace: {},
+        selectedPlace: null,
       }
+    },
+    props: {
+      studyId: String,
     },
     methods: {
       updateMap(places) {
@@ -110,9 +116,34 @@
         this.infowindow.open(this.map, marker);
       },
       sendSelectedPlace() {
-        window.console.log(this.selectedPlace);
-        this.$emit(`sendSelectedPlace`, this.selectedPlace);
-        window.history.back();
+        const app = this;
+        if (this.selectedPlace === null) {
+          window.alert(`장소를 선택하세요`);
+          return false;
+        }
+
+        const location = {
+          id: this.selectedPlace.id,
+          placeName: this.selectedPlace.place_name,
+          phone: this.selectedPlace.phone,
+          placeUrl: this.selectedPlace.place_url,
+          x: this.selectedPlace.x,
+          y: this.selectedPlace.y,
+        };
+
+        this.$request.post(
+          {
+            url: `${window.location.origin}/api/studies/${this.studyId}/locations`,
+            body: location,
+            json: true,
+          },
+          (error, response, body) => {
+            if ((response && response.statusCode) === 200) {
+              app.$emit(`closeMap`);
+            } else {
+              window.confirm(body);
+            }
+          });
       }
     },
     mounted() {
