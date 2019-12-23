@@ -19,7 +19,7 @@
           />
         </template>
 
-        <v-app-bar-nav-icon @click="showLogin"/>
+        <MainMenu/>
 
         <v-toolbar-title>테코러닝</v-toolbar-title>
 
@@ -71,17 +71,18 @@
   `use strict`;
 
   import BottomNavigation from "./templates/BottomNavigation";
+  import MainMenu from "./login/LoginBtn";
 
   export default {
     name: `Main`,
     components: {
       BottomNavigation,
+      MainMenu,
     },
     data() {
       return {
         sheetMarginTop: `0px`,
         sheetMarginBottom: `0px`,
-        loginId: 1,
       }
     },
     methods: {

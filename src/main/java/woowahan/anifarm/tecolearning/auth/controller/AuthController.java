@@ -32,4 +32,11 @@ public class AuthController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        response.addCookie(createJWTCookie("logout"));
+
+        return ResponseEntity.ok().build();
+    }
 }
