@@ -28,5 +28,5 @@ sudo kill ${TARGET_PID}
 
 # Run new WAS as a daemon
 echo "> Now new WAS runs at ${target_port}."
-java -jar -Dserver.port=${target_port} ./build/libs/tecolearning-0.0.1-SNAPSHOT.jar &
+java -jar -Dserver.port=${target_port} -Dspring.profiles.active=production ./build/libs/tecolearning-0.0.1-SNAPSHOT.jar &
 exit 0
