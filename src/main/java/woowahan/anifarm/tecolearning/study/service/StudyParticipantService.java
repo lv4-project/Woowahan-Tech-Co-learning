@@ -7,6 +7,10 @@ import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRep
 import woowahan.anifarm.tecolearning.study.service.dto.StudyParticipantInfoDto;
 import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
 import woowahan.anifarm.tecolearning.user.domain.User;
+import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class StudyParticipantService {
@@ -29,6 +33,15 @@ public class StudyParticipantService {
                 participant.getParticipant().getNickName(),
                 participant.getParticipant().getEmail()
         );
+    }
+
+    public Set<UserInfoDto> findAllParticipantsOf(Study study) {
+        Set<StudyParticipant> studyParticipants = studyParticipantRepository.findAllByStudy(study);
+
+        return studyParticipants.stream()
+                .map(StudyParticipant::getParticipant)
+                .map(UserInfoDto::from)
+                .collect(Collectors.toSet());
     }
 
     private void checkParticipating(StudyParticipant studyParticipant) {

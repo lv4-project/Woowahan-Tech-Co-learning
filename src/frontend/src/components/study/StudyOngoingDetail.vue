@@ -44,7 +44,7 @@
                   <v-icon left>
                     mdi-account-group
                   </v-icon>
-                  2 / {{ studyInfo.totalNumberOfRecruitment }}
+                  {{ studyInfo.numberOfParticipants }} / {{ studyInfo.totalNumberOfRecruitment }}
                 </v-chip>
               </template>
               <v-card width="300">
@@ -63,20 +63,12 @@
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
-                <v-list>
+                <v-list v-for="participant in studyInfo.participants" :key="participant.id">
                   <v-list-item @click="() => {}">
                     <v-list-item-action>
                       <v-icon>mdi-account</v-icon>
                     </v-list-item-action>
-                    <v-list-item-subtitle>kingducksu@yogi.yo</v-list-item-subtitle>
-                  </v-list-item>
-                </v-list>
-                <v-list>
-                  <v-list-item @click="() => {}">
-                    <v-list-item-action>
-                      <v-icon>mdi-account</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-subtitle>mir@dduho.dev</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ participant.email }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -238,24 +230,28 @@
           (error, response, body) => {
             if (response.statusCode === 200) {
               this.studyInfo.studyParticipantStatus = body;
+              this.loadStudyDetail();
             }
           });
       },
+      loadStudyDetail() {
+        this.$request.get(`${window.location.origin}/api/studies/${this.studyId}`,
+          (error, response, body) => {
+            if ((response && response.statusCode) === 200) {
+              this.studyInfo = JSON.parse(body);
+              window.console.log(this.studyInfo);
+            } else if (response.statusCode === 401) {
+              this.$router.push(`/login`)
+            } else {
+              // TODO snackbar로 대체
+              window.alert("그런 study 없음");
+              window.history.back();
+            }
+          });
+      }
     },
     created() {
-      this.$request.get(`${window.location.origin}/api/studies/${this.studyId}`,
-        (error, response, body) => {
-          if ((response && response.statusCode) === 200) {
-            this.studyInfo = JSON.parse(body);
-            window.console.log(this.studyInfo);
-          } else if (response.statusCode === 401) {
-            this.$router.push(`/login`)
-          } else {
-            // TODO snackbar로 대체
-            window.alert("그런 study 없음");
-            window.history.back();
-          }
-        });
+      this.loadStudyDetail();
     },
   }
 </script>

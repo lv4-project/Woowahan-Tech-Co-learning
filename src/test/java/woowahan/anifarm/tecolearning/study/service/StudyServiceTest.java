@@ -101,7 +101,7 @@ class StudyServiceTest {
 
     @Test
     @DisplayName("Study id를 넘겨받아 스터디를 조회한다.")
-    void read() {
+    void findById() {
         // TODO: 2019-12-12 짤 것
     }
 

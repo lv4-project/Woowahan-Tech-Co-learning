@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
+import woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus;
 import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.*;
@@ -16,6 +17,7 @@ import woowahan.anifarm.tecolearning.user.service.UserService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus.*;
@@ -59,15 +61,26 @@ public class StudyService {
         User presenter = study.getPresenter();
         User loggedInUser = userService.findById(userInfoDto.getId());
 
-        if (presenter.isSame(loggedInUser)) {
-            return StudyDetailInfoDto.of(study, PRESENTER.getStatus());
+        if (loggedInUser.is(presenter)) {
+            return createStudyDetailInfo(study, PRESENTER);
         }
 
         if (studyParticipantService.existsByStudyAndParticipant(study, loggedInUser)) {
-            return StudyDetailInfoDto.of(study, PARTICIPANT.getStatus());
+            return createStudyDetailInfo(study, PARTICIPANT);
         }
         // TODO: 2019-12-19  return StudyDetailInfoDto.from(findById(studyId)); 로 변경
-        return StudyDetailInfoDto.of(study, NON_PARTICIPANT.getStatus());
+        return createStudyDetailInfo(study, NON_PARTICIPANT);
+    }
+
+    private StudyDetailInfoDto createStudyDetailInfo(Study study, StudyParticipantStatus status) {
+        Set<UserInfoDto> participants = studyParticipantService.findAllParticipantsOf(study);
+
+        return StudyDetailInfoDto.of(
+                study,
+                status.getStatus(),
+                participants.size(),
+                participants
+        );
     }
 
     public List<StudySummaryDto> findPageOfSummaryDto(String statusName, Pageable pageable) {
@@ -103,6 +116,7 @@ public class StudyService {
         presenter.authenticate(oldPresenter);
     }
 
+    // TODO: 2019-12-24 StudyDetailInfo를 되돌려주는건 어떨까?
     public String participateInStudy(long studyId, UserInfoDto userInfoDto) {
         Study participatingStudy = findById(studyId);
         User user = userService.findById(userInfoDto.getId());

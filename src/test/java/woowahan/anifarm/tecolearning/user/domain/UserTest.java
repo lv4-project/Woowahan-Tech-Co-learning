@@ -75,6 +75,6 @@ class UserTest {
         User user = User.builder().id(1L).build();
         User user2 = User.builder().id(1L).build();
 
-        assertThat(user.isSame(user2)).isTrue();
+        assertThat(user.is(user2)).isTrue();
     }
 }

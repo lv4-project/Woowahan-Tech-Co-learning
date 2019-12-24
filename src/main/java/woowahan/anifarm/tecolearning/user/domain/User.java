@@ -89,7 +89,7 @@ public class User {
         return !this.id.equals(id);
     }
 
-    public boolean isSame(User user) {
+    public boolean is(User user) {
         return this.equals(user);
     }
 }
