@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -29,8 +30,6 @@ import java.util.Map;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
 @AutoConfigureWebTestClient
-@Import(TestConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners({
         DbUnitTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class,
@@ -50,7 +49,10 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
         "/woowahan/anifarm/tecolearning/study_location.xml",
         "/woowahan/anifarm/tecolearning/study_participant.xml"
 }, type = DatabaseOperation.DELETE_ALL)
+@Import(TestConfig.class)
 @ExtendWith(RestDocumentationExtension.class)
+@TestPropertySource("classpath:application_test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractWebTestClient {
     private static final String EMAIL_KEY = "email";
     private static final String PASSWORD_KEY = "password";

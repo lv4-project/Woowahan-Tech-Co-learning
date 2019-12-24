@@ -2,8 +2,7 @@ package woowahan.anifarm.tecolearning;
 
 import com.github.springtestdbunit.bean.DatabaseConfigBean;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
-import org.dbunit.ext.mysql.MySqlDataTypeFactory;
-import org.dbunit.ext.mysql.MySqlMetadataHandler;
+import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,8 +15,7 @@ public class TestConfig {
     public DatabaseConfigBean dbUnitDatabaseConfig() {
         DatabaseConfigBean config = new DatabaseConfigBean();
         config.setAllowEmptyFields(true);
-        config.setDatatypeFactory(new MySqlDataTypeFactory());
-        config.setMetadataHandler(new MySqlMetadataHandler());
+        config.setDatatypeFactory(new H2DataTypeFactory());
         return config;
     }
 
