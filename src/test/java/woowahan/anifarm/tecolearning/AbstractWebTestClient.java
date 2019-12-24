@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.TestExecutionListeners;
@@ -57,6 +58,8 @@ public class AbstractWebTestClient {
     private static final String LOGIN_EMAIL = "learner_duck@woowa.com";
     private static final String LOGIN_PASSWORD = "mastermaster";
 
+    private static final String CONTENT_TYPE = "Content-Type";
+
     @LocalServerPort
     private int port;
 
@@ -69,6 +72,7 @@ public class AbstractWebTestClient {
     protected void setUp(RestDocumentationContextProvider restDocumentation) {
         this.webTestClient = WebTestClient.bindToServer()
                 .baseUrl("http://localhost:" + port)
+                .defaultHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8.toString())
                 .filter(documentationConfiguration(restDocumentation))
                 .build();
 
@@ -104,6 +108,7 @@ public class AbstractWebTestClient {
     protected WebTestClient.ResponseSpec get(String uri) {
         return webTestClient.get()
                 .uri(uri)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(LoggedInInterceptor.TOKEN, token)
                 .exchange();
     }
@@ -145,6 +150,7 @@ public class AbstractWebTestClient {
     protected <T> WebTestClient.ResponseSpec post(String uri, T dto) {
         return webTestClient.post()
                 .uri(uri)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(LoggedInInterceptor.TOKEN, token)
                 .body(Mono.just(dto), dto.getClass())
                 .exchange();
@@ -197,6 +203,7 @@ public class AbstractWebTestClient {
     protected WebTestClient.ResponseSpec delete(String uri) {
         return webTestClient.delete()
                 .uri(uri)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(LoggedInInterceptor.TOKEN, token)
                 .exchange();
     }

@@ -1,4 +1,4 @@
-package woowahan.anifarm.tecolearning.map.domain;
+package woowahan.anifarm.tecolearning.location.domain.studylocation;
 
 
 import lombok.Builder;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
+import woowahan.anifarm.tecolearning.location.domain.location.Location;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 
 import javax.persistence.*;

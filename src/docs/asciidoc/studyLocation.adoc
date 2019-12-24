@@ -1,0 +1,22 @@
+= StudyLocation
+
+== 스터디 장소 스터디 id로 조회 Get 요청
+=== Request
+include::{snippets}/studyLocation/get/http-request.adoc[]
+=== Response
+include::{snippets}/studyLocation/get/http-response.adoc[]
+
+
+==  스터디 장소 저장 Post 요청
+=== Request
+include::{snippets}/studyLocation/post/http-request.adoc[]
+=== Response
+include::{snippets}/studyLocation/post/http-response.adoc[]
+
+
+== 스터디 장소 삭제 Delete 요청
+=== Request
+include::{snippets}/studyLocation/delete/http-request.adoc[]
+=== Response
+include::{snippets}/studyLocation/delete/http-response.adoc[]
+

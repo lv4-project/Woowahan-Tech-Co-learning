@@ -1,7 +1,7 @@
-package woowahan.anifarm.tecolearning.map.dto;
+package woowahan.anifarm.tecolearning.location.service.dto;
 
 import lombok.*;
-import woowahan.anifarm.tecolearning.map.domain.StudyLocation;
+import woowahan.anifarm.tecolearning.location.domain.studylocation.StudyLocation;
 
 @NoArgsConstructor
 @Getter

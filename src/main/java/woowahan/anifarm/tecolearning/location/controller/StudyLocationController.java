@@ -1,10 +1,10 @@
-package woowahan.anifarm.tecolearning.map.controller;
+package woowahan.anifarm.tecolearning.location.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import woowahan.anifarm.tecolearning.map.dto.LocationDto;
-import woowahan.anifarm.tecolearning.map.dto.StudyLocationDto;
-import woowahan.anifarm.tecolearning.map.service.StudyLocationService;
+import woowahan.anifarm.tecolearning.location.service.StudyLocationService;
+import woowahan.anifarm.tecolearning.location.service.dto.LocationDto;
+import woowahan.anifarm.tecolearning.location.service.dto.StudyLocationDto;
 
 import java.util.List;
 

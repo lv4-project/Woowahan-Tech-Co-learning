@@ -1,4 +1,4 @@
-package woowahan.anifarm.tecolearning.map.domain;
+package woowahan.anifarm.tecolearning.location.domain.studylocation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
