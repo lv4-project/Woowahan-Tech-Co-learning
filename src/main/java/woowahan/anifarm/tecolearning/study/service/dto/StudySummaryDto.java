@@ -39,7 +39,7 @@ public class StudySummaryDto {
         this.studyStatus = studyStatus;
     }
 
-    public static StudySummaryDto from(Study study) {
+    public static StudySummaryDto from(Study study, int numberOfParticipants) {
         UserInfoDto presenter = UserInfoDto.from(study.getPresenter());
 
         return StudySummaryDto.builder()
@@ -47,7 +47,7 @@ public class StudySummaryDto {
                 .presenterName(presenter.getNickName())
                 .subject(study.getSubject())
                 .totalNumberOfRecruitment(study.getTotalNumberOfRecruitment())
-                .numberOfParticipants(1) // TODO: 2019-12-15  Study 도메인 객체에 participants 필드 만들 것.
+                .numberOfParticipants(numberOfParticipants)
                 .location(study.getLocation())
                 .summary(study.getDescription()) // TODO: 2019-12-15 도메인 객체에 summary 필드 만들 것.
                 .studyStatus(study.getStatus().getName())

@@ -68,7 +68,7 @@
     methods: {
       requestStudySummaryPage(pageOffset, pageSize) {
         const component = this;
-        const request = `${window.location.origin}/api/studies/summary/participating?page=${String(pageOffset)}&size=${String(pageSize)}&sort=createdDate,desc`;
+        const request = `${window.location.origin}/api/studies/summary?studyStatus=recruiting&page=${String(pageOffset)}&size=${String(pageSize)}&sort=createdDate,desc`;
 
         this.$request.get(request, function (error, response, body) {
           if (response.statusCode === 200) {

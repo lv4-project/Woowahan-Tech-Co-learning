@@ -15,22 +15,30 @@ class StudySummaryApiControllerTest extends AbstractWebTestClient {
     private static final String API_STUDY_SUMMARY = "/api/studies/summary";
 
     @Test
-    @DisplayName("page단위로 study 요약 정보를 조회한다.")
+    @DisplayName("page단위로 모집중인 study 요약 정보를 조회한다.")
     void readOnePageOfStudySummary() {
+        // Given
         int numberOfStudy = 20;
-        addStudies(numberOfStudy);
-
         int pageOffset = 0;
         int pageSize = 10;
-        String sort = "createdDate,asc";
-        String requestUrl = API_STUDY_SUMMARY + "?page=" + pageOffset
-                + "&size=" + pageSize
-                + "&sort=" + sort;
+        String requestUrl = createRequestUrl(pageOffset, pageSize);
 
+        addStudies(numberOfStudy);
+
+        // When, Then
         get(requestUrl)
                 .expectStatus().isOk()
                 .expectBodyList(StudySummaryDto.class)
                 .hasSize(pageSize);
+    }
+
+    private String createRequestUrl(int pageOffset, int pageSize) {
+        String sort = "createdDate,asc";
+
+        return API_STUDY_SUMMARY + "?studyStatus=recruiting"
+                + "&page=" + pageOffset
+                + "&size=" + pageSize
+                + "&sort=" + sort;
     }
 
     private void addStudies(int numberOfStudy) {

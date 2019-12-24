@@ -70,22 +70,21 @@ public class StudyService {
         return StudyDetailInfoDto.of(study, NON_PARTICIPANT.getStatus());
     }
 
-    public List<StudySummaryDto> findPageOfSummaryDto(Pageable pageable) {
-        Page<Study> pageOfStudy = studyRepository.findAll(pageable);
+    public List<StudySummaryDto> findPageOfSummaryDto(String statusName, Pageable pageable) {
+        StudyStatus status = StudyStatus.of(statusName);
+        Page<Study> pageOfStudy = studyRepository.findAllByStatus(status, pageable);
 
         List<StudySummaryDto> studInfoDtos = pageOfStudy.stream()
-                .map(StudySummaryDto::from)
+                .map(this::createStudySummaryDtoFrom)
                 .collect(Collectors.toList());
         return Collections.unmodifiableList(studInfoDtos);
     }
 
-    public List<StudySummaryDto> findPageOfSummaryDto(StudyStatus status, Pageable pageable) {
-        Page<Study> pageOfStudy = studyRepository.findAllByStatus(status, pageable);
+    private StudySummaryDto createStudySummaryDtoFrom(Study study) {
+        long studyId = study.getId();
+        int numberOfParticipants = studyParticipantService.countOfParticipant(studyId);
 
-        List<StudySummaryDto> studInfoDtos = pageOfStudy.stream()
-                .map(StudySummaryDto::from)
-                .collect(Collectors.toList());
-        return Collections.unmodifiableList(studInfoDtos);
+        return StudySummaryDto.from(study, numberOfParticipants);
     }
 
     @Transactional

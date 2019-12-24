@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
-import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
@@ -37,6 +36,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.data.domain.Sort.by;
 import static woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus.PARTICIPANT;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.RECRUITING;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -94,7 +94,7 @@ class StudyServiceTest {
 
         given(mockStudy.getId()).willReturn(STUDY_ID);
         given(mockStudy.getPresenter()).willReturn(user);
-        given(mockStudy.getStatus()).willReturn(StudyStatus.RECRUITING);
+        given(mockStudy.getStatus()).willReturn(RECRUITING);
 
         return mockStudy;
     }
@@ -115,11 +115,11 @@ class StudyServiceTest {
         PageRequest pageRequest = PageRequest.of(offset, pageSize, sort);
 
         Page<Study> pageOfStudy = getPageOfStudy(pageSize);
-        given(studyRepository.findAllByStatus(StudyStatus.RECRUITING, pageRequest)).willReturn(pageOfStudy);
+        given(studyRepository.findAllByStatus(RECRUITING, pageRequest)).willReturn(pageOfStudy);
 
         // When
         List<StudySummaryDto> pageOfSummaryDto =
-                injectStudyService.findPageOfSummaryDto(StudyStatus.RECRUITING, pageRequest);
+                injectStudyService.findPageOfSummaryDto(RECRUITING.getName(), pageRequest);
 
         // Then
         assertThat(pageOfSummaryDto.size()).isEqualTo(pageSize);
@@ -132,6 +132,29 @@ class StudyServiceTest {
             studies.add(getMockStudy());
         }
         return new PageImpl<>(studies);
+    }
+
+    @Test
+    @DisplayName("StudySummaryDto에 현재까지 참여 신청한 인원 수를 넣어 되돌려준다.")
+    void checkCurrentNumberOfParticipants_InSummaryDto() {
+        // Given
+        int expectedNumberOfParticipants = 4;
+        int offset = 0;
+        int pageSize = 1;
+        Sort sort = by(Sort.Direction.ASC, "createdDate");
+        PageRequest pageRequest = PageRequest.of(offset, pageSize, sort);
+
+        Page<Study> pageOfStudy = getPageOfStudy(pageSize);
+        given(studyRepository.findAllByStatus(RECRUITING, pageRequest)).willReturn(pageOfStudy);
+        given(studyParticipantService.countOfParticipant(any(Long.class))).willReturn(expectedNumberOfParticipants);
+
+        // When
+        List<StudySummaryDto> pageOfSummaryDto =
+                injectStudyService.findPageOfSummaryDto(RECRUITING.getName(), pageRequest);
+
+        // Then
+        StudySummaryDto actual = pageOfSummaryDto.get(0);
+        assertThat(actual.getNumberOfParticipants()).isEqualTo(expectedNumberOfParticipants);
     }
 
     // TODO: 2019-12-12 Study 수정 test
