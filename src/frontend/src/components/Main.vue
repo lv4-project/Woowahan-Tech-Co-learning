@@ -115,7 +115,6 @@
       },
     },
     mounted() {
-      this.$router.push(`recruitment`);
       this.resetSheetMargin();
     },
     updated() {
