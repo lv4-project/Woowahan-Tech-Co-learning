@@ -106,27 +106,23 @@
           </v-btn>
         </template>
 
-        <template
-          v-if="studyInfo.studyParticipantStatus === `participant`"
-        >
+        <template>
           <v-row justify="center">
             <v-btn
-              text
-              color="error"
-            >
-              EXIT STUDY
-            </v-btn>
-          </v-row>
-        </template>
-
-        <template v-if="studyInfo.studyParticipantStatus === `nonParticipant`">
-          <v-row justify="center">
-            <v-btn
+              v-if="studyInfo.studyParticipantStatus === `nonParticipant`"
               @click="participateInStudy"
               text
               color="primary"
             >
               JOIN STUDY
+            </v-btn>
+            <v-btn
+              v-if="studyInfo.studyParticipantStatus === `participant`"
+              @click="withdraw"
+              text
+              color="error"
+            >
+              EXIT STUDY
             </v-btn>
           </v-row>
         </template>
@@ -227,9 +223,16 @@
       },
       participateInStudy() {
         this.$request.post(`${window.location.origin}/api/studies/${this.studyId}/participants`,
-          (error, response, body) => {
+          (error, response) => {
             if (response.statusCode === 200) {
-              this.studyInfo.studyParticipantStatus = body;
+              this.loadStudyDetail();
+            }
+          });
+      },
+      withdraw() {
+        this.$request.delete(`${window.location.origin}/api/studies/${this.studyId}/participants`,
+          (error, response) => {
+            if (response.statusCode === 200) {
               this.loadStudyDetail();
             }
           });
