@@ -29,4 +29,12 @@ public class StudyParticipantApiController {
     public ResponseEntity<Integer> countOfParticipant(@PathVariable long studyId) {
         return ResponseEntity.ok().body(studyParticipantService.countOfParticipant(studyId));
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> withdraw(@PathVariable long studyId,
+                                         @LoggedInUser UserInfoDto userInfoDto) {
+        studyParticipantService.withdrawStudy(studyId, userInfoDto);
+
+        return ResponseEntity.ok().build();
+    }
 }

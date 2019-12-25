@@ -21,4 +21,15 @@
            description="내가 강남을 제패하겠다."
            status="RECRUITING"
     />
+
+    <study study_id="3"
+           presenter_id="3"
+           subject="Effective Kotlin1"
+           total_number_of_recruitment="6"
+           start_date="2019-12-12"
+           end_date="2020-1-13"
+           location="강남"
+           description="내가 강남을 제패하겠다."
+           status="RECRUITING"
+    />
 </dataset>

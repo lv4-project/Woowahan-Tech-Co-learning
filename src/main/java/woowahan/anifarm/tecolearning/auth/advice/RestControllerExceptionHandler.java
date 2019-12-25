@@ -9,7 +9,7 @@ import woowahan.anifarm.tecolearning.auth.service.exception.GitSignUpException;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 import woowahan.anifarm.tecolearning.auth.service.exception.OauthException;
 import woowahan.anifarm.tecolearning.auth.service.exception.UserAccountException;
-import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
+import woowahan.anifarm.tecolearning.study.service.exception.StudyParticipantNotFoundException;
 
 @ControllerAdvice(annotations = Controller.class)
 public class RestControllerExceptionHandler {
@@ -20,7 +20,7 @@ public class RestControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-    @ExceptionHandler({InvalidParticipatingRequestException.class})
+    @ExceptionHandler({StudyParticipantNotFoundException.class})
     public ResponseEntity handleInvalidParticipatingException(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }

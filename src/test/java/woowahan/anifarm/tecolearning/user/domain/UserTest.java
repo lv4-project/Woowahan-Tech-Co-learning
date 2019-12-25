@@ -56,17 +56,17 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("User id가 같지 않으면 false 반환")
+    @DisplayName("User id가 같으면 true 반환")
     void doesNotAuthenticated_false() {
         User user = User.builder().id(1L).build();
-        assertThat(user.doesNotAuthenticated(1L)).isFalse();
+        assertThat(user.authenticate(1L)).isTrue();
     }
 
     @Test
-    @DisplayName("User id가 같으면 true 반환")
+    @DisplayName("User id가 같지 않으면 false 반환")
     void doesNotAuthenticated() {
         User user = User.builder().id(1L).build();
-        assertThat(user.doesNotAuthenticated(99999L)).isTrue();
+        assertThat(user.authenticate(99999L)).isFalse();
     }
 
     @Test

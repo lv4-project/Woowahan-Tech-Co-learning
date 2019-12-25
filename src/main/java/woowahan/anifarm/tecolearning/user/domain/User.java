@@ -76,17 +76,13 @@ public class User {
     }
 
     public void authenticate(User presenter) {
-        if (doesNotAuthenticated(presenter)) {
+        if (!is(presenter)) {
             throw new UserAuthenticationFailException();
         }
     }
 
-    public boolean doesNotAuthenticated(User presenter) {
-        return !this.id.equals(presenter.id);
-    }
-
-    public boolean doesNotAuthenticated(long id) {
-        return !this.id.equals(id);
+    public boolean authenticate(long id) {
+        return this.id.equals(id);
     }
 
     public boolean is(User user) {

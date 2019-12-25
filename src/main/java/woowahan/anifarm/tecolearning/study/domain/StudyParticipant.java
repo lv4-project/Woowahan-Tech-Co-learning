@@ -34,5 +34,9 @@ public class StudyParticipant {
         this.participant = participant;
         this.study = study;
     }
+
+    public void checkPresenter(long userId) {
+        study.checkPresenter(userId);
+    }
 }
 

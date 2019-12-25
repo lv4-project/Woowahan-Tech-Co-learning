@@ -78,7 +78,7 @@ class StudyTest {
         User user = User.builder().id(PRESENTER_USER_ID).build();
         Study study = Study.builder().id(STUDY_ID).presenter(user).build();
 
-        assertDoesNotThrow(() -> study.checkPresenter(PRESENTER_USER_ID));
+        assertDoesNotThrow(() -> study.checkNotPresenter(PRESENTER_USER_ID));
     }
 
     @Test
@@ -88,6 +88,6 @@ class StudyTest {
         User other = User.builder().id(ANOTHER_USER_ID).build();
         Study study = Study.builder().id(STUDY_ID).presenter(user).build();
 
-        assertThrows(NotPresenterException.class, () -> study.checkPresenter(ANOTHER_USER_ID));
+        assertThrows(NotPresenterException.class, () -> study.checkNotPresenter(ANOTHER_USER_ID));
     }
 }

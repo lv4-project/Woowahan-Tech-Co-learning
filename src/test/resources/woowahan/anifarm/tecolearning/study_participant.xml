@@ -11,4 +11,28 @@
             participant_id="2"
             study_id="1"
     />
+
+    <study_participant
+            study_participant_id="3"
+            participant_id="2"
+            study_id="2"
+    />
+
+    <study_participant
+            study_participant_id="4"
+            participant_id="3"
+            study_id="2"
+    />
+
+    <study_participant
+            study_participant_id="5"
+            participant_id="1"
+            study_id="3"
+    />
+
+    <study_participant
+            study_participant_id="6"
+            participant_id="2"
+            study_id="3"
+    />
 </dataset>

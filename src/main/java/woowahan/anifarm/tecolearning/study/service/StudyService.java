@@ -134,7 +134,7 @@ public class StudyService {
     public void delete(long studyId, UserInfoDto userInfoDto) {
         Study study = findById(studyId);
 
-        study.checkPresenter(userInfoDto.getId());
+        study.checkNotPresenter(userInfoDto.getId());
         studyRepository.delete(study);
         studyParticipantService.deleteByStudy(study);
     }

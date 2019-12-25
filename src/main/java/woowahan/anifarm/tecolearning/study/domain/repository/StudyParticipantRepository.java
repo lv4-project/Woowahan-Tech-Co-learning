@@ -5,6 +5,7 @@ import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
+import java.util.Optional;
 import java.util.Set;
 
 public interface StudyParticipantRepository extends JpaRepository<StudyParticipant, Long> {
@@ -14,5 +15,9 @@ public interface StudyParticipantRepository extends JpaRepository<StudyParticipa
 
     int countByStudyId(long studyId);
 
+    void deleteByStudyIdAndParticipantId(long studyId, long id);
+
     Set<StudyParticipant> findAllByStudy(Study study);
+
+    Optional<StudyParticipant> findByStudyIdAndParticipantId(long studyId, long userId);
 }

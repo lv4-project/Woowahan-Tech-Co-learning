@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
+import woowahan.anifarm.tecolearning.study.domain.exception.PresenterException;
 import woowahan.anifarm.tecolearning.studyoutput.domain.StudyOutput;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
@@ -95,7 +96,7 @@ public class Study extends BaseEntity {
     }
 
     public void checkPermission(long id) {
-        if (presenter.doesNotAuthenticated(id)) {
+        if (!presenter.authenticate(id)) {
             throw new RuntimeException("수정 권한이 없습니다^^");
         }
     }
@@ -104,9 +105,15 @@ public class Study extends BaseEntity {
         return presenter.equals(user);
     }
 
-    public void checkPresenter(long id) {
-        if (presenter.doesNotAuthenticated(id)) {
+    public void checkNotPresenter(long id) {
+        if (!presenter.authenticate(id)) {
             throw new NotPresenterException();
+        }
+    }
+
+    public void checkPresenter(long id) {
+        if (presenter.authenticate(id)) {
+            throw new PresenterException("발제자는 스터디 탈퇴를 할 수 없습니다.");
         }
     }
 }

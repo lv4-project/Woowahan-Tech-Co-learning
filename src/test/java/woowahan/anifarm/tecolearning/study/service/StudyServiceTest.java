@@ -20,7 +20,7 @@ import woowahan.anifarm.tecolearning.study.service.dto.StudyCreateDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyParticipantInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
-import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
+import woowahan.anifarm.tecolearning.study.service.exception.StudyParticipantNotFoundException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 import woowahan.anifarm.tecolearning.user.service.UserService;
@@ -181,10 +181,10 @@ class StudyServiceTest {
 
         given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
         given(userService.findById(userInfoDto.getId())).willReturn(mock(User.class));
-        given(studyParticipantService.save(any(StudyParticipant.class))).willThrow(InvalidParticipatingRequestException.class);
+        given(studyParticipantService.save(any(StudyParticipant.class))).willThrow(StudyParticipantNotFoundException.class);
 
         // When, Then
-        assertThrows(InvalidParticipatingRequestException.class,
+        assertThrows(StudyParticipantNotFoundException.class,
                 () -> injectStudyService.participateInStudy(STUDY_ID, userInfoDto));
     }
 
@@ -195,7 +195,7 @@ class StudyServiceTest {
         Study mockStudy = mock(Study.class);
 
         given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
-        doThrow(NotPresenterException.class).when(mockStudy).checkPresenter(anyLong());
+        doThrow(NotPresenterException.class).when(mockStudy).checkNotPresenter(anyLong());
 
         assertThrows(NotPresenterException.class, () -> {
             injectStudyService.delete(STUDY_ID, userInfoDto);
@@ -209,7 +209,7 @@ class StudyServiceTest {
         Study mockStudy = mock(Study.class);
 
         given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
-        doNothing().when(mockStudy).checkPresenter(anyLong());
+        doNothing().when(mockStudy).checkNotPresenter(anyLong());
 
         injectStudyService.delete(STUDY_ID, userInfoDto);
 
@@ -223,7 +223,7 @@ class StudyServiceTest {
         Study mockStudy = mock(Study.class);
 
         given(studyRepository.findById(STUDY_ID)).willReturn(Optional.of(mockStudy));
-        doNothing().when(mockStudy).checkPresenter(anyLong());
+        doNothing().when(mockStudy).checkNotPresenter(anyLong());
         doNothing().when(studyParticipantService).deleteByStudy(any(Study.class));
 
         injectStudyService.delete(STUDY_ID, userInfoDto);

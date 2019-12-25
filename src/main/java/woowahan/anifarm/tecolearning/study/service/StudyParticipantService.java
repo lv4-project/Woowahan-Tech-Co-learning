@@ -1,11 +1,12 @@
 package woowahan.anifarm.tecolearning.study.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.study.domain.repository.StudyParticipantRepository;
 import woowahan.anifarm.tecolearning.study.service.dto.StudyParticipantInfoDto;
-import woowahan.anifarm.tecolearning.study.service.exception.InvalidParticipatingRequestException;
+import woowahan.anifarm.tecolearning.study.service.exception.StudyParticipantNotFoundException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
@@ -35,6 +36,12 @@ public class StudyParticipantService {
         );
     }
 
+    private void checkParticipating(StudyParticipant studyParticipant) {
+        if (existsByStudyAndParticipant(studyParticipant.getStudy(), studyParticipant.getParticipant())) {
+            throw new StudyParticipantNotFoundException();
+        }
+    }
+
     public Set<UserInfoDto> findAllParticipantsOf(Study study) {
         Set<StudyParticipant> studyParticipants = studyParticipantRepository.findAllByStudy(study);
 
@@ -44,17 +51,23 @@ public class StudyParticipantService {
                 .collect(Collectors.toSet());
     }
 
-    private void checkParticipating(StudyParticipant studyParticipant) {
-        if (existsByStudyAndParticipant(studyParticipant.getStudy(), studyParticipant.getParticipant())) {
-            throw new InvalidParticipatingRequestException();
-        }
-    }
-
     public int countOfParticipant(long studyId) {
         return studyParticipantRepository.countByStudyId(studyId);
     }
 
+    @Transactional
     public void deleteByStudy(Study study) {
         studyParticipantRepository.deleteByStudy(study);
+    }
+
+    @Transactional
+    public void withdrawStudy(long studyId, UserInfoDto userInfoDto) {
+        long userId = userInfoDto.getId();
+
+        studyParticipantRepository.findByStudyIdAndParticipantId(studyId, userId)
+                .orElseThrow(StudyParticipantNotFoundException::new)
+                .checkPresenter(userId);
+
+        studyParticipantRepository.deleteByStudyIdAndParticipantId(studyId, userId);
     }
 }
