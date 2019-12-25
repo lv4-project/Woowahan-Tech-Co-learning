@@ -63,7 +63,7 @@ class StudySummaryApiControllerTest extends AbstractWebTestClient {
         List<StudyInfoDto> studyInfosDto = get("/api//users/1/studies")
                 .expectStatus().isOk()
                 .expectBodyList(StudyInfoDto.class)
-                .hasSize(1)
+                .hasSize(2)
                 .returnResult()
                 .getResponseBody();
 
