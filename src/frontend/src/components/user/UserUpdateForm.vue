@@ -9,24 +9,26 @@
       </v-avatar>
     </v-row>
 
-    <v-col cols="12" sm="6" md="3">
-      <v-text-field
-        v-model="nickName"
-        label="닉네임"
-        outlined
-      />
+    <v-row justify="center">
+      <v-col cols="10" sm="6" md="3">
+        <v-text-field
+          v-model="nickName"
+          label="닉네임"
+          outlined
+        />
 
-      <v-text-field
-        v-model="email"
-        label="이메일"
-        readonly
-        outlined
-      />
+        <v-text-field
+          v-model="email"
+          label="이메일"
+          readonly
+          outlined
+        />
 
-      <div class="text-center">
-        <v-btn @click="requestUpdate" block tile color="grey" dark>수정</v-btn>
-      </div>
-    </v-col>
+        <div class="text-center">
+          <v-btn @click="requestUpdate">수정</v-btn>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -50,7 +52,7 @@
 
         this.$request.put({
           url: `${window.location.origin}/api/users/`,
-          body: { nickName: this.nickName },
+          body: {nickName: this.nickName},
           json: true,
         }, function (error, response) {
           if ((response && response.statusCode) === 200) {

@@ -8,7 +8,9 @@ import woowahan.anifarm.tecolearning.study.service.dto.StudyInfoDto;
 import woowahan.anifarm.tecolearning.study.service.dto.StudySummaryDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static woowahan.anifarm.tecolearning.study.controller.StudyApiControllerTest.API_STUDIES;
 
 class StudySummaryApiControllerTest extends AbstractWebTestClient {
@@ -53,5 +55,20 @@ class StudySummaryApiControllerTest extends AbstractWebTestClient {
             );
             postJsonRequest(API_STUDIES, studyCreateDto, StudyInfoDto.class);
         }
+    }
+
+    @Test
+    @DisplayName("특정 유저가 참여한 모든 study 조회")
+    void readAllStudyByUserId() {
+        List<StudyInfoDto> studyInfosDto = get("/api//users/1/studies")
+                .expectStatus().isOk()
+                .expectBodyList(StudyInfoDto.class)
+                .hasSize(1)
+                .returnResult()
+                .getResponseBody();
+
+        StudyInfoDto actual = studyInfosDto.get(0);
+        assertThat(actual.getId()).isEqualTo(1);
+        assertThat(actual.getLocation()).isEqualTo("판교");
     }
 }

@@ -10,6 +10,7 @@ import woowahan.anifarm.tecolearning.study.service.exception.StudyParticipantNot
 import woowahan.anifarm.tecolearning.user.domain.User;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,9 @@ public class StudyParticipantService {
     public void deleteByStudy(Study study) {
         studyParticipantRepository.deleteByStudy(study);
     }
+
+    public List<StudyParticipant> findByUser(User user) {
+        return studyParticipantRepository.findAllByParticipant(user);
 
     @Transactional
     public void withdrawStudy(long studyId, UserInfoDto userInfoDto) {

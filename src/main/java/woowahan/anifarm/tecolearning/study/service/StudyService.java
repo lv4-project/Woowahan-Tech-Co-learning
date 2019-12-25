@@ -138,4 +138,14 @@ public class StudyService {
         studyRepository.delete(study);
         studyParticipantService.deleteByStudy(study);
     }
+
+    public List<StudyInfoDto> findInfoByUserId(long userId) {
+        // TODO: 2019-12-24 service test 구현
+        User user = userService.findById(userId);
+        return studyParticipantService
+                .findByUser(user).stream()
+                .map(StudyParticipant::getStudy)
+                .map(StudyInfoDto::of)
+                .collect(Collectors.toList());
+    }
 }

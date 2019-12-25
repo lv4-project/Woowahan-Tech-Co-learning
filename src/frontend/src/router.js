@@ -67,32 +67,59 @@ const routes = [
     name: `Main`,
     path: `/`,
     component: Main,
+    meta: {authRequired: true},
     children: mainChild,
   },
   {
     name: `LoginForm`,
     path: `/login`,
+    meta: {authRequired: false},
     component: LoginForm,
   },
   {
     name: `SignUpForm`,
     path: `/signup`,
+    meta: {authRequired: false},
     component: SignUpForm,
   },
   {
     name: `StudyOutputGeneration`,
     path: `/studies/:studyId/outputs`,
+    meta: {authRequired: true},
+
     component: StudyOutputGeneration,
   },
   {
     name: `StudyOutputEdit`,
     path: `/studies/:studyId/outputs/:outputId`,
+    meta: {authRequired: true},
     component: StudyOutputEdit,
   },
 ];
 
-export default new VueRouter({
+const vueRouter = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: routes,
 });
+
+// TODO vuex 적용
+vueRouter.data = {
+  auth: false,
+};
+
+vueRouter.beforeEach(function (to, from, next) {
+  if (vueRouter.data.auth) {
+    next();
+    return;
+  }
+  if (to.matched.some((routeInfo) => {
+    return routeInfo.meta.authRequired;
+  })) {
+    next(`/login`);
+  } else {
+    next();
+  }
+});
+
+export default vueRouter;

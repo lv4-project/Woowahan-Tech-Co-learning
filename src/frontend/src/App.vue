@@ -12,7 +12,11 @@
   }
 </script>
 
-<style scoped>
+<style>
+  @import url(//fonts.googleapis.com/earlyaccess/hanna.css);
 
+  * {
+    font-family: 'Hanna', fantasy;
+  }
 </style>
 

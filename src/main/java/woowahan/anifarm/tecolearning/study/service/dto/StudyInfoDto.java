@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import woowahan.anifarm.tecolearning.study.domain.Study;
+import woowahan.anifarm.tecolearning.study.domain.StudyParticipant;
 import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
@@ -62,6 +63,22 @@ public class StudyInfoDto {
                 .description(study.getDescription())
                 .status(study.getStatus())
                 .studyParticipantStatus(participatingStatus)
+                .build();
+    }
+
+    public static StudyInfoDto of(Study study) {
+        UserInfoDto presenter = UserInfoDto.from(study.getPresenter());
+
+        return StudyInfoDto.builder()
+                .id(study.getId())
+                .presenter(presenter)
+                .subject(study.getSubject())
+                .totalNumberOfRecruitment(study.getTotalNumberOfRecruitment())
+                .startDate(study.getStartDate())
+                .endDate(study.getEndDate())
+                .location(study.getLocation())
+                .description(study.getDescription())
+                .status(study.getStatus())
                 .build();
     }
 }

@@ -1,12 +1,13 @@
 <template>
-  <v-container>
-    완료된 스터디
-  </v-container>
+  <StudyCardsTemplateByStatus status="finished"/>
 </template>
 
 <script>
+  import StudyCardsTemplateByStatus from "./StudyCardsTemplateByStatus"
+
   export default {
     name: `StudyFinished`,
+    components: {StudyCardsTemplateByStatus},
     data: () => ({}),
   };
 </script>
