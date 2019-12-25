@@ -63,6 +63,7 @@ public class StudyParticipantService {
 
     public List<StudyParticipant> findByUser(User user) {
         return studyParticipantRepository.findAllByParticipant(user);
+    }
 
     @Transactional
     public void withdrawStudy(long studyId, UserInfoDto userInfoDto) {
