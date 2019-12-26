@@ -1,45 +1,21 @@
 <template>
   <v-app>
-    <v-content>
-      <v-app-bar
-        v-scroll
-        fixed
-      >
-        <v-spacer/>
-        <v-toolbar-title>테코러닝</v-toolbar-title>
-        <v-spacer/>
+    <v-app-bar
+      fixed
+      inverted-scroll
+    >
+      <v-spacer/>
+      <v-toolbar-title>테코러닝</v-toolbar-title>
+      <v-spacer/>
 
-        <v-toolbar-items>
-          <MainMenu/>
-        </v-toolbar-items>
-      </v-app-bar>
+      <v-toolbar-items>
+        <MainMenu/>
+      </v-toolbar-items>
+    </v-app-bar>
 
-      <div style="height: 50px;"></div>
+    <router-view/>
 
-      <v-parallax
-        height="300"
-        src="../assets/bg.jpg"
-        dark
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col class="text-center" cols="12">
-            <h1>Tecolearning</h1>
-            <h4 class="subheading">Build your STUDY today!</h4>
-          </v-col>
-        </v-row>
-      </v-parallax>
-
-      <v-sheet>
-        <v-container>
-          <router-view/>
-        </v-container>
-      </v-sheet>
-    </v-content>
-
-    <div style="height: 50px;"></div>
+    <div style="height: 55px;"></div>
 
     <BottomNavigation/>
   </v-app>

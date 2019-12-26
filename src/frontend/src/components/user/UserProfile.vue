@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col align="center">
+        <h1>{{ nickName }}'s Profile</h1>
+      </v-col>
+    </v-row>
+
     <v-row justify="space-around">
       <v-avatar size="100">
         <img
@@ -81,7 +87,7 @@
     data() {
       return {
         id: ``,
-        nickName: `aa`,
+        nickName: ``,
         email: ``,
 
         timelines: [],

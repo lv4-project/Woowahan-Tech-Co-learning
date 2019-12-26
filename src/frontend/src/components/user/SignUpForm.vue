@@ -1,79 +1,81 @@
 <template>
   <v-container>
-    <v-col
-      cols="12"
-      sm="6"
-      md="3"
-    >
-      <v-text-field
-        v-model="signUpFormData.email"
-        label="이메일"
-        outlined
-      />
-
-      <v-text-field
-        v-model="signUpFormData.password"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :rules="[rules.required, rules.min]"
-        :type="showPassword ? 'text' : 'password'"
-        @click:append="showPassword = !showPassword"
-        name="input-10-1"
-        label="패스워드 입력"
-        hint="최소 8 글자 이상 입력하세요."
-        counter
-        outlined
-      />
-
-      <v-text-field
-        :append-icon="showPasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'"
-        :rules="[rules.required, rules.passwordMatch]"
-        :type="showPasswordConfirm ? 'text' : 'password'"
-        @click:append="showPasswordConfirm = !showPasswordConfirm"
-        name="input-10-1"
-        label="패스워드 확인"
-        hint="패스워드를 다시 입력하세요."
-        counter
-        outlined
-      />
-
-      <v-text-field
-        v-model="signUpFormData.nickName"
-        label="닉네임"
-        outlined
-      />
-
-      <v-col
-        cols="12"
-        sm="6"
-        md="3"
-      >
-        <v-btn
-          @click="requestSignUp"
-          block
-          tile
-          color="grey"
-          dark
-        >
-          가입
-        </v-btn>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <h1>회원가입</h1>
       </v-col>
+    </v-row>
 
-      <v-col
-        cols="12"
-        sm="6"
-        md="3"
-      >
-        <v-btn
-          @click="cancel"
-          block
-          tile
-          color="grey"
-          dark
-        >
-          취소
-        </v-btn>
+    <div style="height: 30px;"></div>
+
+    <v-row justify="center">
+      <v-col cols="auto">
+        <v-text-field
+          v-model="signUpFormData.email"
+          label="이메일"
+          outlined
+        />
+
+        <v-text-field
+          v-model="signUpFormData.password"
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :rules="[rules.required, rules.min]"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
+          name="input-10-1"
+          label="패스워드 입력"
+          hint="최소 8 글자 이상 입력하세요."
+          counter
+          outlined
+        />
+
+        <v-text-field
+          :append-icon="showPasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+          :rules="[rules.required, rules.passwordMatch]"
+          :type="showPasswordConfirm ? 'text' : 'password'"
+          @click:append="showPasswordConfirm = !showPasswordConfirm"
+          name="input-10-1"
+          label="패스워드 확인"
+          hint="패스워드를 다시 입력하세요."
+          counter
+          outlined
+        />
+
+        <v-text-field
+          v-model="signUpFormData.nickName"
+          label="닉네임"
+          outlined
+        />
+
+        <v-row>
+          <v-col>
+            <v-btn
+              @click="requestSignUp"
+              block
+              tile
+              color="grey"
+              dark
+            >
+              가입
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-btn
+              @click="cancel"
+              block
+              tile
+              color="grey"
+              dark
+            >
+              취소
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-col>
-    </v-col>
+    </v-row>
   </v-container>
 </template>
 

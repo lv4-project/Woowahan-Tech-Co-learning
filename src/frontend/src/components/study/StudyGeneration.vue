@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <h1>Recruit</h1>
+      </v-col>
+    </v-row>
     <v-form
       v-model="valid"
       ref="form"
@@ -94,6 +99,7 @@
           생성
         </v-btn>
         <v-btn
+          @click="goRecruitingStudy"
           color="error"
         >
           취소
@@ -190,6 +196,10 @@
             window.alert(body);
           }
         });
+      },
+
+      goRecruitingStudy() {
+        this.$router.push(`/recruitment`)
       },
     },
   }

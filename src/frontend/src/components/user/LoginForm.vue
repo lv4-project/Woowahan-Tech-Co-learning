@@ -1,19 +1,25 @@
 <template>
   <v-container>
-    <v-row justify="center" align="center"
-           style="height: 600px;">
-      <v-col>
+    <v-row>
+      <v-img
+        height="max-height"
+        src="../../assets/login-bg.png"
+        style="opacity: 0.3; z-index: 0; position: absolute; bottom: 0"
+      />
+    </v-row>
+    <v-row
+      justify="center"
+      align="center"
+      style="height: 600px;"
+    >
+      <v-col cols="auto" style="z-index: 2">
         <v-row>
           <v-col align="center">
-            <h1>테 코 러 닝</h1>
+            <h1>Tecolearning</h1>
           </v-col>
         </v-row>
         <v-row>
-          <v-col
-            cols="12"
-            sm="6"
-            md="3"
-          >
+          <v-col>
             <v-text-field
               v-model="loginData.email"
               label="이메일"
@@ -36,11 +42,7 @@
         </v-row>
 
         <v-row>
-          <v-col
-            cols="12"
-            sm="6"
-            md="3"
-          >
+          <v-col>
             <v-btn
               @click="login"
               block
@@ -54,11 +56,7 @@
         </v-row>
 
         <v-row>
-          <v-col
-            cols="12"
-            sm="6"
-            md="3"
-          >
+          <v-col>
             <v-btn
               href="https://github.com/login/oauth/authorize?client_id=ec77f51776eab7f7dcf1&scope=user:email"
               block
@@ -72,11 +70,7 @@
         </v-row>
 
         <v-row>
-          <v-col
-            cols="12"
-            sm="6"
-            md="3"
-          >
+          <v-col>
             <v-btn
               @click="showSignUp"
               block
