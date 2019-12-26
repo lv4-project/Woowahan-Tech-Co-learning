@@ -17,6 +17,7 @@
 
     <div style="height: 55px;"></div>
 
+    <SnackBar/>
     <BottomNavigation/>
   </v-app>
 </template>
@@ -25,11 +26,13 @@
   `use strict`;
 
   import BottomNavigation from "./templates/BottomNavigation";
+  import SnackBar from "./templates/SnackBar";
 
   export default {
     name: `Main`,
     components: {
       BottomNavigation,
+      SnackBar,
     },
     data() {
       return {}

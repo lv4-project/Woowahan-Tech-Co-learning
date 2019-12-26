@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <h1>Search</h1>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col cols="auto">
         <v-radio-group
@@ -22,7 +27,6 @@
         </v-radio-group>
       </v-col>
     </v-row>
-
     <v-row justify="center">
       <v-col class="pr-0">
         <v-text-field
@@ -46,13 +50,11 @@
         </v-btn>
       </v-col>
     </v-row>
-
     <StudyCard
       v-for="study in studies"
       :key="study.id"
       :study="study"
     />
-
     <v-row>
       <v-col>
         <v-snackbar
@@ -70,14 +72,11 @@
         </v-snackbar>
       </v-col>
     </v-row>
-
     <div id="bottomSensor"></div>
-  </div>
+  </v-container>
 </template>
-
 <script>
   import StudyCard from "./StudyCard";
-
   export default {
     name: "StudySearch",
     components: {StudyCard},
@@ -85,14 +84,11 @@
       return {
         keyword: ``,
         fixedKeyword: ``,
-
         status: `recruiting`,
         fixedStatus: ``,
-
         studies: [],
         pageOffset: 0,
         pageSize: 2,
-
         snackbar: false,
         snackbarText: "",
       }
@@ -110,14 +106,11 @@
         if (this.checkValid()) {
           return;
         }
-
         this.pageOffset = 0;
         this.fixedKeyword = this.keyword;
         this.fixedStatus = this.status;
-
         const request = `${window.location.origin}/api/studies/search/${this.fixedStatus}?` +
           `keyword=${this.fixedKeyword}&page=${this.pageOffset}&size=${this.pageSize}`;
-
         this.$request.get(request,
           (error, response, body) => {
             if (response.statusCode === 200) {
@@ -131,7 +124,6 @@
       },
       observeSearch() {
         const bottomSensor = document.getElementById(`bottomSensor`);
-
         const observer = new IntersectionObserver(entries => {
           entries.forEach(entry => {
             if (!entry.isIntersecting) {
@@ -145,7 +137,6 @@
       nextSearch() {
         const request = `${window.location.origin}/api/studies/search/${this.fixedStatus}?` +
           `keyword=${this.fixedKeyword}&page=${++this.pageOffset}&size=${this.pageSize}`;
-
         this.$request.get(request,
           (error, response, body) => {
             if (response.statusCode === 200) {

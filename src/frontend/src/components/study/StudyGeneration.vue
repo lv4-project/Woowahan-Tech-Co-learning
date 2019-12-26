@@ -128,6 +128,7 @@
 <script>
   `use strict`;
   import VueSimplemde from 'vue-simplemde';
+  import {eventBus} from "../../main";
 
   export default {
     name: "StudyGeneration",
@@ -206,6 +207,7 @@
 
         this.$request(studyCreationRequest, function (error, response, body) {
           if (response.statusCode === 200) {
+            eventBus.$emit(`raiseNotice`, `새로운 스터디가 만들어졌습니다.`);
             component.$router.push(`/studies/${body.id}`);
           } else if (response.statusCode === 401) {
             component.$router.push(`/login`)
