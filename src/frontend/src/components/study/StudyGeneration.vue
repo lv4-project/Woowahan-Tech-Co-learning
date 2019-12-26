@@ -99,13 +99,29 @@
           생성
         </v-btn>
         <v-btn
-          @click="goRecruitingStudy"
+          @click="dialog = true"
           color="error"
         >
           취소
         </v-btn>
       </v-card-actions>
     </v-form>
+
+    <v-dialog v-model="dialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          스터디 만들기를 취소하시겠습니까?
+        </v-card-title>
+        <v-card-text>
+          지금까지 작성하신 내용이 모두 사라집니다. 정말로 취소하시겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="goRecruitingStudy">예</v-btn>
+          <v-btn color="primary" text @click="dialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -168,6 +184,7 @@
         location: ``,
         description: ``,
         checkbox: false,
+        dialog: false,
       }
     },
     methods: {
