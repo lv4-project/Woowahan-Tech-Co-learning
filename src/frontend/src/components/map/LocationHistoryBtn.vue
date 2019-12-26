@@ -125,7 +125,11 @@
           });
       },
       showDialog(event) {
-        const url = event.target.getAttribute(`data-url`);
+        let url = event.target.getAttribute(`data-url`);
+        if (url.includes(`http`)) {
+          url = url.replace('http', 'https');
+        }
+
         this.dialogUrl = url;
         this.dialog = true;
       },
