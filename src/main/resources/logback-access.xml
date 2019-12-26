@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%t{yyyy-MM-dd HH:mm:ss.SSS} %green(WEB) --- %boldCyan(Request) %cyan(from
+                client\(){}%clientHost{}%cyan(\) to server \(){}%server:%localPort{}%cyan(\))
+                :%n%fullRequest{}%n%boldCyan(Response) %cyan(in) %elapsedTime ms %cyan(from
+                server\(){}%server:%localPort{}%cyan(\) to client \(){}%clientHost{}%cyan(\)) :%n{}%fullResponse
+            </pattern>
+        </encoder>
+    </appender>
+    <appender-ref ref="CONSOLE"/>
+</configuration>

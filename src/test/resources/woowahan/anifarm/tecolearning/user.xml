@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <user user_id="1" nick_name="learnerduck" password="mastermaster" email="learner_duck@woowa.com" status="ACTIVE" />
+    <user user_id="2" nick_name="duholee" password="ddu0422.dev" email="eara12sa@gmail.com" status="ACTIVE" />
+    <user user_id="3" nick_name="mir" password="mir.dev" email="ddu0422@naver.com" status="ACTIVE" />
+</dataset>

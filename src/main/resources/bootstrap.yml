@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: app
+  profiles: production
+  cloud:
+    config:
+      uri: http://15.165.73.137:8888

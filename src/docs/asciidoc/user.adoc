@@ -1,0 +1,14 @@
+= User
+
+== Get user information
+=== Request
+include::{snippets}/users/get/http-request.adoc[]
+=== Response
+include::{snippets}/users/get/http-response.adoc[]
+
+
+== User sign up
+=== Request
+include::{snippets}/users/post/http-request.adoc[]
+=== Response
+include::{snippets}/users/post/http-response.adoc[]

@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+**/static/**
 
 ### STS ###
 .apt_generated
@@ -37,3 +38,6 @@ out/
 /build/
 /out/
 /target/
+
+### docker ###
+/docker/db/mysql/data/
