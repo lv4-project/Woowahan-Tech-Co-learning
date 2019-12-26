@@ -44,9 +44,6 @@
         return this.$route.name === `StudyRecruitment`;
       },
     },
-    mounted() {
-      this.$router.push(`recruitment`);
-    },
   };
 </script>
 

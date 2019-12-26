@@ -22,8 +22,6 @@ public class LoggedInConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/index.html")
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/docs/**")
-                .excludePathPatterns("/api/studies/summary/**")
-                .excludePathPatterns("/api/oauth")
                 .excludePathPatterns("/api/users/signup")
                 .excludePathPatterns("/api/oauth/**");
     }

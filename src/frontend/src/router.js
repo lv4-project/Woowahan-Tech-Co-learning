@@ -17,6 +17,7 @@ import StudyOngoingDetail from "./components/study/StudyOngoingDetail";
 import StudyOutputEdit from "./components/studyoutput/StudyOutputEdit";
 import StudySearch from "./components/study/StudySearch";
 
+import request from 'request'
 
 Vue.use(VueRouter);
 
@@ -109,23 +110,24 @@ const vueRouter = new VueRouter({
   routes: routes,
 });
 
-// TODO vuex 적용
-vueRouter.data = {
-  auth: false,
-};
-
 vueRouter.beforeEach(function (to, from, next) {
-  if (vueRouter.data.auth) {
-    next();
-    return;
-  }
-  if (to.matched.some((routeInfo) => {
-    return routeInfo.meta.authRequired;
-  })) {
-    next(`/login`);
-  } else {
-    next();
-  }
+  request.get({
+      url: `${window.location.origin}/api/users/loggedIn`,
+    },
+    (error, response) => {
+      if ((response && response.statusCode) === 200) {
+          next();
+          return;
+      }
+
+      if (to.matched.some((routeInfo) => {
+        return routeInfo.meta.authRequired;
+      })) {
+        next(`/login`);
+      } else {
+        next();
+      }
+    });
 });
 
 export default vueRouter;

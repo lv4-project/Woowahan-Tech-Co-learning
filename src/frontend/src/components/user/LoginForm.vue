@@ -117,7 +117,6 @@
           json: true,
         }, (error, response, body) => {
           if ((response && response.statusCode) === 200) {
-            this.$router.data.auth = true;
             this.$router.push(`/recruitment`);
           } else {
             window.alert(body);

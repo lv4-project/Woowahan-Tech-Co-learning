@@ -32,6 +32,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.findInfoDtoById(userId));
     }
 
+    @GetMapping("/loggedIn")
+    public ResponseEntity<UserInfoDto> loggedIn(@LoggedInUser UserInfoDto userInfoDto) {
+        return ResponseEntity.ok().body(userInfoDto);
+    }
+
     @PutMapping
     public ResponseEntity<UserInfoDto> update(@RequestBody UserUpdateDto userUpdateDto, @LoggedInUser UserInfoDto userInfoDto) {
         return ResponseEntity.ok().body(userService.update(userUpdateDto, userInfoDto.getId()));
