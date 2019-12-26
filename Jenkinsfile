@@ -1,12 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage("Database setup") {
-            steps {
-                sh "cd docker && docker-compose up -d"
-            }
-        }
-
         stage("Build") {
             steps {
                 sh "sudo sh deploy.sh"
