@@ -1,13 +1,11 @@
 package woowahan.anifarm.tecolearning.user.exception;
 
-public class UserCreateException extends RuntimeException {
-    private static final String MESSAGE = "사용자 생성 실패";
+import woowahan.anifarm.tecolearning.common.exception.BadRequestException;
 
-    public UserCreateException(Throwable cause) {
-        super(MESSAGE, cause);
-    }
+public class UserCreateException extends BadRequestException {
+    private static final String MESSAGE = "입력값을 확인해주세요";
 
-    public UserCreateException(String message) {
-        super(message);
+    public UserCreateException(Exception e) {
+        super(MESSAGE);
     }
 }

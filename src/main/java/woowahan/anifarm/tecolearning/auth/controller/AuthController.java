@@ -23,7 +23,7 @@ public class AuthController {
     public String login(@RequestParam String code, HttpServletResponse response) {
         response.addCookie(createJWTCookie(oauthService.gitLogin(code).getToken()));
 
-        return "redirect:/";
+        return "redirect:/recruitment";
     }
 
     @PostMapping("/login")
