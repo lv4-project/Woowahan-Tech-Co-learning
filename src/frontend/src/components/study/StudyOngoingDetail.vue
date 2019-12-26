@@ -99,6 +99,14 @@
           >
             START STUDY
           </v-btn>
+          <v-btn
+            @click="finishStudy"
+            v-if="studyInfo.studyStatus === `ongoing`"
+            text
+            color="primary"
+          >
+            FINISH STUDY
+          </v-btn>
           <v-spacer/>
           <v-btn
             text
@@ -261,15 +269,27 @@
               window.console.log(this.studyInfo);
             } else if (response.statusCode === 401) {
               this.$router.push(`/login`)
-              window.console.log(body);
             } else {
-              window.console.log(body);
               // TODO snackbar로 대체
               window.alert("그런 study 없음");
               window.history.back();
             }
           });
       },
+      finishStudy() {
+        this.$request.patch({uri: `${window.location.origin}/api/studies/${this.studyId}/finish`},
+          (error, response, body) => {
+            if (response.statusCode === 200) {
+              this.studyInfo = JSON.parse(body);
+            } else if (response.statusCode === 401) {
+              this.$router.push(`/login`)
+            } else {
+              // TODO snackbar로 대체
+              window.alert("그런 study 없음");
+              window.history.back();
+            }
+          });
+      }
     },
     created() {
       this.loadStudyDetail();

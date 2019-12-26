@@ -50,4 +50,10 @@ public class StudyApiController {
                                                          @LoggedInUser UserInfoDto userInfoDto) {
         return ResponseEntity.ok(studyService.startStudy(studyId, userInfoDto));
     }
+
+    @PatchMapping("/{studyId}/finish")
+    public ResponseEntity<StudyDetailInfoDto> endStudy(@PathVariable long studyId,
+                                                         @LoggedInUser UserInfoDto userInfoDto) {
+        return ResponseEntity.ok(studyService.endStudy(studyId, userInfoDto));
+    }
 }

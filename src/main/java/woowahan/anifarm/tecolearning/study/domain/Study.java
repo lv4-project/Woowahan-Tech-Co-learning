@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
+import woowahan.anifarm.tecolearning.study.domain.exception.CannotFinishStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.CannotStartStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.study.domain.exception.PresenterException;
@@ -14,8 +15,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
-import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.RECRUITING;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -129,15 +129,30 @@ public class Study extends BaseEntity {
 
     public Study start(long presenterId) {
         checkNotPresenter(presenterId);
-        checkRecruiting();
+        checkStartable();
 
-        this.status = ONGOING;
+        status = ONGOING;
         return this;
     }
 
-    private void checkRecruiting() {
+    private void checkStartable() {
         if (!RECRUITING.equals(status)) {
             throw new CannotStartStudyException();
         }
     }
+
+    public Study finish(long presenterId) {
+        checkNotPresenter(presenterId);
+        checkFinishable();
+
+        status = FINISHED;
+        return this;
+    }
+
+    private void checkFinishable() {
+        if(!ONGOING.equals(status)) {
+            throw new CannotFinishStudyException();
+        }
+    }
 }
+

@@ -3,6 +3,7 @@ package woowahan.anifarm.tecolearning.study.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import woowahan.anifarm.tecolearning.study.domain.exception.CannotFinishStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.CannotStartStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.user.domain.User;
@@ -12,8 +13,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
-import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
-import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.RECRUITING;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.*;
 
 class StudyTest {
     private static final Long STUDY_ID = 1L;
@@ -138,5 +138,32 @@ class StudyTest {
         assertThrows(CannotStartStudyException.class, () -> study.start(presenter.getId()));
     }
 
+    @Test
+    @DisplayName("발제자가 스터디를 스터디 완료 상태로 바꾼다.")
+    void endStudy() {
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter)
+                .status(ONGOING).build();
+
+        study.finish(presenter.getId());
+
+        assertThat(study.getStatus()).isEqualTo(FINISHED);
+    }
+
+    @Test
+    @DisplayName("발제자가 아닌 사람이 스터디를 완료시키는 경우 NotPresenterException이 발생한다.")
+    void cannotFinishStudy_ifNotPresenter() {
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
+
+        assertThrows(NotPresenterException.class, () -> study.finish(otherUser.getId()));
+    }
+
+    @Test
+    @DisplayName("진행중인 상태가 아닌 스터디를 시작하려고 하는 경우 CannotStartStudy예외가 발생한다.")
+    void cannotFinishStudy_ifStudyIsNotInRecruiting() {
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter)
+                .status(FINISHED).build();
+
+        assertThrows(CannotFinishStudyException.class, () -> study.finish(presenter.getId()));
+    }
 
 }

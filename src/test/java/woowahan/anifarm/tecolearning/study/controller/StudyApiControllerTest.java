@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.FINISHED;
 import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
 import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.SAMPLE_USER_ID;
 
@@ -163,7 +164,7 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
 
     @Test
     @DisplayName("발제가가 스터디를 시작하면 스터디 상태가 ongoing으로 바뀐다.")
-    void name() {
+    void startStudy() {
         StudyDetailInfoDto responseBody = patch(API_STUDIES + "/" + SAMPLE_STUDY_ID + "/start", Void.class)
                 .expectStatus().isOk()
                 .expectBody(StudyDetailInfoDto.class)
@@ -171,5 +172,23 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
                 .getResponseBody();
 
         assertThat(responseBody.getStudyStatus()).isEqualTo(ONGOING.getName());
+    }
+
+    @Test
+    @DisplayName("발제자가 스터디를 완료시키면 스터디 상태가 finished로 바뀐다.")
+    void endStudy() {
+        // Given
+        patch(API_STUDIES + "/" + SAMPLE_STUDY_ID + "/start", Void.class)
+                .expectStatus().isOk();
+
+        // When
+        StudyDetailInfoDto responseBody = patch(API_STUDIES + "/" + SAMPLE_STUDY_ID + "/finish", Void.class)
+                .expectStatus().isOk()
+                .expectBody(StudyDetailInfoDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        // Then
+        assertThat(responseBody.getStudyStatus()).isEqualTo(FINISHED.getName());
     }
 }

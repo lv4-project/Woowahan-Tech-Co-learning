@@ -142,6 +142,15 @@ public class StudyService {
         return createStudyDetailInfo(started, PRESENTER);
     }
 
+    @Transactional
+    public StudyDetailInfoDto endStudy(long studyId, UserInfoDto userInfoDto) {
+        Study study = findById(studyId);
+
+        Study finished = study.finish(userInfoDto.getId());
+
+        return createStudyDetailInfo(finished, PRESENTER);
+    }
+
     public void delete(long studyId, UserInfoDto userInfoDto) {
         Study study = findById(studyId);
 
