@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.RECRUITING;
 
 class StudyTest {
     private static final Long STUDY_ID = 1L;
@@ -112,7 +113,8 @@ class StudyTest {
     @Test
     @DisplayName("스터디를 시작하면 스터디가 진행중인 상태로 바뀐다.")
     void startStudy() {
-        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter)
+                .status(RECRUITING).build();
 
         Study startedStudy = study.start(presenter.getId());
 

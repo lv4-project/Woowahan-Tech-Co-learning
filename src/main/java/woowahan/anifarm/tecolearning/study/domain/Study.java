@@ -124,7 +124,7 @@ public class Study extends BaseEntity {
     }
 
     public boolean isOngoing() {
-        return status.equals(ONGOING);
+        return ONGOING.equals(status);
     }
 
     public Study start(long presenterId) {
@@ -136,7 +136,7 @@ public class Study extends BaseEntity {
     }
 
     private void checkRecruiting() {
-        if (!status.equals(RECRUITING)) {
+        if (!RECRUITING.equals(status)) {
             throw new CannotStartStudyException();
         }
     }
