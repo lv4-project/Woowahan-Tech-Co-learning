@@ -51,6 +51,9 @@ dependencies {
 
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:2.2.0.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 ext {

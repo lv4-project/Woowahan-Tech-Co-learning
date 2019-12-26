@@ -3,7 +3,7 @@ package woowahan.anifarm.tecolearning.auth.github;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -16,17 +16,21 @@ import reactor.core.publisher.Mono;
 @Component
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "oauth.client.github")
 public class GithubClient {
     private static final String CLIENT_ID = "client_id";
     private static final String CLIENT_SECRET = "client_secret";
     private static final String CODE = "code";
 
+    @Value("${oauth.client.github.client-id}")
     private String clientId;
+    @Value("${oauth.client.github.client-secret}")
     private String clientSecret;
 
+    @Value("${oauth.client.github.token-url}")
     private String tokenUrl;
+    @Value("${oauth.client.github.user-info-url}")
     private String userInfoUrl;
+    @Value("${oauth.client.github.user-email-url}")
     private String userEmailUrl;
 
     public String getToken(String code) {

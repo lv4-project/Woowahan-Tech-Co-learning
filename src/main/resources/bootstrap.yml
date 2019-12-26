@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: app
+  profiles: production
+  cloud:
+    config:
+      uri: http://13.125.168.159.xip.io:8888
