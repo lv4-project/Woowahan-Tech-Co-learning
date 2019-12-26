@@ -343,7 +343,7 @@
       },
       participateInStudy() {
         this.$request.post(`${window.location.origin}/api/studies/${this.studyId}/participants`,
-          (error, response, body) => {
+          (error, response) => {
             if (response.statusCode === 200) {
               this.participantStudyDialog = false;
               this.loadStudyDetail();
