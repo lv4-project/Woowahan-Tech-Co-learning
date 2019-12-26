@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.study.domain.exception.CannotFinishStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.CannotStartStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
+import woowahan.anifarm.tecolearning.study.service.exception.CannotParticipateException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
 import java.time.LocalDate;
@@ -166,4 +167,10 @@ class StudyTest {
         assertThrows(CannotFinishStudyException.class, () -> study.finish(presenter.getId()));
     }
 
+    @Test
+    void isAvailable() {
+        Study study = Study.builder().id(1L).totalNumberOfRecruitment(2).build();
+        assertThatThrownBy(() -> study.isAvailable(2))
+                .isInstanceOf(CannotParticipateException.class);
+    }
 }

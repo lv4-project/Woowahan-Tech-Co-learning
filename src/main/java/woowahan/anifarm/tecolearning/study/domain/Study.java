@@ -8,6 +8,7 @@ import woowahan.anifarm.tecolearning.study.domain.exception.CannotFinishStudyExc
 import woowahan.anifarm.tecolearning.study.domain.exception.CannotStartStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.study.domain.exception.PresenterException;
+import woowahan.anifarm.tecolearning.study.service.exception.CannotParticipateException;
 import woowahan.anifarm.tecolearning.studyoutput.domain.StudyOutput;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
@@ -144,8 +145,14 @@ public class Study extends BaseEntity {
     }
 
     private void checkFinishable() {
-        if(!ONGOING.equals(status)) {
+        if (!ONGOING.equals(status)) {
             throw new CannotFinishStudyException();
+        }
+    }
+
+    public void isAvailable(int count) {
+        if (totalNumberOfRecruitment <= count) {
+            throw new CannotParticipateException();
         }
     }
 }

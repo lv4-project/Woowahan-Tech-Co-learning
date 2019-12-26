@@ -123,6 +123,9 @@ public class StudyService {
         Study participatingStudy = findById(studyId);
         User user = userService.findById(userInfoDto.getId());
 
+        int count = studyParticipantService.countOfParticipant(studyId);
+        participatingStudy.isAvailable(count);
+
         StudyParticipant studyParticipant = StudyParticipant.builder()
                 .study(participatingStudy)
                 .participant(user)

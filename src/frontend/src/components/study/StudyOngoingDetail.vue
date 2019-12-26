@@ -89,7 +89,7 @@
         <LocationHistoryBtn :studyId="studyId"/>
 
       </v-card-text>
-      <v-card-actions >
+      <v-card-actions>
         <template v-if="studyInfo.studyParticipantStatus === `presenter`">
           <v-btn
             @click="startDialog = true"
@@ -348,7 +348,7 @@
               this.participantStudyDialog = false;
               this.loadStudyDetail();
             } else if (response.statusCode === 400) {
-              eventBus.$emit(`raiseNotice`, body);
+              eventBus.$emit(`raiseNotice`, `참여할 수 없는 스터디입니다.`);
             }
           });
       },
