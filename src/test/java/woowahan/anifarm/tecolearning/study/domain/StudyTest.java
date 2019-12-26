@@ -72,7 +72,7 @@ class StudyTest {
                 .presenter(presenter)
                 .build();
 
-        assertThatThrownBy(() -> study.checkPermission(ANOTHER_USER_ID)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> study.checkNotPresenter(ANOTHER_USER_ID)).isInstanceOf(RuntimeException.class);
     }
 
     @Test

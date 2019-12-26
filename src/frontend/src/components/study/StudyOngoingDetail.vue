@@ -92,7 +92,7 @@
       <v-card-actions >
         <template v-if="studyInfo.studyParticipantStatus === `presenter`">
           <v-btn
-            @click="startStudy"
+            @click="startDialog = true"
             v-if="studyInfo.studyStatus === `recruiting`"
             text
             color="primary"
@@ -100,7 +100,7 @@
             START STUDY
           </v-btn>
           <v-btn
-            @click="finishStudy"
+            @click="finishDialog = true"
             v-if="studyInfo.studyStatus === `ongoing`"
             text
             color="primary"
@@ -109,6 +109,7 @@
           </v-btn>
           <v-spacer/>
           <v-btn
+            @click="removeStudyDialog = true"
             text
             color="error"
           >
@@ -120,7 +121,7 @@
           <v-row justify="center">
             <v-btn
               v-if="studyInfo.studyParticipantStatus === `nonParticipant`"
-              @click="participateInStudy"
+              @click="participantStudyDialog = true"
               text
               color="primary"
             >
@@ -128,7 +129,7 @@
             </v-btn>
             <v-btn
               v-if="studyInfo.studyParticipantStatus === `participant`"
-              @click="withdraw"
+              @click="withdrawDialog = true"
               text
               color="error"
             >
@@ -142,6 +143,7 @@
     <v-row>
       <v-col class="d-flex flex-row-reverse">
         <v-btn
+          v-if="studyInfo.studyParticipantStatus === `presenter`"
           @click="writeStudyOutput"
           color="primary"
         >
@@ -178,7 +180,7 @@
                 </v-col>
                 <v-col cols="auto">
                   <v-btn
-                    @click="removeOutput(output.id)"
+                    @click="changeIdAndDialog(output.id)"
                     icon
                     text
                   >
@@ -191,12 +193,109 @@
         </v-expansion-panels>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="startDialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          스터디 시작
+        </v-card-title>
+        <v-card-text>
+          정말로 시작하겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="startStudy">예</v-btn>
+          <v-btn color="primary" text @click="startDialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="finishDialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          스터디 종료
+        </v-card-title>
+        <v-card-text>
+          다시 스터디를 시작할 수 없습니다. 정말로 끝내시겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="finishStudy">예</v-btn>
+          <v-btn color="primary" text @click="finishDialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="participantStudyDialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          스터디 참가
+        </v-card-title>
+        <v-card-text>
+          정말로 참가하시겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="participateInStudy">예</v-btn>
+          <v-btn color="primary" text @click="participantStudyDialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="withdrawDialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          스터디 탈퇴
+        </v-card-title>
+        <v-card-text>
+          정말로 탈퇴하시겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="withdraw">예</v-btn>
+          <v-btn color="primary" text @click="withdrawDialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="removeStudyDialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          스터디 삭제
+        </v-card-title>
+        <v-card-text>
+          지금까지 작성하신 내용이 모두 사라집니다. 정말로 삭제하시겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="removeStudy">예</v-btn>
+          <v-btn color="primary" text @click="removeStudyDialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="outputDialog" width="80vw">
+      <v-card>
+        <v-card-title class="headline">
+          산출물 삭제
+        </v-card-title>
+        <v-card-text>
+          지금까지 작성하신 내용이 모두 사라집니다. 정말로 삭제하시겠습니까?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="removeOutput">예</v-btn>
+          <v-btn color="primary" text @click="outputDialog = false">아니오</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
   import VueMarkdown from 'vue-markdown';
   import LocationHistoryBtn from "../map/LocationHistoryBtn";
+  import {eventBus} from "../../main";
 
   export default {
     name: "StudyDetail",
@@ -209,41 +308,58 @@
         studyId: this.$route.params.studyId,
         studyInfo: {},
         menu: ``,
+        startDialog: false,
+        finishDialog: false,
+        participantStudyDialog: false,
+        withdrawDialog: false,
+        removeStudyDialog: false,
+        outputDialog: false,
+        id: 0,
       }
     },
     methods: {
+      changeIdAndDialog(id) {
+        this.outputDialog = true;
+        this.id = id;
+      },
       writeStudyOutput() {
         this.$router.push(`/studies/${this.studyInfo.id}/outputs`)
       },
-      removeOutput(outputId) {
-        const component = this;
-        // TODO 진짜 삭제할꺼냐 확인
-        this.$request.delete(`${window.location.origin}/api/outputs/${outputId}`, function (error, response) {
-          if (response.statusCode === 200) {
-            // TODO 다시 조회하는 방식
-            component.$request.get(`${window.location.origin}/api/studies/${component.studyId}/outputs`,
-              function (error, response, body) {
-                component.studyInfo.studyOutput = JSON.parse(body);
-              });
-          }
-        });
+      removeOutput() {
+        this.$request.delete(`${window.location.origin}/api/outputs/${this.id}`, (error, response, body) => {
+            if (response.statusCode === 200) {
+              this.removeStudyDialog = false;
+              this.$request.get(`${window.location.origin}/api/studies/${this.studyId}/outputs`,
+                (response, body) => {
+                  this.studyInfo.studyOutput = JSON.parse(body);
+                });
+            } else if (response.statusCode === 400) {
+              eventBus.$emit(`raiseNotice`, body);
+            }
+          });
       },
       editOutput(outputId) {
         this.$router.push(`/studies/${this.studyId}/outputs/${outputId}`);
       },
       participateInStudy() {
         this.$request.post(`${window.location.origin}/api/studies/${this.studyId}/participants`,
-          (error, response) => {
+          (error, response, body) => {
             if (response.statusCode === 200) {
+              this.participantStudyDialog = false;
               this.loadStudyDetail();
+            } else if (response.statusCode === 400) {
+              eventBus.$emit(`raiseNotice`, body);
             }
           });
       },
       withdraw() {
         this.$request.delete(`${window.location.origin}/api/studies/${this.studyId}/participants`,
-          (error, response) => {
+          (error, response, body) => {
             if (response.statusCode === 200) {
+              this.withdrawDialog = false;
               this.loadStudyDetail();
+            } else if (response.statusCode === 400) {
+              eventBus.$emit(`raiseNotice`, body);
             }
           });
       },
@@ -255,41 +371,51 @@
             } else if (response.statusCode === 401) {
               this.$router.push(`/login`)
             } else {
-              // TODO snackbar로 대체
-              window.alert("그런 study 없음");
+              eventBus.$emit(`raiseNotice`, `그런 Study 없음`);
               window.history.back();
             }
           });
       },
       startStudy() {
-        this.$request.patch({uri: `${window.location.origin}/api/studies/${this.studyId}/start`},
+        this.$request.patch(`${window.location.origin}/api/studies/${this.studyId}/start`,
           (error, response, body) => {
             if (response.statusCode === 200) {
               this.studyInfo = JSON.parse(body);
+              this.startDialog = false;
               window.console.log(this.studyInfo);
             } else if (response.statusCode === 401) {
               this.$router.push(`/login`)
             } else {
-              // TODO snackbar로 대체
-              window.alert("그런 study 없음");
+              eventBus.$emit(`raiseNotice`, `그런 Study 없음`);
               window.history.back();
             }
           });
       },
       finishStudy() {
-        this.$request.patch({uri: `${window.location.origin}/api/studies/${this.studyId}/finish`},
+        this.$request.patch(`${window.location.origin}/api/studies/${this.studyId}/finish`,
           (error, response, body) => {
             if (response.statusCode === 200) {
+              this.finishDialog = false;
               this.studyInfo = JSON.parse(body);
             } else if (response.statusCode === 401) {
               this.$router.push(`/login`)
             } else {
-              // TODO snackbar로 대체
-              window.alert("그런 study 없음");
+              eventBus.$emit(`raiseNotice`, `그런 Study 없음`);
               window.history.back();
             }
           });
-      }
+      },
+      removeStudy() {
+        this.$request.delete(`${window.location.origin}/api/studies/${this.studyId}`,
+          (error, response, body) => {
+            if (response.statusCode === 200) {
+              this.removeStudyDialog = false;
+              this.$router.push(`/recruitment`)
+            } else if (response.statusCode === 400) {
+              eventBus.$emit(`raiseNotice`, body);
+            }
+          });
+      },
     },
     created() {
       this.loadStudyDetail();

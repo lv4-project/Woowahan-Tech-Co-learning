@@ -29,7 +29,7 @@ public class StudyOutputService {
     public StudyOutputDto save(long studyId, StudyOutputDto studyOutputDto, UserInfoDto userInfoDto) {
         Study study = studyService.findById(studyId);
         // TODO: 2019-12-16 그룹내 인원이면, 작성 가능하도록 변경
-        study.checkPermission(userInfoDto.getId());
+        study.checkNotPresenter(userInfoDto.getId());
 
         StudyOutput studyOutput = studyOutputDto.toEntity(study);
         return StudyOutputDto.from(studyOutputRepository.save(studyOutput));
@@ -48,7 +48,7 @@ public class StudyOutputService {
         StudyOutput oldStudyOutput = findById(outputId);
         StudyOutput newStudyOutput = studyOutputDto.toEntity();
 
-        oldStudyOutput.getStudy().checkPermission(userInfoDto.getId());
+        oldStudyOutput.getStudy().checkNotPresenter(userInfoDto.getId());
 
         return StudyOutputDto.from(oldStudyOutput.update(newStudyOutput));
     }
@@ -60,7 +60,11 @@ public class StudyOutputService {
                 .collect(toList());
     }
 
-    public void delete(long outputId) {
-        studyOutputRepository.delete(findById(outputId));
+    public void delete(long outputId, UserInfoDto userInfoDto) {
+        StudyOutput studyOutput = findById(outputId);
+
+        studyOutput.authenticate(userInfoDto.getId());
+
+        studyOutputRepository.delete(studyOutput);
     }
 }

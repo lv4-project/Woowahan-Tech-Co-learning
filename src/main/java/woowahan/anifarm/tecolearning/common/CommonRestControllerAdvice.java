@@ -9,7 +9,7 @@ import woowahan.anifarm.tecolearning.common.exception.BadRequestException;
 public class CommonRestControllerAdvice {
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity responseBadRequest(BadRequestException badRequestException) {
+    public ResponseEntity<String> responseBadRequest(BadRequestException badRequestException) {
         return ResponseEntity.badRequest().body(badRequestException.getMessage());
     }
 }

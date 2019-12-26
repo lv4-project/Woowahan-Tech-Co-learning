@@ -42,8 +42,9 @@ public class StudyOutputApiController {
     }
 
     @DeleteMapping("/api/outputs/{outputId}")
-    public ResponseEntity<?> delete(@PathVariable long outputId) {
-        studyOutputService.delete(outputId);
+    public ResponseEntity<?> delete(@PathVariable long outputId,
+                                    @LoggedInUser UserInfoDto userInfoDto) {
+        studyOutputService.delete(outputId, userInfoDto);
         return ResponseEntity.ok().build();
     }
 }

@@ -44,4 +44,8 @@ public class StudyOutput extends BaseEntity {
         this.contents = newStudyOutput.contents;
         return this;
     }
+
+    public void authenticate(long id) {
+        study.checkNotPresenter(id);
+    }
 }

@@ -101,12 +101,6 @@ public class Study extends BaseEntity {
         return this;
     }
 
-    public void checkPermission(long id) {
-        if (!presenter.authenticate(id)) {
-            throw new RuntimeException("수정 권한이 없습니다^^");
-        }
-    }
-
     public boolean isCreatedBy(User user) {
         return presenter.equals(user);
     }
