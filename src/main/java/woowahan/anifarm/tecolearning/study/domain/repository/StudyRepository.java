@@ -10,4 +10,6 @@ import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 @Repository
 public interface StudyRepository extends JpaRepository<Study, Long> {
     Page<Study> findAllByStatus(StudyStatus status, Pageable pageable);
+
+    Page<Study> findAllByStatusAndSubjectIgnoreCaseContainingOrderByCreatedDate(StudyStatus status, String subject, Pageable pageable);
 }

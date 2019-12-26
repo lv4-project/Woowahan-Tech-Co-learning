@@ -15,6 +15,7 @@ import LoginForm from "./components/user/LoginForm";
 import StudyOutputGeneration from "./components/studyoutput/StudyOutputGeneration";
 import StudyOngoingDetail from "./components/study/StudyOngoingDetail";
 import StudyOutputEdit from "./components/studyoutput/StudyOutputEdit";
+import StudySearch from "./components/study/StudySearch";
 
 
 Vue.use(VueRouter);
@@ -39,6 +40,11 @@ const mainChild = [
     name: `StudyFinished`,
     path: `/finished`,
     component: StudyFinished,
+  },
+  {
+    name: `StudySearch`,
+    path: `/search`,
+    component: StudySearch,
   },
   {
     name: `UserProfile`,

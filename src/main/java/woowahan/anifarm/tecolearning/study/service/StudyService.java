@@ -168,4 +168,12 @@ public class StudyService {
                 .map(StudyInfoDto::of)
                 .collect(Collectors.toList());
     }
+
+    public List<StudySummaryDto> search(String status, String keyword, Pageable pageable) {
+        StudyStatus studyStatus = StudyStatus.of(status);
+        return studyRepository
+                .findAllByStatusAndSubjectIgnoreCaseContainingOrderByCreatedDate(studyStatus, keyword, pageable)
+                .map(this::createStudySummaryDtoFrom)
+                .getContent();
+    }
 }

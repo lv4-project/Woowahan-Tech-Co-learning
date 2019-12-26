@@ -1,5 +1,6 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +29,12 @@ public class StudySummaryApiController {
     // TODO: 2019-12-24 Pageable 로...
     public ResponseEntity<List<StudyInfoDto>> readAllStudyByUserId(@PathVariable long userId) {
         return ResponseEntity.ok(studyService.findInfoByUserId(userId));
+    }
+
+    @GetMapping("/studies/search/{status}")
+    public ResponseEntity<List<StudySummaryDto>> search(@PathVariable String status,
+                                                        @RequestParam String keyword,
+                                                        Pageable pageable) {
+        return ResponseEntity.ok(studyService.search(status, keyword, pageable));
     }
 }

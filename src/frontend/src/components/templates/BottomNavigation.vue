@@ -38,7 +38,7 @@
     </v-menu>
 
     <v-btn
-      @click="changeView(``)"
+      @click="changeView(`StudySearch`)"
       icon
     >
       <span>검색</span>
