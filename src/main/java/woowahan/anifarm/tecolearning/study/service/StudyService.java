@@ -72,12 +72,13 @@ public class StudyService {
         return createStudyDetailInfo(study, NON_PARTICIPANT);
     }
 
-    private StudyDetailInfoDto createStudyDetailInfo(Study study, StudyParticipantStatus status) {
+    private StudyDetailInfoDto createStudyDetailInfo(Study study,
+                                                     StudyParticipantStatus studyParticipantStatus) {
         Set<UserInfoDto> participants = studyParticipantService.findAllParticipantsOf(study);
 
         return StudyDetailInfoDto.of(
                 study,
-                status.getStatus(),
+                studyParticipantStatus.getStatus(),
                 participants.size(),
                 participants
         );
@@ -108,7 +109,8 @@ public class StudyService {
         Study newStudy = studyUpdateDto.toEntity();
 
         authenticate(oldStudy.getPresenter(), loginUser.getId());
-        return StudyInfoDto.of(oldStudy.update(newStudy), PRESENTER.getStatus());
+        Study updated = oldStudy.update(newStudy);
+        return StudyInfoDto.of(updated, PRESENTER.getStatus());
     }
 
     private void authenticate(User oldPresenter, long userId) {
@@ -129,6 +131,15 @@ public class StudyService {
         studyParticipantService.save(studyParticipant);
 
         return PARTICIPANT.getStatus();
+    }
+
+    @Transactional
+    public StudyDetailInfoDto startStudy(long studyId, UserInfoDto userInfoDto) {
+        Study study = findById(studyId);
+
+        Study started = study.start(userInfoDto.getId());
+
+        return createStudyDetailInfo(started, PRESENTER);
     }
 
     public void delete(long studyId, UserInfoDto userInfoDto) {

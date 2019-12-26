@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import woowahan.anifarm.tecolearning.common.BaseEntity;
+import woowahan.anifarm.tecolearning.study.domain.exception.CannotStartStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.study.domain.exception.PresenterException;
 import woowahan.anifarm.tecolearning.studyoutput.domain.StudyOutput;
@@ -12,6 +13,9 @@ import woowahan.anifarm.tecolearning.user.domain.User;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.RECRUITING;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -72,7 +76,8 @@ public class Study extends BaseEntity {
                  LocalDate endDate,
                  String location,
                  String description,
-                 StudyStatus status) {
+                 StudyStatus status,
+                 List<StudyOutput> studyOutputs) {
         this.id = id;
         this.subject = subject;
         this.presenter = presenter;
@@ -82,6 +87,7 @@ public class Study extends BaseEntity {
         this.location = location;
         this.description = description;
         this.status = status;
+        this.studyOutputs = studyOutputs;
     }
 
     public Study update(Study newStudy) {
@@ -114,6 +120,24 @@ public class Study extends BaseEntity {
     public void checkPresenter(long id) {
         if (presenter.authenticate(id)) {
             throw new PresenterException("발제자는 스터디 탈퇴를 할 수 없습니다.");
+        }
+    }
+
+    public boolean isOngoing() {
+        return status.equals(ONGOING);
+    }
+
+    public Study start(long presenterId) {
+        checkNotPresenter(presenterId);
+        checkRecruiting();
+
+        this.status = ONGOING;
+        return this;
+    }
+
+    private void checkRecruiting() {
+        if (!status.equals(RECRUITING)) {
+            throw new CannotStartStudyException();
         }
     }
 }

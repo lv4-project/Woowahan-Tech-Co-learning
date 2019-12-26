@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import woowahan.anifarm.tecolearning.study.domain.Study;
-import woowahan.anifarm.tecolearning.study.domain.StudyStatus;
 import woowahan.anifarm.tecolearning.studyoutput.service.dto.StudyOutputDto;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
@@ -28,7 +27,7 @@ public class StudyDetailInfoDto {
     private LocalDate endDate;
     private String location;
     private String description;
-    private StudyStatus status; // TODO: 2019-12-24 field 일관성 있게
+    private String studyStatus;
     private String studyParticipantStatus;
     private List<StudyOutputDto> studyOutput;
     private Set<UserInfoDto> participants;
@@ -43,7 +42,7 @@ public class StudyDetailInfoDto {
                               LocalDate endDate,
                               String location,
                               String description,
-                              StudyStatus status,
+                              String studyStatus,
                               String studyParticipantStatus,
                               List<StudyOutputDto> studyOutput,
                               Set<UserInfoDto> participants) {
@@ -56,7 +55,7 @@ public class StudyDetailInfoDto {
         this.endDate = endDate;
         this.location = location;
         this.description = description;
-        this.status = status;
+        this.studyStatus = studyStatus;
         this.studyParticipantStatus = studyParticipantStatus;
         this.studyOutput = studyOutput;
         this.participants = participants;
@@ -81,7 +80,7 @@ public class StudyDetailInfoDto {
                 .endDate(study.getEndDate())
                 .location(study.getLocation())
                 .description(study.getDescription())
-                .status(study.getStatus())
+                .studyStatus(study.getStatus().getName())
                 .studyParticipantStatus(participatingStatus)
                 .studyOutput(outputs)
                 .participants(participants)

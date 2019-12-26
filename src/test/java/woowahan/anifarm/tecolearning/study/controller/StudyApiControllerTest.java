@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
 import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.SAMPLE_USER_ID;
 
 @Slf4j
@@ -158,5 +159,17 @@ public class StudyApiControllerTest extends AbstractWebTestClient {
         delete(API_STUDIES + "/2")
                 .expectStatus()
                 .isBadRequest();
+    }
+
+    @Test
+    @DisplayName("발제가가 스터디를 시작하면 스터디 상태가 ongoing으로 바뀐다.")
+    void name() {
+        StudyDetailInfoDto responseBody = patch(API_STUDIES + "/" + SAMPLE_STUDY_ID + "/start", Void.class)
+                .expectStatus().isOk()
+                .expectBody(StudyDetailInfoDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(responseBody.getStudyStatus()).isEqualTo(ONGOING.getName());
     }
 }

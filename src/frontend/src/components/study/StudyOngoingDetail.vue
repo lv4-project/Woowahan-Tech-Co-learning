@@ -89,9 +89,11 @@
         <LocationHistoryBtn :studyId="studyId"/>
 
       </v-card-text>
-      <v-card-actions v-if="studyInfo.status === `RECRUITING`">
+      <v-card-actions >
         <template v-if="studyInfo.studyParticipantStatus === `presenter`">
           <v-btn
+            @click="startStudy"
+            v-if="studyInfo.studyStatus === `recruiting`"
             text
             color="primary"
           >
@@ -242,7 +244,6 @@
           (error, response, body) => {
             if ((response && response.statusCode) === 200) {
               this.studyInfo = JSON.parse(body);
-              window.console.log(this.studyInfo);
             } else if (response.statusCode === 401) {
               this.$router.push(`/login`)
             } else {
@@ -251,7 +252,24 @@
               window.history.back();
             }
           });
-      }
+      },
+      startStudy() {
+        this.$request.patch({uri: `${window.location.origin}/api/studies/${this.studyId}/start`},
+          (error, response, body) => {
+            if (response.statusCode === 200) {
+              this.studyInfo = JSON.parse(body);
+              window.console.log(this.studyInfo);
+            } else if (response.statusCode === 401) {
+              this.$router.push(`/login`)
+              window.console.log(body);
+            } else {
+              window.console.log(body);
+              // TODO snackbar로 대체
+              window.alert("그런 study 없음");
+              window.history.back();
+            }
+          });
+      },
     },
     created() {
       this.loadStudyDetail();

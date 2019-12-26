@@ -1,7 +1,9 @@
 package woowahan.anifarm.tecolearning.study.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import woowahan.anifarm.tecolearning.study.domain.exception.CannotStartStudyException;
 import woowahan.anifarm.tecolearning.study.domain.exception.NotPresenterException;
 import woowahan.anifarm.tecolearning.user.domain.User;
 
@@ -10,11 +12,21 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
 
 class StudyTest {
     private static final Long STUDY_ID = 1L;
     private static final Long PRESENTER_USER_ID = 1L;
     private static final Long ANOTHER_USER_ID = 2L;
+
+    private User presenter;
+    private User otherUser;
+
+    @BeforeEach
+    void setUp() {
+        presenter = User.builder().id(PRESENTER_USER_ID).build();
+        otherUser = User.builder().id(ANOTHER_USER_ID).build();
+    }
 
     @Test
     @DisplayName("스터디 정보를 수정한다.")
@@ -41,7 +53,6 @@ class StudyTest {
                 .status(StudyStatus.RECRUITING)
                 .build();
 
-
         Study updatedStudy = oldStudy.update(newStudy);
 
         assertThat(updatedStudy.getDescription()).isEqualTo(newStudy.getDescription());
@@ -57,7 +68,7 @@ class StudyTest {
     void checkPermission() {
         Study study = Study.builder()
                 .id(STUDY_ID)
-                .presenter(User.builder().id(PRESENTER_USER_ID).build())
+                .presenter(presenter)
                 .build();
 
         assertThatThrownBy(() -> study.checkPermission(ANOTHER_USER_ID)).isInstanceOf(RuntimeException.class);
@@ -66,17 +77,15 @@ class StudyTest {
     @Test
     @DisplayName("스터디 발제자를 확인한다.")
     void checkIfPresenter() {
-        User user = User.builder().id(PRESENTER_USER_ID).build();
-        Study study = Study.builder().id(STUDY_ID).presenter(user).build();
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
 
-        assertTrue(study.isCreatedBy(user));
+        assertTrue(study.isCreatedBy(presenter));
     }
 
     @Test
     @DisplayName("스터디 발제자인 경우 에러를 발생하지 않는다.")
     void check_IfPresenter() {
-        User user = User.builder().id(PRESENTER_USER_ID).build();
-        Study study = Study.builder().id(STUDY_ID).presenter(user).build();
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
 
         assertDoesNotThrow(() -> study.checkNotPresenter(PRESENTER_USER_ID));
     }
@@ -84,10 +93,48 @@ class StudyTest {
     @Test
     @DisplayName("스터디 발제자가 아닌 경우 NotPresenterException을 발생한다.")
     void check_IfNotPresenter() {
-        User user = User.builder().id(PRESENTER_USER_ID).build();
-        User other = User.builder().id(ANOTHER_USER_ID).build();
-        Study study = Study.builder().id(STUDY_ID).presenter(user).build();
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
 
         assertThrows(NotPresenterException.class, () -> study.checkNotPresenter(ANOTHER_USER_ID));
     }
+
+    @Test
+    @DisplayName("스터디가 진행중인지 확인한다.")
+    void checkIfStudyIsOngoing() {
+        Study study = Study.builder()
+                .id(STUDY_ID)
+                .presenter(presenter)
+                .status(ONGOING).build();
+
+        assertTrue(study.isOngoing());
+    }
+
+    @Test
+    @DisplayName("스터디를 시작하면 스터디가 진행중인 상태로 바뀐다.")
+    void startStudy() {
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
+
+        Study startedStudy = study.start(presenter.getId());
+
+        assertTrue(startedStudy.isOngoing());
+    }
+
+    @Test
+    @DisplayName("발제자가 아닌 사람이 스터디를 시작하려는 경우 NotPresenterException이 발생한다.")
+    void cannotStartStudy_ifNotPresenter() {
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter).build();
+
+        assertThrows(NotPresenterException.class, () -> study.start(otherUser.getId()));
+    }
+
+    @Test
+    @DisplayName("모집중인 상태가 아닌 스터디를 시작하려고 하는 경우 CannotStartStudy예외가 발생한다.")
+    void cannotStartStudy_ifStudyIsNotInRecruiting() {
+        Study study = Study.builder().id(STUDY_ID).presenter(presenter)
+                .status(ONGOING).build();
+
+        assertThrows(CannotStartStudyException.class, () -> study.start(presenter.getId()));
+    }
+
+
 }

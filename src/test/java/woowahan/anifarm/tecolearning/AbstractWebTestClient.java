@@ -202,6 +202,21 @@ public class AbstractWebTestClient {
                 .exchange();
     }
 
+    protected <T> WebTestClient.ResponseSpec patch(String uri, T dto) {
+        return webTestClient.patch()
+                .uri(uri)
+                .cookie(LoggedInInterceptor.TOKEN, token)
+                .body(Mono.just(dto), dto.getClass())
+                .exchange();
+    }
+
+    protected <T> WebTestClient.ResponseSpec patchWithoutLogin(String uri, T dto) {
+        return webTestClient.patch()
+                .uri(uri)
+                .body(Mono.just(dto), dto.getClass())
+                .exchange();
+    }
+
     protected WebTestClient.ResponseSpec delete(String uri) {
         return webTestClient.delete()
                 .uri(uri)

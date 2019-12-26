@@ -157,7 +157,8 @@ class StudyServiceTest {
         assertThat(actual.getNumberOfParticipants()).isEqualTo(expectedNumberOfParticipants);
     }
 
-    // TODO: 2019-12-12 Study 수정 test
+    // TODO: 2019-12-12 Study 수정 test 추가할 것
+
     @Test
     @DisplayName("발제자가 아닌 회원이 스터디에 참여한다.")
     void participateInStudy() {
