@@ -17,14 +17,11 @@
         required
       />
 
-      <v-overflow-btn
+      <v-select
         v-model="totalNumberOfRecruitment"
         :items="possibleNumbers"
-        :outlined="false"
-        class="mt-7"
         label="총 모집 인원"
-        target="#dropdown-example"
-      ></v-overflow-btn>
+      />
 
       <v-row>
         <v-col cols="6">
