@@ -4,6 +4,7 @@
       v-for="study in studies"
       :key="study.id"
       :study="study"
+      :loading="loading"
     />
     <div id="bottomSensor"></div>
   </div>
@@ -25,6 +26,7 @@
         studies: [],
         pageOffset: 0,
         pageSize: 5,
+        loading: true,
       }
     },
     methods: {
@@ -37,6 +39,7 @@
             if (response.statusCode === 200) {
               this.studies = this.studies.concat(JSON.parse(body));
               this.pageOffset++;
+              this.loading = false;
             } else {
               window.console.log(error);
               alert(body);
