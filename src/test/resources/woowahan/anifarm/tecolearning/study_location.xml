@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
+    <user user_id="1"
+          nick_name="learnerduck"
+          password="mastermaster"
+          email="learner_duck@woowa.com"
+          status="ACTIVE"
+    />
+
+    <study study_id="1" presenter_id="1"
+           subject="spring"
+           total_number_of_recruitment="6"
+           start_date="2019-12-12"
+           end_date="2020-1-13"
+           location="판교"
+           description="내가 판교를 제패하겠다."
+           status="RECRUITING"
+    />
+
     <location
             location_id="7947003"
             phone="02-415-3595"
