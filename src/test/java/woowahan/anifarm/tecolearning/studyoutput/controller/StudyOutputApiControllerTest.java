@@ -1,5 +1,8 @@
 package woowahan.anifarm.tecolearning.studyoutput.controller;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
@@ -7,7 +10,12 @@ import woowahan.anifarm.tecolearning.studyoutput.service.dto.StudyOutputDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@DatabaseSetup(value = {
+        "/woowahan/anifarm/tecolearning/study_output.xml",
+}, type = DatabaseOperation.CLEAN_INSERT)
+@DatabaseTearDown(value = {
+        "/woowahan/anifarm/tecolearning/study_output.xml",
+}, type = DatabaseOperation.DELETE_ALL)
 class StudyOutputApiControllerTest extends AbstractWebTestClient {
     private static final String API_OUTPUTS = "/api/outputs";
 
