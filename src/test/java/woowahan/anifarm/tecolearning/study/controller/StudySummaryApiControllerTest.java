@@ -1,5 +1,8 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
@@ -13,6 +16,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static woowahan.anifarm.tecolearning.study.controller.StudyApiControllerTest.API_STUDIES;
 
+@DatabaseSetup(value = {
+        "/woowahan/anifarm/tecolearning/study_summary.xml",
+}, type = DatabaseOperation.CLEAN_INSERT)
+@DatabaseTearDown(value = {
+        "/woowahan/anifarm/tecolearning/study_summary.xml",
+}, type = DatabaseOperation.DELETE_ALL)
 class StudySummaryApiControllerTest extends AbstractWebTestClient {
     private static final String API_STUDY_SUMMARY = "/api/studies/summary";
 
@@ -63,7 +72,7 @@ class StudySummaryApiControllerTest extends AbstractWebTestClient {
         List<StudyInfoDto> studyInfosDto = get("/api/users/1/studies")
                 .expectStatus().isOk()
                 .expectBodyList(StudyInfoDto.class)
-                .hasSize(2)
+                .hasSize(1)
                 .returnResult()
                 .getResponseBody();
 
@@ -80,7 +89,7 @@ class StudySummaryApiControllerTest extends AbstractWebTestClient {
                 + "&size=" + 5)
                 .expectStatus().isOk()
                 .expectBodyList(StudySummaryDto.class)
-                .hasSize(2)
+                .hasSize(1)
                 .returnResult()
                 .getResponseBody();
     }
