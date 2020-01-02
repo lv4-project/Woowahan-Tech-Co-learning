@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.FINISHED;
 import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
-import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.SAMPLE_USER_ID;
 
 @DatabaseSetup(value = {
         "/woowahan/anifarm/tecolearning/study.xml",
@@ -28,7 +27,9 @@ import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.S
 }, type = DatabaseOperation.DELETE_ALL)
 class StudyApiControllerTest extends AbstractWebTestClient {
     static final String API_STUDIES = "/api/studies";
-    private static final long SAMPLE_STUDY_ID = 1L;
+    private static final String PRESENTER = "presenter";
+    private static final String NON_PARTICIPANT = "nonParticipant";
+    private static final String PARTICIPANT = "participant";
 
     @Test
     @DisplayName("새로운 Study를 생성한다.")
@@ -55,7 +56,7 @@ class StudyApiControllerTest extends AbstractWebTestClient {
         assertThat(studyInfoDto.getLocation()).isEqualTo(studyCreateDto.getLocation());
         assertThat(studyInfoDto.getDescription()).isEqualTo(studyCreateDto.getDescription());
         assertThat(studyInfoDto.getStatus()).isEqualTo(StudyStatus.RECRUITING);
-        assertThat(studyInfoDto.getStudyParticipantStatus()).isEqualTo("presenter");
+        assertThat(studyInfoDto.getStudyParticipantStatus()).isEqualTo(PRESENTER);
     }
 
     @Test
@@ -74,7 +75,7 @@ class StudyApiControllerTest extends AbstractWebTestClient {
     void findStudy_ifUserIsPresenter() {
         StudyDetailInfoDto study = getRequest(API_STUDIES + "/" + SAMPLE_STUDY_ID, StudyDetailInfoDto.class);
 
-        assertThat(study.getStudyParticipantStatus()).isEqualTo("presenter");
+        assertThat(study.getStudyParticipantStatus()).isEqualTo(PRESENTER);
     }
 
     @Test
@@ -82,7 +83,7 @@ class StudyApiControllerTest extends AbstractWebTestClient {
     void findStudy_ifUserIsMemberAndNonParticipant() {
         StudyDetailInfoDto study = getRequest(API_STUDIES + "/2", StudyDetailInfoDto.class);
 
-        assertThat(study.getStudyParticipantStatus()).isEqualTo("nonParticipant");
+        assertThat(study.getStudyParticipantStatus()).isEqualTo(NON_PARTICIPANT);
     }
 
     @Test
@@ -91,7 +92,7 @@ class StudyApiControllerTest extends AbstractWebTestClient {
         post(API_STUDIES + "/2/participants", Void.class).expectStatus().isOk();
         StudyDetailInfoDto study = getRequest(API_STUDIES + "/2", StudyDetailInfoDto.class);
 
-        assertThat(study.getStudyParticipantStatus()).isEqualTo("participant");
+        assertThat(study.getStudyParticipantStatus()).isEqualTo(PARTICIPANT);
     }
 
     @Test

@@ -18,8 +18,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 class UserControllerTest extends AbstractWebTestClient {
-    public static final long SAMPLE_USER_ID = 1L;
-
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private static final String NICK_NAME = "nickName";

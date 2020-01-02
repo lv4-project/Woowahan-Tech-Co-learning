@@ -46,6 +46,9 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @TestPropertySource("classpath:application_test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractWebTestClient {
+    protected static final long SAMPLE_STUDY_ID = 1L;
+    protected static final long SAMPLE_USER_ID = 1L;
+
     private static final String EMAIL_KEY = "email";
     private static final String PASSWORD_KEY = "password";
 

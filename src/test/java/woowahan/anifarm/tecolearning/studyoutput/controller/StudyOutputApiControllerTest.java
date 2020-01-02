@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 }, type = DatabaseOperation.DELETE_ALL)
 class StudyOutputApiControllerTest extends AbstractWebTestClient {
     private static final String API_OUTPUTS = "/api/outputs";
+    private static final int SAMPLE_OUTPUT_ID = 1;
+    private static final String API_STUDIES_ONE_OUTPUTS = "/api/studies/1/outputs";
 
     @Test
     @DisplayName("발제자와 같은 회원이 정상적으로 산출물 작성")
@@ -29,7 +31,7 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                         .build();
         // TODO: 2019-12-16 post method 에 status check 추가?
         StudyOutputDto studyOutputDto =
-                postJsonRequest("/api/studies/1/outputs", outputCreateDto, StudyOutputDto.class)
+                postJsonRequest(API_STUDIES_ONE_OUTPUTS, outputCreateDto, StudyOutputDto.class)
                         .getResponseBody();
 
         assertThat(studyOutputDto.getTitle()).isEqualTo(outputCreateDto.getTitle());
@@ -43,15 +45,15 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                 .title("php 1장")
                 .contents("# 이게 안 된다고?")
                 .build();
-        // TODO: 2019-12-16 exception 바꾸기, RestControllerAdvice convention 정하기
-        postWithoutLogin("/api/studies/1/outputs" + "/" + 1, outputCreateDto)
+
+        postWithoutLogin(API_STUDIES_ONE_OUTPUTS + "/" + SAMPLE_OUTPUT_ID, outputCreateDto)
                 .expectStatus().is4xxClientError();
     }
 
     @Test
     @DisplayName("로그인한 사용자가 원하는 id의 산출물을 조회")
     void read() {
-        StudyOutputDto studyOutputDto = get(API_OUTPUTS + "/" + 1)
+        StudyOutputDto studyOutputDto = get(API_OUTPUTS + "/" + SAMPLE_OUTPUT_ID)
                 .expectStatus().isOk()
                 .expectBody(StudyOutputDto.class)
                 .returnResult()
@@ -74,7 +76,7 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                 .title("Updated title")
                 .contents("updated contents~!~!")
                 .build();
-        StudyOutputDto updatedDto = put(API_OUTPUTS + "/" + 1, studyOutputDto)
+        StudyOutputDto updatedDto = put(API_OUTPUTS + "/" + SAMPLE_OUTPUT_ID, studyOutputDto)
                 .expectStatus().isOk()
                 .expectBody(StudyOutputDto.class)
                 .returnResult()
@@ -91,7 +93,7 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                 .title("Updated title")
                 .contents("updated contents~!~!")
                 .build();
-        putWithoutLogin(API_OUTPUTS + "/" + 1, studyOutputDto)
+        putWithoutLogin(API_OUTPUTS + "/" + SAMPLE_OUTPUT_ID, studyOutputDto)
                 .expectStatus().is4xxClientError();
     }
 
@@ -103,12 +105,12 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
                 .contents("# 이게 이렇게 된다고?")
                 .build();
 
-        StudyOutputDto studyOutputDto = postJsonRequest("/api/studies/1/outputs",
+        StudyOutputDto studyOutputDto = postJsonRequest(API_STUDIES_ONE_OUTPUTS,
                 sampleOutput,
                 StudyOutputDto.class)
                 .getResponseBody();
 
-        get("/api/studies/1/outputs")
+        get(API_STUDIES_ONE_OUTPUTS)
                 .expectStatus().isOk()
                 .expectBodyList(StudyOutputDto.class)
                 .hasSize(2)
@@ -120,7 +122,7 @@ class StudyOutputApiControllerTest extends AbstractWebTestClient {
     @Test
     @DisplayName("Output id 에 해당하는 산출물 삭제")
     void delete() {
-        delete(API_OUTPUTS + "/" + 1)
+        delete(API_OUTPUTS + "/" + SAMPLE_OUTPUT_ID)
                 .expectStatus().isOk();
     }
 }

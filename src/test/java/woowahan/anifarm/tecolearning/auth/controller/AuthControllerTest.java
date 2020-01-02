@@ -3,7 +3,6 @@ package woowahan.anifarm.tecolearning.auth.controller;
 import com.auth0.jwt.JWT;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
 import woowahan.anifarm.tecolearning.auth.service.exception.OauthException;
 
@@ -21,9 +20,6 @@ class AuthControllerTest extends AbstractWebTestClient {
     private static final String LOGIN_EMAIL = "learner_duck@woowa.com";
     private static final String LOGIN_PASSWORD = "mastermaster";
 
-    @Autowired
-    private AuthController authController;
-
     @Test
     @DisplayName("로그인 성공시 헤더에 토큰 정보가 있음")
     void login_성공() {
@@ -37,7 +33,7 @@ class AuthControllerTest extends AbstractWebTestClient {
 
         String token = cookie.split(";")[0].split("=")[1];
 
-        assertThat(JWT.decode(token).getClaim("email")
+        assertThat(JWT.decode(token).getClaim(EMAIL_KEY)
                 .asString())
                 .isEqualTo(LOGIN_EMAIL);
     }
