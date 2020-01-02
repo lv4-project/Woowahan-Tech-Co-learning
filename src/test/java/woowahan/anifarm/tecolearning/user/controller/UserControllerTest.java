@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
-public class UserControllerTest extends AbstractWebTestClient {
+class UserControllerTest extends AbstractWebTestClient {
     public static final long SAMPLE_USER_ID = 1L;
 
     private static final String EMAIL = "email";

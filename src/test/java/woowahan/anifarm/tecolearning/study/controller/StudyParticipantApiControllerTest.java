@@ -17,7 +17,7 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @DatabaseTearDown(value = {
         "/woowahan/anifarm/tecolearning/study_participant.xml",
 }, type = DatabaseOperation.DELETE_ALL)
-public class StudyParticipantApiControllerTest extends AbstractWebTestClient {
+class StudyParticipantApiControllerTest extends AbstractWebTestClient {
     private static final String API_ONE_STUDIES_PARTICIPANTS = "/api/studies/1/participants";
     private static final String API_TWO_STUDIES_PARTICIPANTS = "/api/studies/2/participants";
     private static final String API_THREE_STUDIES_PARTICIPANTS = "/api/studies/3/participants";

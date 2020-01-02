@@ -26,7 +26,7 @@ import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.S
 @DatabaseTearDown(value = {
         "/woowahan/anifarm/tecolearning/study.xml",
 }, type = DatabaseOperation.DELETE_ALL)
-public class StudyApiControllerTest extends AbstractWebTestClient {
+class StudyApiControllerTest extends AbstractWebTestClient {
     static final String API_STUDIES = "/api/studies";
     private static final long SAMPLE_STUDY_ID = 1L;
 

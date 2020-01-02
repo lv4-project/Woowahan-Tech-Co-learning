@@ -1,6 +1,5 @@
 package woowahan.anifarm.tecolearning.study.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,6 @@ import static org.springframework.data.domain.Sort.by;
 import static woowahan.anifarm.tecolearning.study.domain.StudyParticipantStatus.PARTICIPANT;
 import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.RECRUITING;
 
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 class StudyServiceTest {
     private static final Long STUDY_ID = 1L;
