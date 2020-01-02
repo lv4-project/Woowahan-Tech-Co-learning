@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
+    <user user_id="1"
+          nick_name="learnerduck"
+          password="mastermaster"
+          email="learner_duck@woowa.com"
+          status="ACTIVE"
+    />
+
+    <user user_id="2"
+          nick_name="duholee"
+          password="ddu0422.dev"
+          email="eara12sa@gmail.com"
+          status="ACTIVE"
+    />
+
+    <user user_id="3"
+          nick_name="duholee"
+          password="ddu0422.tripstore"
+          email="ddu0422@gmail.com"
+          status="ACTIVE"
+    />
+
+    <study study_id="1" presenter_id="1"
+           subject="spring"
+           total_number_of_recruitment="6"
+           start_date="2019-12-12"
+           end_date="2020-1-13"
+           location="판교"
+           description="내가 판교를 제패하겠다."
+           status="RECRUITING"
+    />
+
+    <study study_id="2"
+           presenter_id="2"
+           subject="Effective Kotlin"
+           total_number_of_recruitment="4"
+           start_date="2019-12-12"
+           end_date="2020-1-13"
+           location="강남"
+           description="내가 강남을 제패하겠다."
+           status="RECRUITING"
+    />
+
+    <study study_id="3"
+           presenter_id="3"
+           subject="공룡책"
+           total_number_of_recruitment="4"
+           start_date="2019-12-12"
+           end_date="2020-1-13"
+           location="강남"
+           description="내가 잠실을 제패하겠다."
+           status="RECRUITING"
+    />
+
     <study_participant
-           study_participant_id="1"
-           participant_id="1"
-           study_id="1"
+            study_participant_id="1"
+            participant_id="1"
+            study_id="1"
     />
 
     <study_participant

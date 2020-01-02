@@ -1,5 +1,8 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
@@ -8,6 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
+@DatabaseSetup(value = {
+        "/woowahan/anifarm/tecolearning/study_participant.xml",
+}, type = DatabaseOperation.CLEAN_INSERT)
+@DatabaseTearDown(value = {
+        "/woowahan/anifarm/tecolearning/study_participant.xml",
+}, type = DatabaseOperation.DELETE_ALL)
 public class StudyParticipantApiControllerTest extends AbstractWebTestClient {
     private static final String API_ONE_STUDIES_PARTICIPANTS = "/api/studies/1/participants";
     private static final String API_TWO_STUDIES_PARTICIPANTS = "/api/studies/2/participants";
