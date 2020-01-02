@@ -1,6 +1,8 @@
 package woowahan.anifarm.tecolearning.study.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import woowahan.anifarm.tecolearning.AbstractWebTestClient;
@@ -18,7 +20,12 @@ import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.FINISHED;
 import static woowahan.anifarm.tecolearning.study.domain.StudyStatus.ONGOING;
 import static woowahan.anifarm.tecolearning.user.controller.UserControllerTest.SAMPLE_USER_ID;
 
-@Slf4j
+@DatabaseSetup(value = {
+        "/woowahan/anifarm/tecolearning/study.xml",
+}, type = DatabaseOperation.CLEAN_INSERT)
+@DatabaseTearDown(value = {
+        "/woowahan/anifarm/tecolearning/study.xml",
+}, type = DatabaseOperation.DELETE_ALL)
 public class StudyApiControllerTest extends AbstractWebTestClient {
     static final String API_STUDIES = "/api/studies";
     private static final long SAMPLE_STUDY_ID = 1L;
