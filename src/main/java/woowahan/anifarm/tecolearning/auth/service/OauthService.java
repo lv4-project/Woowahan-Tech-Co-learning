@@ -19,16 +19,18 @@ import woowahan.anifarm.tecolearning.user.service.UserService;
 public class OauthService {
     public static final long LOGIN_VALID_SECOND = 30 * 60;
 
-    private GithubClient githubClient;
-    private UserService userService;
+    private final GithubClient githubClient;
+    private final UserService userService;
+    private final WebToken webToken;
 
-    public OauthService(GithubClient githubClient, UserService userService) {
+    public OauthService(GithubClient githubClient, UserService userService, WebToken webToken) {
         this.githubClient = githubClient;
         this.userService = userService;
+        this.webToken = webToken;
     }
 
     public boolean oauth(String token) {
-        return WebToken.from(token).validToken(LOGIN_VALID_SECOND);
+        return webToken.from(token).validToken(LOGIN_VALID_SECOND);
     }
 
     public WebToken login(UserLoginDto userLoginDto) {
@@ -36,7 +38,7 @@ public class OauthService {
             User user = userService.authenticate(userLoginDto);
             UserInfoDto userInfoDto = checkStatus(user);
 
-            return WebToken.create(userInfoDto.toMap());
+            return webToken.create(userInfoDto.toMap());
         } catch (UserNotFoundException e) {
             throw new OauthException();
         }
@@ -56,15 +58,15 @@ public class OauthService {
             User user = userService.findInfoDtoByEmail(email);
             UserInfoDto userInfoDto = checkStatus(user);
 
-            return WebToken.create(userInfoDto.toMap());
+            return webToken.create(userInfoDto.toMap());
         } catch (UserNotFoundException e) {
             User user = userService.saveGitTempUser(email);
-            return WebToken.create(checkStatus(user).toMap());
+            return webToken.create(checkStatus(user).toMap());
         }
     }
 
     public WebToken renewLogin(String token) {
-        return WebToken.from(token).renewToken(token, UserInfoDto.ID_KEY, UserInfoDto.EMAIL_KEY, UserInfoDto.NICK_NAME_KEY);
+        return webToken.from(token).renewToken(token, UserInfoDto.ID_KEY, UserInfoDto.EMAIL_KEY, UserInfoDto.NICK_NAME_KEY);
     }
 
 }

@@ -6,6 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 
 import java.util.Date;
@@ -13,26 +15,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@Component
 public class WebToken {
-    private static final String ISSUER = "TechCoLearning";
-    private static final String SECRET = "cbd6639c357448292870c001908fb757ec18c839";
-    private static final Algorithm algorithm = Algorithm.HMAC256(SECRET);
 
-    private final String token;
+    private String issuer;
+    private String secret;
+    private Algorithm algorithm;
 
-    private WebToken(String token) {
+    private String token;
+
+    public WebToken(@Value("${auth.jwt.issuer}") String issuer,
+                    @Value("${auth.jwt.secret}") String secret) {
+        this.issuer = issuer;
+        this.secret = secret;
+        this.algorithm = Algorithm.HMAC256(this.secret);
+    }
+
+    public WebToken from(String token) {
         this.token = token;
+        return this;
     }
 
-    public static WebToken from(String token) {
-        return new WebToken(token);
+    public WebToken create(Map<String, String> withInfo) {
+        this.token = createToken(withInfo);
+        return this;
     }
 
-    public static WebToken create(Map<String, String> withInfo) {
-        return new WebToken(createToken(withInfo));
-    }
-
-    private static String createToken(Map<String, String> withInfo) {
+    private String createToken(Map<String, String> withInfo) {
         try {
             JWTCreator.Builder builder = getJWTBuilder();
             for (String key : withInfo.keySet()) {
@@ -45,16 +54,16 @@ public class WebToken {
         }
     }
 
-    private static JWTCreator.Builder getJWTBuilder() {
+    private JWTCreator.Builder getJWTBuilder() {
         return JWT.create()
-                .withIssuer(ISSUER)
+                .withIssuer(issuer)
                 .withExpiresAt(new Date());
     }
 
     public boolean validToken(long validSecond) {
         try {
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .acceptExpiresAt(validSecond)
                     .build();
 
@@ -79,8 +88,8 @@ public class WebToken {
                 .asString();
     }
 
-
     public WebToken renewToken(String... keys) {
-        return new WebToken(createToken(getPayloads(keys)));
+        this.token = createToken(getPayloads(keys));
+        return this;
     }
 }

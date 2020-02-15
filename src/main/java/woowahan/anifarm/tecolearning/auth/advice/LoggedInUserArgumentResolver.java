@@ -15,6 +15,11 @@ import java.util.Arrays;
 import static woowahan.anifarm.tecolearning.auth.advice.LoggedInInterceptor.TOKEN;
 
 public class LoggedInUserArgumentResolver implements HandlerMethodArgumentResolver {
+    private final WebToken webToken;
+
+    public LoggedInUserArgumentResolver(WebToken webToken) {
+        this.webToken = webToken;
+    }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -27,7 +32,7 @@ public class LoggedInUserArgumentResolver implements HandlerMethodArgumentResolv
 
         String token = getToken(request);
 
-        return UserInfoDto.from(WebToken.from(token));
+        return UserInfoDto.from(webToken.from(token));
     }
 
     private String getToken(HttpServletRequest request) {
