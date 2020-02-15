@@ -23,10 +23,10 @@ public class OauthService {
     private final UserService userService;
     private final WebToken webToken;
 
-    public OauthService(GithubClient githubClient, UserService userService, WebToken webToken) {
+    public OauthService(GithubClient githubClient, UserService userService, WebToken webToken, WebToken webToken1) {
         this.githubClient = githubClient;
         this.userService = userService;
-        this.webToken = webToken;
+        this.webToken = webToken1;
     }
 
     public boolean oauth(String token) {

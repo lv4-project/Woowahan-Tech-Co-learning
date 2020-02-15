@@ -54,6 +54,7 @@
       v-for="study in studies"
       :key="study.id"
       :study="study"
+      :loading="loading"
     />
     <v-row>
       <v-col>
@@ -77,6 +78,7 @@
 </template>
 <script>
   import StudyCard from "./StudyCard";
+
   export default {
     name: "StudySearch",
     components: {StudyCard},
@@ -91,6 +93,7 @@
         pageSize: 2,
         snackbar: false,
         snackbarText: "",
+        loading: true,
       }
     },
     methods: {
@@ -115,6 +118,7 @@
           (error, response, body) => {
             if (response.statusCode === 200) {
               this.studies = JSON.parse(body);
+              this.loading = false;
               this.observeSearch();
             } else {
               window.console.log(error);

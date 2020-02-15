@@ -334,6 +334,7 @@
                   this.studyInfo.studyOutput = JSON.parse(body);
                 });
             } else if (response.statusCode === 400) {
+              this.removeStudyDialog = false;
               eventBus.$emit(`raiseNotice`, body);
             }
           });
@@ -348,6 +349,7 @@
               this.participantStudyDialog = false;
               this.loadStudyDetail();
             } else if (response.statusCode === 400) {
+              this.participantStudyDialog = false;
               eventBus.$emit(`raiseNotice`, `참여할 수 없는 스터디입니다.`);
             }
           });
@@ -359,6 +361,7 @@
               this.withdrawDialog = false;
               this.loadStudyDetail();
             } else if (response.statusCode === 400) {
+              this.withdrawDialog = false;
               eventBus.$emit(`raiseNotice`, body);
             }
           });
@@ -384,8 +387,10 @@
               this.startDialog = false;
               window.console.log(this.studyInfo);
             } else if (response.statusCode === 401) {
+              this.startDialog = false;
               this.$router.push(`/login`)
             } else {
+              this.startDialog = false;
               eventBus.$emit(`raiseNotice`, `그런 Study 없음`);
               window.history.back();
             }
@@ -398,8 +403,10 @@
               this.finishDialog = false;
               this.studyInfo = JSON.parse(body);
             } else if (response.statusCode === 401) {
+              this.finishDialog = false;
               this.$router.push(`/login`)
             } else {
+              this.finishDialog = false;
               eventBus.$emit(`raiseNotice`, `그런 Study 없음`);
               window.history.back();
             }
@@ -412,6 +419,7 @@
               this.removeStudyDialog = false;
               this.$router.push(`/recruitment`)
             } else if (response.statusCode === 400) {
+              this.removeStudyDialog = false;
               eventBus.$emit(`raiseNotice`, body);
             }
           });

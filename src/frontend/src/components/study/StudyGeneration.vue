@@ -17,13 +17,10 @@
         required
       />
 
-      <v-text-field
-        v-model="totalNumberOfRecruitment.init"
-        :rules="totalNumberOfRecruitment.rules"
-        :maxlength="totalNumberOfRecruitment.max"
+      <v-select
+        v-model="totalNumberOfRecruitment"
+        :items="possibleNumbers"
         label="총 모집 인원"
-        type="text"
-        required
       />
 
       <v-row>
@@ -159,13 +156,8 @@
             v => validateLength(v, this.subject.length, `주제는 ${this.subject.length}글자 이하로 작성해주세요.`),
           ],
         },
-        totalNumberOfRecruitment: {
-          init: ``,
-          rules: [
-            v => validateBlank(v, `인원 수를 입력해주세요.`),
-          ],
-          max: 2,
-        },
+        possibleNumbers: [],
+        totalNumberOfRecruitment: 0,
         startDate: {
           view: ``,
           init: ``,
@@ -196,7 +188,7 @@
           method: `POST`,
           body: {
             subject: this.subject.name,
-            totalNumberOfRecruitment: this.totalNumberOfRecruitment.init,
+            totalNumberOfRecruitment: this.totalNumberOfRecruitment,
             startDate: this.startDate.init,
             endDate: this.endDate.init,
             location: this.location,
@@ -216,10 +208,20 @@
           }
         });
       },
-
       goRecruitingStudy() {
         this.$router.push(`/recruitment`)
       },
+      generatePossibleNumbersOfRecruitment() {
+        const candidates = [];
+
+        for (let i = 2; i <= 25; i++) {
+          candidates.push(i);
+        }
+        return candidates;
+      },
     },
+    created() {
+      this.possibleNumbers = this.generatePossibleNumbersOfRecruitment();
+    }
   }
 </script>

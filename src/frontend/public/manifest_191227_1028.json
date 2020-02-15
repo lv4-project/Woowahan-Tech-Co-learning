@@ -1,0 +1,21 @@
+{
+  "short_name": "TecoLearning",
+  "name": "TecoLearning",
+  "icons": [
+    {
+      "src": "/img/icons/logo_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/icons/logo_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "scope": "/"
+}

@@ -36,18 +36,21 @@
                 <v-list-item-title>
                   <v-row>
                     <v-col
-                      :data-url="place.locationDto.placeUrl"
-                      @click="showDialog"
                       cols="10"
                       justify="center"
-                      style="padding: 0px; padding-left: 12px"
+                      class="pb-0 pt-0"
                     >
-                      {{place.locationDto.placeName}}
+                      <a
+                        :href="place.locationDto.placeUrl"
+                        style="text-decoration: none;"
+                      >
+                        {{place.locationDto.placeName}}
+                      </a>
                     </v-col>
                     <v-spacer/>
                     <v-col
                       cols="auto"
-                      style="padding: 0px"
+                      class="pa-0"
                     >
                       <v-icon
                         :data-id="place.id"
@@ -71,15 +74,6 @@
       </v-row>
     </v-menu>
 
-    <v-dialog v-model="dialog">
-      <v-card :height="dialogHeight">
-        <iframe
-          style="width:100%; height: 100%"
-          :src="dialogUrl"
-        />
-      </v-card>
-    </v-dialog>
-
     <v-dialog v-model="mapDialog">
       <v-card :height="dialogHeight">
         <Map
@@ -95,6 +89,7 @@
 
 <script>
   import Map from "./Map";
+  import {eventBus} from "../../main";
 
   export default {
     name: `LocationHistoryBtn`,
@@ -124,15 +119,6 @@
             }
           });
       },
-      showDialog(event) {
-        let url = event.target.getAttribute(`data-url`);
-        if (url.includes(`http`)) {
-          url = url.replace('http', 'https');
-        }
-
-        this.dialogUrl = url;
-        this.dialog = true;
-      },
       closeMap() {
         this.mapDialog = false;
       },
@@ -142,9 +128,9 @@
           `${window.location.origin}/api/locations/${id}`,
           (error, response) => {
             if (response.statusCode === 200) {
-              window.confirm("삭제 성공");
+              eventBus.$emit(`raiseNotice`, `삭제 성공`);
             } else {
-              window.confirm("삭제 실패");
+              eventBus.$emit(`raiseNotice`, `삭제 실패`);
             }
           });
       }
