@@ -5,8 +5,11 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 
@@ -16,6 +19,7 @@ import java.util.Map;
 
 @Getter
 @Component
+@PropertySource("classpath:application-production.properties")
 public class WebToken {
 
     private String issuer;
