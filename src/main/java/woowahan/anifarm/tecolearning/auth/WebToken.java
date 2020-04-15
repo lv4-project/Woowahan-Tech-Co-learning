@@ -19,7 +19,6 @@ import java.util.Map;
 
 @Getter
 @Component
-@PropertySource("classpath:application-production.properties")
 public class WebToken {
 
     private String issuer;
@@ -28,8 +27,8 @@ public class WebToken {
 
     private String token;
 
-    public WebToken(@Value("${auth.jwt.issuer}") String issuer,
-                    @Value("${auth.jwt.secret}") String secret) {
+    public WebToken(@Value("${auth.jwt.issuer:TechCoLearning}") String issuer,
+                    @Value("${auth.jwt.secret:cbd6639c357448292870c001908fb757ec18c839}") String secret) {
         this.issuer = issuer;
         this.secret = secret;
         this.algorithm = Algorithm.HMAC256(this.secret);
