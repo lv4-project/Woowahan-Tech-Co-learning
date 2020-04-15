@@ -5,11 +5,8 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import woowahan.anifarm.tecolearning.auth.service.exception.JWTValidException;
 
@@ -20,6 +17,8 @@ import java.util.Map;
 @Getter
 @Component
 public class WebToken {
+    private static final String ISSUER = "TechCoLearning";
+    private static final String SECRET = "cbd6639c357448292870c001908fb757ec18c839";
 
     private String issuer;
     private String secret;
@@ -27,10 +26,9 @@ public class WebToken {
 
     private String token;
 
-    public WebToken(@Value("${auth.jwt.issuer:TechCoLearning}") String issuer,
-                    @Value("${auth.jwt.secret:cbd6639c357448292870c001908fb757ec18c839}") String secret) {
-        this.issuer = issuer;
-        this.secret = secret;
+    public WebToken() {
+        this.issuer = ISSUER;
+        this.secret = SECRET;
         this.algorithm = Algorithm.HMAC256(this.secret);
     }
 
