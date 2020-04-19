@@ -58,7 +58,7 @@
         <v-row>
           <v-col>
             <v-btn
-              href="https://github.com/login/oauth/authorize?client_id=ec77f51776eab7f7dcf1&scope=user:email"
+              href="https://github.com/login/oauth/authorize?client_id=c55893afaf94d4575ccc&scope=user:email"
               block
               tile
               color="black"
