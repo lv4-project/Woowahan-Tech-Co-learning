@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 import woowahan.anifarm.tecolearning.study.domain.Study;
 import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 
@@ -11,21 +12,25 @@ import woowahan.anifarm.tecolearning.user.dto.UserInfoDto;
 @NoArgsConstructor
 @ToString
 public class StudySummaryDto {
-    private long id;
+    public static final int MAX_SUMMARY_DESCRIPTION_LENGTH = 40;
+    public static final String SUMMARY_DESCRIPTION_SUFFIX = "...";
+    private static final String EMPTY_DESCRIPTION = "";
+
+    private Long id;
     private String presenterName;
     private String subject;
-    private int totalNumberOfRecruitment;
-    private int numberOfParticipants;
+    private Integer totalNumberOfRecruitment;
+    private Integer numberOfParticipants;
     private String location;
     private String summary;
     private String studyStatus;
 
     @Builder
-    public StudySummaryDto(long id,
+    public StudySummaryDto(Long id,
                            String presenterName,
                            String subject,
-                           int totalNumberOfRecruitment,
-                           int numberOfParticipants,
+                           Integer totalNumberOfRecruitment,
+                           Integer numberOfParticipants,
                            String location,
                            String summary,
                            String studyStatus) {
@@ -49,8 +54,20 @@ public class StudySummaryDto {
                 .totalNumberOfRecruitment(study.getTotalNumberOfRecruitment())
                 .numberOfParticipants(numberOfParticipants)
                 .location(study.getLocation())
-                .summary(study.getDescription()) // TODO: 2019-12-15 도메인 객체에 summary 필드 만들 것.
+                .summary(summarize(study.getDescription())) // TODO: 2019-12-15 도메인 객체에 summary 필드 만들 것.
                 .studyStatus(study.getStatus().getName())
                 .build();
+    }
+
+    private static String summarize(String description) {
+        if (StringUtils.isEmpty(description)) {
+            return EMPTY_DESCRIPTION;
+        }
+
+        if (description.length() <= MAX_SUMMARY_DESCRIPTION_LENGTH) {
+            return description;
+        }
+
+        return description.substring(0, MAX_SUMMARY_DESCRIPTION_LENGTH) + SUMMARY_DESCRIPTION_SUFFIX;
     }
 }
