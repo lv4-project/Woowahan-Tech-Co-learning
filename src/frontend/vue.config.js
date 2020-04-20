@@ -15,6 +15,6 @@ module.exports = {
     },
   },
   pwa: {
-    themeColor: "#444444",
+    themeColor: "#333333",
   },
 };
