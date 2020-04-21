@@ -15,7 +15,7 @@ pipeline {
 
         stage("Send jar to deploy server") {
             steps {
-                sh "scp -i ~/KEY-TRAINING-Deocksu.pem ./build/libs/tecolearning-0.0.1-SNAPSHOT.jar ubuntu@13.125.168.159:/home/ubuntu"
+                sh "scp -i ~/KEY-TRAINING-Deocksu.pem ./build/libs/tecolearning-1.0.0.jar ubuntu@13.125.168.159:/home/ubuntu"
             }
         }
 
