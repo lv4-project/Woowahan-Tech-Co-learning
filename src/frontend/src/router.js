@@ -117,7 +117,8 @@ vueRouter.beforeEach(function (to, from, next) {
     (error, response) => {
       if ((response && response.statusCode) === 200) {
         if(to.path === `/`) {
-          next(`/recruitment`)
+          next(`/recruitment`);
+          return;
         }
           next();
           return;
