@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col align="center">
-        <h1>{{ nickName }}'s Profile</h1>
+        <h1>{{ nickName }}의 프로필</h1>
       </v-col>
     </v-row>
 

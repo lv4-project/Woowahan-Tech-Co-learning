@@ -57,7 +57,7 @@ public class User {
         return User.builder()
                 .email(email)
                 .password("tempPassword")
-                .nickName("moomin")
+                .nickName("userName")
                 .introduction("")
                 .build();
     }

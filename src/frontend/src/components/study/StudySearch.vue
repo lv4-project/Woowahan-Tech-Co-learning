@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto">
-        <h1>Search</h1>
+        <h1>검색</h1>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -13,15 +13,15 @@
           row
         >
           <v-radio
-            label="Recruiting"
+            label="모집중"
             value="recruiting"
           />
           <v-radio
-            label="Ongoing"
+            label="진행중"
             value="ongoing"
           />
           <v-radio
-            label="Finished"
+            label="완료됨"
             value="finished"
           />
         </v-radio-group>
@@ -32,8 +32,8 @@
         <v-text-field
           v-model="keyword"
           class="me-0"
-          label="Search Study"
-          placeholder="키워드를 입력해주세요."
+          label="스터디 검색"
+          placeholder="찾으려는 스터디 주제를 입력해주세요."
           hide-details
         />
       </v-col>

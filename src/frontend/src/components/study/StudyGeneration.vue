@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto">
-        <h1>Recruit</h1>
+        <h1>스터디 만들기</h1>
       </v-col>
     </v-row>
     <v-form

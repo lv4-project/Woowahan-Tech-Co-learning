@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col align="center">
-        <h2>Ongoing Study</h2>
+        <h2>진행중인 스터디</h2>
       </v-col>
     </v-row>
 

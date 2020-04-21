@@ -19,7 +19,7 @@
     <v-container>
       <v-row>
         <v-col align="center">
-          <h2>Recruiting Study</h2>
+          <h2>모집중인 스터디</h2>
         </v-col>
       </v-row>
 

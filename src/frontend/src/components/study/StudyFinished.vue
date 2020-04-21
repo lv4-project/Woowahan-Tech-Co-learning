@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col align="center">
-        <h2>Finished Study</h2>
+        <h2>완료된 스터디</h2>
       </v-col>
     </v-row>
 
