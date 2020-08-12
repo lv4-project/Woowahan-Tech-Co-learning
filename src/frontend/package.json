@@ -13,7 +13,7 @@
     "path": "^0.12.7",
     "register-service-worker": "^1.6.2",
     "request": "^2.88.0",
-    "serialize-javascript": "^2.1.2",
+    "serialize-javascript": "^3.1.0",
     "simplemde": "^1.11.2",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
